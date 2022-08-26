@@ -9,7 +9,7 @@ ThemeData lightTheme(ColorScheme? lightDynamic) {
       useMaterial3: true,
       appBarTheme: AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: lightDynamic.onInverseSurface,
+            statusBarColor: Colors.transparent,
             systemNavigationBarColor: lightDynamic.onInverseSurface),
         backgroundColor: lightDynamic.onInverseSurface,
         actionsIconTheme: IconThemeData(color: lightDynamic.onPrimaryContainer),
