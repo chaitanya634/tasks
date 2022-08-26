@@ -9,12 +9,10 @@ ThemeData lightTheme(ColorScheme? lightDynamic) {
       useMaterial3: true,
       appBarTheme: AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: lightDynamic.onInverseSurface,
-          systemNavigationBarColor: lightDynamic.onInverseSurface
-        ),
+            statusBarColor: lightDynamic.onInverseSurface,
+            systemNavigationBarColor: lightDynamic.onInverseSurface),
         backgroundColor: lightDynamic.onInverseSurface,
-      actionsIconTheme: IconThemeData(color: lightDynamic.onPrimaryContainer),
-      centerTitle: false,
-      titleTextStyle: const TextStyle(color: Colors.red)
+        actionsIconTheme: IconThemeData(color: lightDynamic.onPrimaryContainer),
+        centerTitle: false,
       ));
 }
