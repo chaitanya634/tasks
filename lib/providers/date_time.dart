@@ -88,7 +88,7 @@ class DateTimeProvider with ChangeNotifier {
       ],
     );
   }
-
+  
   String weekday() {
     DateTime currentDateTime = DateTime.now();
     late String day;
