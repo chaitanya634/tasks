@@ -7,6 +7,7 @@ ThemeData lightTheme(ColorScheme? lightDynamic) {
   }
   return ThemeData(
       useMaterial3: true,
+      backgroundColor: lightDynamic.surface,
       appBarTheme: AppBarTheme(
           systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,

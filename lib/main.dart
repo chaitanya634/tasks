@@ -7,8 +7,6 @@ import 'package:tasks/providers/date_time.dart';
 import 'package:tasks/themes/light.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(systemNavigationBarColor: Colors.red));
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => DateTimeProvider())

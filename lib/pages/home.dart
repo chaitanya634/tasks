@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks/pages/create_task.dart';
+import 'package:tasks/pages/list_menu.dart';
 import 'package:tasks/providers/date_time.dart';
 
 class HomePage extends StatelessWidget {
@@ -43,43 +44,111 @@ class HomePage extends StatelessWidget {
                     expandedTitleScale: 2,
                   ),
                   actions: [
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.sort)),
+                    PopupMenuButton(
+                      color: lightDynamic?.secondaryContainer,
+                      icon: const Icon(Icons.sort),
+                      itemBuilder: (context) => <PopupMenuEntry>[
+                        const PopupMenuItem(
+                            child: ListTile(
+                          title: Text('Creation'),
+                        )),
+                        const PopupMenuItem(
+                            child: ListTile(
+                          title: Text('Due date'),
+                        )),
+                        const PopupMenuItem(
+                            child: ListTile(
+                          title: Text('Starred'),
+                        )),
+                      ],
+                    ),
                     IconButton(
                       onPressed: () {},
-                      icon: const Icon(IconData(0xe800, fontFamily: 'ShareFontIcon')),
+                      icon: const Icon(
+                          IconData(0xe800, fontFamily: 'ShareFontIcon')),
                     ),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+                    PopupMenuButton(
+                      color: lightDynamic?.secondaryContainer,
+                      icon: const Icon(Icons.more_vert),
+                      itemBuilder: (context) => <PopupMenuEntry>[
+                        const PopupMenuItem(
+                            child: ListTile(
+                          title: Text('Reorder tasks'),
+                        )),
+                        const PopupMenuItem(
+                            child: ListTile(
+                          title: Text('Hide completed'),
+                        )),
+                        const PopupMenuItem(
+                            child: ListTile(
+                          title: Text('Print list'),
+                        )),
+                        const PopupMenuItem(
+                            child: ListTile(
+                          title: Text('Change theme'),
+                        )),
+                      ],
+                    )
                   ],
                 ),
                 SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
                   return Container(
                     height: 40,
-                    color: Colors.yellow,
                   );
                 }, childCount: 60)),
-                
               ],
             ),
           ),
-        Container(height: 66, color: Colors.red, child: Row(
-          children: [Expanded(child: Row(children: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.menu)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.today)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.task_outlined)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.star_border)),
-            ]),),
-            
-            Padding(
-              padding: const EdgeInsets.only(right: 6.0),
-              child: FloatingActionButton(onPressed: (){
-                showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) {
-                  return CreateTaskPage();
-                },);
-              },mini: true,elevation: 0,child: Icon(Icons.add),),
-            )
-            ],
-        ),)
+          Container(
+            height: 66,
+            color: lightDynamic?.onInverseSurface,
+            child: Row(
+              children: [   
+                Expanded(
+                  child: Row(children: [
+                    IconButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: lightDynamic?.secondaryContainer,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                            builder: (context) => ListMenu(),
+                          );
+                        },
+                        icon: const Icon(Icons.menu)),
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.today)),
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.task_outlined)),
+                    IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.star_border)),
+                  ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 6.0),
+                  child: FloatingActionButton(
+                    backgroundColor: lightDynamic?.primary,
+                    onPressed: () {
+                      showGeneralDialog(
+                        context: context,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return const CreateTaskPage();
+                        },
+                      );
+                    },
+                    mini: true,
+                    elevation: 0,
+                    child: Icon(
+                      Icons.add,
+                      color: lightDynamic?.onPrimary,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
