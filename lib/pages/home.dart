@@ -22,14 +22,12 @@ class HomePage extends StatelessWidget {
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  surfaceTintColor: Colors.black,
-                  backgroundColor: Theme.of(context).bottomAppBarColor,
+                  backgroundColor: lightDynamic?.onInverseSurface ?? Theme.of(context).bottomAppBarColor,
                   floating: true,
                   snap: true,
                   expandedHeight: 150.0,
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
-
                     title: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,8 +36,11 @@ class HomePage extends StatelessWidget {
                             style: GoogleFonts.roboto(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w300,
-                                color: lightDynamic?.primary ?? Theme.of(context).primaryColor)),
-                        context.read<DateTimeProvider>().date(context, lightDynamic),
+                                color: lightDynamic?.primary ??
+                                    Theme.of(context).primaryColor)),
+                        context
+                            .read<DateTimeProvider>()
+                            .date(context, lightDynamic),
                       ],
                     ),
                     titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
@@ -48,7 +49,8 @@ class HomePage extends StatelessWidget {
                   actions: [
                     PopupMenuButton(
                       color: lightDynamic?.secondaryContainer,
-                      icon: const Icon(IconData(0xe800, fontFamily: 'SortFontIcon')),
+                      icon: const Icon(
+                          IconData(0xe813, fontFamily: 'OutlinedFontIcons')),
                       itemBuilder: (context) => <PopupMenuEntry>[
                         const PopupMenuItem(
                             child: ListTile(
@@ -67,11 +69,12 @@ class HomePage extends StatelessWidget {
                     IconButton(
                       onPressed: () {},
                       icon: const Icon(
-                          IconData(0xe800, fontFamily: 'ShareFontIcon')),
+                          IconData(0xe814, fontFamily: 'OutlinedFontIcons')),
                     ),
                     PopupMenuButton(
                       color: lightDynamic?.secondaryContainer,
-                      icon: const Icon(IconData(0xe800, fontFamily: 'MoreFontIcon')),
+                      icon: const Icon(
+                          IconData(0xe815, fontFamily: 'OutlinedFontIcons')),
                       itemBuilder: (context) => <PopupMenuEntry>[
                         const PopupMenuItem(
                             child: ListTile(
@@ -104,9 +107,10 @@ class HomePage extends StatelessWidget {
           ),
           Container(
             height: 66,
-            color: lightDynamic?.onInverseSurface,
+            color: lightDynamic?.onInverseSurface ??
+                Theme.of(context).bottomAppBarColor,
             child: Row(
-              children: [   
+              children: [
                 Expanded(
                   child: Row(children: [
                     IconButton(
@@ -119,33 +123,31 @@ class HomePage extends StatelessWidget {
                             builder: (context) => const ListMenu(),
                           );
                         },
-                        icon: const Icon(Icons.menu)),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.today)),
+                        icon: const Icon(IconData(0xe810, fontFamily: 'OutlinedFontIcons'))),
+                    IconButton(onPressed: () {}, icon: const Icon(IconData(0xe80f, fontFamily: 'OutlinedFontIcons'))),
                     IconButton(
                         onPressed: () {},
-                        icon: const Icon(Icons.task_outlined)),
+                        icon: const Icon(IconData(0xe80e, fontFamily: 'OutlinedFontIcons'))),
                     IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.star_border)),
+                        onPressed: () {}, icon: const Icon(IconData(0xe80d, fontFamily: 'OutlinedFontIcons'))),
                   ]),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 6.0),
                   child: FloatingActionButton(
-                    backgroundColor: lightDynamic?.primary,
+                    backgroundColor:
+                        lightDynamic?.primary ?? Theme.of(context).primaryColor,
                     onPressed: () {
                       showGeneralDialog(
                         context: context,
                         pageBuilder: (context, animation, secondaryAnimation) {
-                          return const CreateTaskPage();
+                          return CreateTaskPage(lightDynamic);
                         },
                       );
                     },
                     mini: true,
                     elevation: 0,
-                    child: Icon(
-                      Icons.add,
-                      color: lightDynamic?.onPrimary,
-                    ),
+                    child: const Icon(IconData(0xe811, fontFamily: 'OutlinedFontIcons')),
                   ),
                 )
               ],

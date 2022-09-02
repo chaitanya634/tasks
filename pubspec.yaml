@@ -78,15 +78,9 @@ flutter:
   # example:
   
   fonts:
-   - family: SortFontIcon
+   - family: OutlinedFontIcons
      fonts:
-      - asset: lib/assets/icons/sort.ttf  
-   - family: ShareFontIcon
-     fonts:
-      - asset: lib/assets/icons/share.ttf
-   - family: MoreFontIcon
-     fonts:
-      - asset: lib/assets/icons/more.ttf
+      - asset: lib/assets/icons/outlined_font.ttf
 
   # fonts:
   #   - family: Schyler

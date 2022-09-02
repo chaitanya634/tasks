@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CreateTaskPage extends StatefulWidget {
-  const CreateTaskPage({Key? key}) : super(key: key);
-
+  const CreateTaskPage(this.lightDynamic, {Key? key}) : super(key: key);
+  final ColorScheme? lightDynamic;
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
 }
@@ -12,47 +12,81 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.close_rounded),onPressed: (() => Navigator.pop(context))),
-        title: Text('Create Task'),
-        actions: [TextButton(onPressed: () {}, child: Text('Save'))],
-        // titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: ListView(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: TextField(
-              decoration: InputDecoration(
-                  label: Text('Title'),
-                  prefixIcon: IconButton(
-                    icon: Icon(
-                      Icons.star_border,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      debugPrint('Pressed');
-                    },
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      Icons.check_box_outline_blank_outlined,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      debugPrint('Pressed');
-                    },
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(18))),
+        backgroundColor:
+            widget.lightDynamic?.onInverseSurface ?? colorScheme.surface,
+        leading: IconButton(
+            icon: Icon(
+              Icons.close_rounded,
+              color:
+                  widget.lightDynamic?.inverseSurface ?? colorScheme.onSurface,
             ),
+            onPressed: (() => Navigator.pop(context))),
+        title: const Text('Create Task'),
+        titleTextStyle: TextStyle(
+          color: widget.lightDynamic?.inverseSurface ?? colorScheme.onSurface,
+          fontSize: 19,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              'Save',
+              style: TextStyle(
+                  color: widget.lightDynamic?.primary ?? colorScheme.primary),
+            ),
+          )
+        ],
+      ),
+      body: ListView(children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
+          child: TextField(
+            decoration: InputDecoration(
+                label: const Text('Title'),
+                prefixIcon: IconButton(
+                  icon: const Icon(Icons.star_border_rounded),
+                  onPressed: () {
+                    debugPrint('Starred');
+                  },
+                ),
+                suffixIcon: IconButton(
+                  icon: Checkbox(
+                      value: false,
+                      onChanged: (value) {},
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      )),
+                  onPressed: () {
+                    debugPrint('Pressed');
+                  },
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: widget.lightDynamic?.outline ??
+                            colorScheme.outline),
+                    borderRadius: BorderRadius.circular(18))),
           ),
-          Column(
-            children: subtask,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          // child: Column(
+          //   children: subtask,
+          // ),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: subtask.length,
+            itemBuilder: (context, index) {
+            
+              return subtask.elementAt(index);
+            },
           ),
-          Row(
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -68,27 +102,20 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                           ),
                           child: TextField(
                             decoration: InputDecoration(
-                                label: Text('Subtitle'),
+                                label: const Text('Subtitle'),
                                 suffixIcon: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
+                                      Checkbox(
+                                          value: false,
+                                          onChanged: (value) {},
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          )),
                                       IconButton(
-                                        icon: Icon(
-                                          Icons
-                                              .check_box_outline_blank_outlined,
-                                          color: Colors.black,
-                                        ),
-                                        onPressed: () {
-                                          debugPrint('Pressed');
-                                        },
-                                      ),
-                                      // IconButton(
-                                      //   icon: Icon(
-                                      //     Icons.remove,
-                                      //     color: Colors.black,
-                                      //   ),
-                                      //   onPressed: () {},
-                                      // ),
+                                          onPressed: () {},
+                                          icon: Icon(Icons.close_rounded))
                                     ]),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(18))),
@@ -96,33 +123,36 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                         ));
                       });
                     },
-                    icon: Icon(Icons.add),
-                    label: Text('Subtask'),
+                    icon: const Icon(
+                        IconData(0xe811, fontFamily: 'OutlinedFontIcons')),
+                    label: const Text('Subtask'),
                     style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.red)),
+                        side: const BorderSide(color: Colors.black54)),
                   ),
                 ),
               ]),
-          Divider(
-            indent: 138,
-            endIndent: 138,
-          ),
-          ListTile(
-              leading: Icon(Icons.notifications_active_outlined),
-              title: Text('Add reaminder')),
-          Divider(indent: 68),
-          ListTile(
-              leading: Icon(Icons.event_outlined), title: Text('Add due date')),
-          Divider(indent: 68),
-          ListTile(
-              leading: Icon(Icons.event_repeat_outlined),
-              title: Text('Repeat')),
-          Divider(indent: 68),
-          ListTile(
-              leading: Icon(Icons.notes_outlined), title: Text('Add note')),
-          Divider(indent: 68),
-        ]),
-      ),
+        ),
+        const Divider(
+          indent: 138,
+          endIndent: 138,
+        ),
+        const ListTile(
+            leading: Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons')),
+            title: Text('Add reaminder')),
+        const Divider(indent: 68),
+        const ListTile(
+            leading: Icon(IconData(0xe802, fontFamily: 'OutlinedFontIcons')),
+            title: Text('Add due date')),
+        Divider(indent: 68),
+        ListTile(
+            leading: Icon(IconData(0xe801, fontFamily: 'OutlinedFontIcons')),
+            title: Text('Repeat')),
+        Divider(indent: 68),
+        ListTile(
+            leading: Icon(IconData(0xe816, fontFamily: 'OutlinedFontIcons')),
+            title: Text('Add note')),
+        Divider(indent: 68),
+      ]),
     );
   }
 }
