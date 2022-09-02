@@ -6,16 +6,15 @@ class ListMenu extends StatelessWidget {
   const ListMenu({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView(
-    shrinkWrap: true,
+    return Wrap(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 12.0, top: 12.0, bottom: 12),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: [
               const Padding(
-                padding: EdgeInsets.only(
-                  right: 8.0,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.0,
                 ),
                 child: CircleAvatar(child: Icon(Icons.person)),
               ),
@@ -30,7 +29,7 @@ class ListMenu extends StatelessWidget {
                             height: 1)),
                     Text('Jadhav',
                         style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w600, fontSize: 13)),
+                            fontWeight: FontWeight.w600, fontSize: 13, height: 1.2)),
                   ],
                 ),
               ),
@@ -38,63 +37,21 @@ class ListMenu extends StatelessWidget {
             ],
           ),
         ),
-        Divider(indent: 12, endIndent: 12, height: 1),
-        Column(
-            children: MyData.myLists
-                .map((e) => Row(
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.checklist_rtl_rounded)),
-                        Text(e.key),
-                      ],
-                    ))
-                .toList()),
-        Column(
-            children: MyData.myFolders.map((e) {
-          return Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {}, icon: Icon(Icons.folder_outlined)),
-                  Expanded(child: Text(e.key)),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.expand_more))
-                ],
-              ),
-              Visibility(
-                visible: true,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Column(
-                    children: e.value.map((e) => Row(
-                          children: [
-                            IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.checklist_rtl_rounded)),
-                            Text(e.key),
-                          ],
-                        )).toList(),
-                  ),
-                ),
-              )
-            ],
-          );
-        }).toList()),
+        const Divider(indent: 12, endIndent: 12, height: 1),
+
         if (MyData.myLists.isNotEmpty || MyData.myFolders.isNotEmpty)
           const Divider(indent: 12, endIndent: 12, height: 1),
-        InkWell(
-          onTap: () {},
+        Padding(
+          padding: const EdgeInsets.only(left: 6.0),
           child: Row(
             children: [
-              Expanded(
-                  child: Row(children: [
-                IconButton(onPressed: () {}, icon: Icon(Icons.playlist_add)),
-                Text('New List')
-              ])),
-              IconButton(
+              TextButton.icon(
                   onPressed: () {},
-                  icon: Icon(Icons.create_new_folder_outlined))
+                  icon: Icon(Icons.playlist_add_rounded),
+                  label: Text('New List')),
+              const Expanded(child: SizedBox()),
+              IconButton(
+                  onPressed: () {}, icon: Icon(Icons.create_new_folder_outlined))
             ],
           ),
         ),
@@ -102,3 +59,4 @@ class ListMenu extends StatelessWidget {
     );
   }
 }
+

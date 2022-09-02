@@ -22,12 +22,14 @@ class HomePage extends StatelessWidget {
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  backgroundColor: lightDynamic?.onInverseSurface,
+                  surfaceTintColor: Colors.black,
+                  backgroundColor: Theme.of(context).bottomAppBarColor,
                   floating: true,
                   snap: true,
                   expandedHeight: 150.0,
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
+
                     title: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,8 +38,8 @@ class HomePage extends StatelessWidget {
                             style: GoogleFonts.roboto(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w300,
-                                color: lightDynamic?.primary)),
-                        context.read<DateTimeProvider>().date(lightDynamic),
+                                color: lightDynamic?.primary ?? Theme.of(context).primaryColor)),
+                        context.read<DateTimeProvider>().date(context, lightDynamic),
                       ],
                     ),
                     titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
@@ -46,7 +48,7 @@ class HomePage extends StatelessWidget {
                   actions: [
                     PopupMenuButton(
                       color: lightDynamic?.secondaryContainer,
-                      icon: const Icon(Icons.sort),
+                      icon: const Icon(IconData(0xe800, fontFamily: 'SortFontIcon')),
                       itemBuilder: (context) => <PopupMenuEntry>[
                         const PopupMenuItem(
                             child: ListTile(
@@ -69,7 +71,7 @@ class HomePage extends StatelessWidget {
                     ),
                     PopupMenuButton(
                       color: lightDynamic?.secondaryContainer,
-                      icon: const Icon(Icons.more_vert),
+                      icon: const Icon(IconData(0xe800, fontFamily: 'MoreFontIcon')),
                       itemBuilder: (context) => <PopupMenuEntry>[
                         const PopupMenuItem(
                             child: ListTile(
@@ -114,7 +116,7 @@ class HomePage extends StatelessWidget {
                             backgroundColor: lightDynamic?.secondaryContainer,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16)),
-                            builder: (context) => ListMenu(),
+                            builder: (context) => const ListMenu(),
                           );
                         },
                         icon: const Icon(Icons.menu)),

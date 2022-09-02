@@ -23,72 +23,73 @@ class DateTimeProvider with ChangeNotifier {
     String m = '';
     switch (i) {
       case 1:
-        m = 'January';
+        m = 'Jan';
         break;
       case 2:
-        m = 'February';
+        m = 'Feb';
         break;
       case 3:
-        m = 'March';
+        m = 'Mar';
         break;
       case 4:
-        m = 'April';
+        m = 'Apr';
         break;
       case 5:
         m = 'May';
         break;
       case 6:
-        m = 'June';
+        m = 'Jun';
         break;
       case 7:
-        m = 'July';
+        m = 'Jul';
         break;
       case 8:
-        m = 'August';
+        m = 'Aug';
         break;
       case 9:
-        m = 'September';
+        m = 'Sept';
         break;
       case 10:
-        m = 'October';
+        m = 'Oct';
         break;
       case 11:
-        m = 'November';
+        m = 'Nov';
         break;
       case 12:
-        m = 'December';
+        m = 'Dec';
         break;
     }
     return m;
   }
 
-  Wrap date(ColorScheme? lightDynamic) {
+  Wrap date(BuildContext context, ColorScheme? lightDynamic) {
     DateTime currentDateTime = DateTime.now();
+    ThemeData themeData = Theme.of(context);
     return Wrap(
       direction: Axis.horizontal,
       children: [
         Text(currentDateTime.day.toString(),
             style: TextStyle(
-              color: lightDynamic?.secondary,
+              color: lightDynamic?.secondary ?? themeData.secondaryHeaderColor,
               fontSize: 10,
             )),
         Text(ordinal(currentDateTime.day),
             style: TextStyle(
-                color: lightDynamic?.secondary,
+                color: lightDynamic?.secondary ?? themeData.secondaryHeaderColor,
                 fontSize: 6,
                 fontFeatures: const [FontFeature.superscripts()])),
         Padding(
-          padding: const EdgeInsets.only(left: 1.0),
+          padding: const EdgeInsets.only(left: 2.0),
           child: Text(month(currentDateTime.month),
               style: TextStyle(
-                color: lightDynamic?.secondary,
+                color: lightDynamic?.secondary ?? themeData.secondaryHeaderColor,
                 fontSize: 10,
               )),
         ),
       ],
     );
   }
-  
+
   String weekday() {
     DateTime currentDateTime = DateTime.now();
     late String day;
