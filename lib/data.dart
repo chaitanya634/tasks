@@ -1,33 +1,30 @@
+import 'package:flutter/foundation.dart';
 
-class Tasks {}
-
-class MyData {
-  static List<MapEntry<String, Tasks>> myLists = [
-    MapEntry('List 1', Tasks()),
-    MapEntry('List 2', Tasks()),
-    MapEntry('List 3', Tasks()),
-    MapEntry('List 3', Tasks()),
-    MapEntry('List 3', Tasks()),
-    MapEntry('List 3', Tasks()),
-    MapEntry('List 3', Tasks()),
-    MapEntry('List 3', Tasks()),
-    MapEntry('List 3', Tasks()),
-    MapEntry('List 3', Tasks()),
-    MapEntry('List 3', Tasks()),
-  ];
-
-  static List<MapEntry<String, List<MapEntry<String, Tasks>>>> myFolders = [
-    MapEntry('Group 1', [
-      MapEntry('G List 1', Tasks()),
-      MapEntry('G List 2', Tasks()),
-      MapEntry('G List 3', Tasks()),
-    ]),
-    MapEntry('Group 2', [
-      MapEntry('G List 1', Tasks()),
-      MapEntry('G List 2', Tasks()),
-      MapEntry('G List 3', Tasks()),
-    ]),
-  ];
+class SubtaskModel {
+  String? title;
+  bool isChecked = false;
 }
 
+class MyData with ChangeNotifier, SubtaskModel {
+  List<SubtaskModel> subtasks = [];
 
+  void addSubtask({required SubtaskModel subtaskModel}) {
+    subtasks.add(subtaskModel);
+    notifyListeners();
+  }
+
+  void removeSubtaskAt({required int index}) {
+    subtasks.removeAt(index);
+    notifyListeners();
+  }
+
+  void updateSubtaskTitle(String subtitle, int index) {
+    subtasks.elementAt(index).title = subtitle;
+    notifyListeners();
+  }
+
+  void updateSubtaskCheckbox(bool value, int index) {
+    subtasks.elementAt(index).isChecked = value;
+    notifyListeners();
+  }
+}

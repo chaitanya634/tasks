@@ -39,8 +39,8 @@ class ListMenu extends StatelessWidget {
         ),
         const Divider(indent: 12, endIndent: 12, height: 1),
 
-        if (MyData.myLists.isNotEmpty || MyData.myFolders.isNotEmpty)
-          const Divider(indent: 12, endIndent: 12, height: 1),
+        // if (MyData.myLists.isNotEmpty || MyData.myFolders.isNotEmpty)
+        //   const Divider(indent: 12, endIndent: 12, height: 1),
         Padding(
           padding: const EdgeInsets.only(left: 6.0),
           child: Row(

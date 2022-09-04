@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../data.dart';
 
 class CreateTaskPage extends StatefulWidget {
   const CreateTaskPage(this.lightDynamic, {Key? key}) : super(key: key);
@@ -8,18 +11,16 @@ class CreateTaskPage extends StatefulWidget {
 }
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
-  static List<Widget> subtask = [];
+  bool starred = false, checked = false;
 
   @override
   void initState() {
     super.initState();
-    subtask.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor:
@@ -48,21 +49,35 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         ],
       ),
       body: ListView(children: [
+        //Add task textfield
         Padding(
           padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
           child: TextField(
             decoration: InputDecoration(
                 label: const Text('Title'),
                 prefixIcon: IconButton(
-                  icon: const Icon(Icons.star_border_rounded),
+                  icon: Icon(
+                    starred ? Icons.star_rounded : Icons.star_border_rounded,
+                    color:
+                        starred ? Theme.of(context).colorScheme.primary : null,
+                  ),
                   onPressed: () {
+                    setState(() {
+                      starred ? starred = false : starred = true;
+                    });
                     debugPrint('Starred');
                   },
                 ),
                 suffixIcon: IconButton(
                   icon: Checkbox(
-                      value: false,
-                      onChanged: (value) {},
+                      checkColor: Theme.of(context).colorScheme.onPrimary,
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      value: checked,
+                      onChanged: (value) {
+                        setState(() {
+                          checked = value!;
+                        });
+                      },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       )),
@@ -77,65 +92,77 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     borderRadius: BorderRadius.circular(18))),
           ),
         ),
+
+        // Subtask textfield list
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.only(left: 46, right: 8),
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: subtask.length,
+            itemCount: context.watch<MyData>().subtasks.length,
             itemBuilder: (context, index) {
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(child: subtask.elementAt(index)),
-                  IconButton(onPressed: () {
-                    setState(() {
-                      subtask.removeAt(index);
-                    });
-                  }, icon: Icon(Icons.close_rounded))
-                ],
+              return Padding(
+                padding: const EdgeInsets.only(
+                  top: 8,
+                ),
+                child: TextField(
+                  onChanged: (value) {
+                    context.read<MyData>().updateSubtaskTitle(value, index);
+                  },
+                  decoration: InputDecoration(
+                      label: const Text('Subtitle'),
+                      suffixIcon:
+                          Row(mainAxisSize: MainAxisSize.min, children: [
+                        Checkbox(
+                            value: context
+                                .watch<MyData>()
+                                .subtasks
+                                .elementAt(index)
+                                .isChecked,
+                            onChanged: (value) {
+                              context
+                                  .read<MyData>()
+                                  .updateSubtaskCheckbox(value!, index);
+                                  debugPrint('${context
+                                  .read<MyData>().subtasks.elementAt(index).title}, ${context
+                                  .read<MyData>().subtasks.elementAt(index).isChecked.toString()}');
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            )),
+                        IconButton(
+                            icon: const Icon(
+                              Icons.close_rounded,
+                            ),
+                            onPressed: () {
+                              context
+                                  .read<MyData>()
+                                  .removeSubtaskAt(index: index);
+                            }),
+                      ]),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18))),
+                ),
               );
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        subtask.add(Padding(
-                          padding: const EdgeInsets.only(
-                            left: 46,
-                            top: 8,
-                          ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                                label: const Text('Subtitle'),
-                                suffixIcon: Checkbox(
-                                    value: false,
-                                    onChanged: (value) {},
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                    )),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(18))),
-                          ),
-                        ));
-                      });
-                    },
-                    icon: const Icon(
-                        IconData(0xe811, fontFamily: 'OutlinedFontIcons')),
-                    label: const Text('Subtask'),
-                    style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.black54)),
-                  ),
-                ),
-              ]),
+
+        //Add Subtask Button
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: OutlinedButton.icon(
+              onPressed: () {
+                context.read<MyData>().addSubtask(subtaskModel: SubtaskModel());
+              },
+              icon:
+                  const Icon(IconData(0xe811, fontFamily: 'OutlinedFontIcons')),
+              label: const Text('Subtask'),
+              style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.black54)),
+            ),
+          ),
         ),
         const Divider(
           indent: 138,
