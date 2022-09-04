@@ -11,8 +11,15 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   static List<Widget> subtask = [];
 
   @override
+  void initState() {
+    super.initState();
+    subtask.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor:
@@ -72,15 +79,21 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          // child: Column(
-          //   children: subtask,
-          // ),
           child: ListView.builder(
             shrinkWrap: true,
             itemCount: subtask.length,
             itemBuilder: (context, index) {
-            
-              return subtask.elementAt(index);
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(child: subtask.elementAt(index)),
+                  IconButton(onPressed: () {
+                    setState(() {
+                      subtask.removeAt(index);
+                    });
+                  }, icon: Icon(Icons.close_rounded))
+                ],
+              );
             },
           ),
         ),
@@ -103,20 +116,12 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                           child: TextField(
                             decoration: InputDecoration(
                                 label: const Text('Subtitle'),
-                                suffixIcon: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Checkbox(
-                                          value: false,
-                                          onChanged: (value) {},
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          )),
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.close_rounded))
-                                    ]),
+                                suffixIcon: Checkbox(
+                                    value: false,
+                                    onChanged: (value) {},
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    )),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(18))),
                           ),
