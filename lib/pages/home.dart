@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/data/enums.dart';
 import 'package:tasks/pages/create_task.dart';
 import 'package:tasks/pages/list_menu.dart';
 import 'package:tasks/providers/date_time.dart';
@@ -22,7 +23,8 @@ class HomePage extends StatelessWidget {
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  backgroundColor: lightDynamic?.onInverseSurface ?? Theme.of(context).bottomAppBarColor,
+                  backgroundColor: lightDynamic?.onInverseSurface ??
+                      Theme.of(context).bottomAppBarColor,
                   floating: true,
                   snap: true,
                   expandedHeight: 150.0,
@@ -32,7 +34,7 @@ class HomePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(context.read<DateTimeProvider>().weekday(DateTime.now().weekday),
+                        Text(DaysOfWeek.values[DateTime.now().weekday - 1].name,
                             style: GoogleFonts.roboto(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w300,
@@ -123,13 +125,20 @@ class HomePage extends StatelessWidget {
                             builder: (context) => const ListMenu(),
                           );
                         },
-                        icon: const Icon(IconData(0xe810, fontFamily: 'OutlinedFontIcons'))),
-                    IconButton(onPressed: () {}, icon: const Icon(IconData(0xe80f, fontFamily: 'OutlinedFontIcons'))),
+                        icon: const Icon(
+                            IconData(0xe810, fontFamily: 'OutlinedFontIcons'))),
                     IconButton(
                         onPressed: () {},
-                        icon: const Icon(IconData(0xe80e, fontFamily: 'OutlinedFontIcons'))),
+                        icon: const Icon(
+                            IconData(0xe80f, fontFamily: 'OutlinedFontIcons'))),
                     IconButton(
-                        onPressed: () {}, icon: const Icon(IconData(0xe80d, fontFamily: 'OutlinedFontIcons'))),
+                        onPressed: () {},
+                        icon: const Icon(
+                            IconData(0xe80e, fontFamily: 'OutlinedFontIcons'))),
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                            IconData(0xe80d, fontFamily: 'OutlinedFontIcons'))),
                   ]),
                 ),
                 Padding(
@@ -147,7 +156,8 @@ class HomePage extends StatelessWidget {
                     },
                     mini: true,
                     elevation: 0,
-                    child: const Icon(IconData(0xe811, fontFamily: 'OutlinedFontIcons')),
+                    child: const Icon(
+                        IconData(0xe811, fontFamily: 'OutlinedFontIcons')),
                   ),
                 )
               ],

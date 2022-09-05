@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/providers/date_time.dart';
 
-import '../data.dart';
+import '../providers/date_time.dart';
+import '../data/enums.dart';
+import '../data/models.dart';
 
 class CreateTaskPage extends StatefulWidget {
   const CreateTaskPage(this.lightDynamic, {Key? key}) : super(key: key);
@@ -12,14 +13,28 @@ class CreateTaskPage extends StatefulWidget {
 }
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
-  bool starred = false, checked = false;
+  //title
+  bool isStarred = false;
+  bool isChecked = false;
+  late String title;
+
+  //subtasks
+  List<SubtaskModel> subtasks = [];
+
+  //remainder
+  DateTime? remainderDate;
+  TimeOfDay? remainderTime;
+
+  //due
+  DateTime? dueDate;
+
+  //repeat
+  RepeatTask? repeat;
+
+  //note
+  String? note;
 
   Widget? rTitle = const Text('Add reaminder'), rSubtitle;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +67,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         ],
       ),
       body: ListView(children: [
-        //Add task textfield
+        //title textfield
         Padding(
           padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
           child: TextField(
@@ -60,34 +75,29 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                 label: const Text('Title'),
                 prefixIcon: IconButton(
                   icon: Icon(
-                    starred ? Icons.star_rounded : Icons.star_border_rounded,
-                    color:
-                        starred ? Theme.of(context).colorScheme.primary : null,
+                    isStarred ? Icons.star_rounded : Icons.star_border_rounded,
+                    color: isStarred
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
                   ),
                   onPressed: () {
                     setState(() {
-                      starred ? starred = false : starred = true;
+                      isStarred ? isStarred = false : isStarred = true;
                     });
-                    debugPrint('Starred');
                   },
                 ),
-                suffixIcon: IconButton(
-                  icon: Checkbox(
-                      checkColor: Theme.of(context).colorScheme.onPrimary,
-                      activeColor: Theme.of(context).colorScheme.primary,
-                      value: checked,
-                      onChanged: (value) {
-                        setState(() {
-                          checked = value!;
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      )),
-                  onPressed: () {
-                    debugPrint('Pressed');
-                  },
-                ),
+                suffixIcon: Checkbox(
+                    checkColor: Theme.of(context).colorScheme.onPrimary,
+                    activeColor: Theme.of(context).colorScheme.primary,
+                    value: isChecked,
+                    onChanged: (value) {
+                      setState(() {
+                        isChecked = value!;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    )),
                 border: OutlineInputBorder(
                     borderSide: BorderSide(
                         color: widget.lightDynamic?.outline ??
@@ -101,7 +111,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           padding: const EdgeInsets.only(left: 46, right: 8),
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: context.watch<MyData>().subtasks.length,
+            itemCount: subtasks.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(
@@ -109,24 +119,18 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                 ),
                 child: TextField(
                   onChanged: (value) {
-                    context.read<MyData>().updateSubtaskTitle(value, index);
+                    subtasks.elementAt(index).title = value;
                   },
                   decoration: InputDecoration(
                       label: const Text('Subtitle'),
                       suffixIcon:
                           Row(mainAxisSize: MainAxisSize.min, children: [
                         Checkbox(
-                            value: context
-                                .watch<MyData>()
-                                .subtasks
-                                .elementAt(index)
-                                .isChecked,
+                            value: subtasks.elementAt(index).isChecked,
                             onChanged: (value) {
-                              context
-                                  .read<MyData>()
-                                  .updateSubtaskCheckbox(value!, index);
-                              debugPrint(
-                                  '${context.read<MyData>().subtasks.elementAt(index).title}, ${context.read<MyData>().subtasks.elementAt(index).isChecked.toString()}');
+                              setState(() {
+                                subtasks.elementAt(index).isChecked = value!;
+                              });
                             },
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
@@ -136,9 +140,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                               Icons.close_rounded,
                             ),
                             onPressed: () {
-                              context
-                                  .read<MyData>()
-                                  .removeSubtaskAt(index: index);
+                              setState(() {
+                                subtasks.removeAt(index);
+                              });
                             }),
                       ]),
                       border: OutlineInputBorder(
@@ -156,7 +160,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             padding: const EdgeInsets.all(8.0),
             child: OutlinedButton.icon(
               onPressed: () {
-                context.read<MyData>().addSubtask(subtaskModel: SubtaskModel());
+                setState(() {
+                  subtasks.add(SubtaskModel());
+                });
               },
               icon:
                   const Icon(IconData(0xe811, fontFamily: 'OutlinedFontIcons')),
@@ -170,10 +176,12 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           indent: 138,
           endIndent: 138,
         ),
+
+        //Remainder
         ListTile(
-          leading: Container(
-            height: double.infinity,
-            child: Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons'))),
+          leading: const SizedBox(
+              height: double.infinity,
+              child: Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons'))),
           title: rTitle!,
           subtitle: rSubtitle,
           onTap: () async {
@@ -200,8 +208,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
 
               rSubtitle = Row(
                 children: [
-                  Text(
-                      '${context.read<DateTimeProvider>().weekday(date!.weekday)}, '),
+                  Text('${DaysOfWeek.values[date!.weekday - 1].name}, '),
                   context
                       .read<DateTimeProvider>()
                       .date(context, Theme.of(context).colorScheme, date, 14),

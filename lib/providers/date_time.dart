@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:tasks/data/enums.dart';
 
 class DateTimeProvider with ChangeNotifier {
   String ordinal(int number) {
@@ -17,49 +18,6 @@ class DateTimeProvider with ChangeNotifier {
     }
 
     return ordinal;
-  }
-
-  String month(int i) {
-    String m = '';
-    switch (i) {
-      case 1:
-        m = 'Jan';
-        break;
-      case 2:
-        m = 'Feb';
-        break;
-      case 3:
-        m = 'Mar';
-        break;
-      case 4:
-        m = 'Apr';
-        break;
-      case 5:
-        m = 'May';
-        break;
-      case 6:
-        m = 'Jun';
-        break;
-      case 7:
-        m = 'Jul';
-        break;
-      case 8:
-        m = 'Aug';
-        break;
-      case 9:
-        m = 'Sept';
-        break;
-      case 10:
-        m = 'Oct';
-        break;
-      case 11:
-        m = 'Nov';
-        break;
-      case 12:
-        m = 'Dec';
-        break;
-    }
-    return m;
   }
 
   Wrap date(BuildContext context, ColorScheme? lightDynamic, DateTime dateTime,
@@ -83,7 +41,7 @@ class DateTimeProvider with ChangeNotifier {
                 fontFeatures: const [FontFeature.superscripts()])),
         Padding(
           padding: const EdgeInsets.only(left: 2.0),
-          child: Text(month(currentDateTime.month),
+          child: Text(Months.values[currentDateTime.month-1].name,
               style: TextStyle(
                 color:
                     lightDynamic?.secondary ?? themeData.secondaryHeaderColor,
@@ -92,33 +50,5 @@ class DateTimeProvider with ChangeNotifier {
         ),
       ],
     );
-  }
-
-  String weekday(int weekdayNum) {
-    late String day;
-    switch (weekdayNum) {
-      case 1:
-        day = 'Monday';
-        break;
-      case 2:
-        day = 'Tuesday';
-        break;
-      case 3:
-        day = 'Wednesday';
-        break;
-      case 4:
-        day = 'Thursday';
-        break;
-      case 5:
-        day = 'Friday';
-        break;
-      case 6:
-        day = 'Saturday';
-        break;
-      case 7:
-        day = 'Sunday';
-        break;
-    }
-    return day;
   }
 }
