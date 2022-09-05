@@ -2,10 +2,21 @@ import 'package:flutter/foundation.dart';
 
 class SubtaskModel {
   String? title;
-  bool isChecked = false;
+  bool isChecked;
+
+  SubtaskModel({this.title, this.isChecked = false});
 }
 
-class MyData with ChangeNotifier, SubtaskModel {
+
+class TaskModel {
+  bool isStarred = false;
+  bool isChecked = false;
+  String? title;
+
+  List<SubtaskModel> subtasks = [];
+}
+
+class MyData with ChangeNotifier {
   List<SubtaskModel> subtasks = [];
 
   void addSubtask({required SubtaskModel subtaskModel}) {

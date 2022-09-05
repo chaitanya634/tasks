@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/providers/date_time.dart';
 
 import '../data.dart';
 
@@ -12,6 +13,8 @@ class CreateTaskPage extends StatefulWidget {
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
   bool starred = false, checked = false;
+
+  Widget? rTitle = const Text('Add reaminder'), rSubtitle;
 
   @override
   void initState() {
@@ -122,9 +125,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                               context
                                   .read<MyData>()
                                   .updateSubtaskCheckbox(value!, index);
-                                  debugPrint('${context
-                                  .read<MyData>().subtasks.elementAt(index).title}, ${context
-                                  .read<MyData>().subtasks.elementAt(index).isChecked.toString()}');
+                              debugPrint(
+                                  '${context.read<MyData>().subtasks.elementAt(index).title}, ${context.read<MyData>().subtasks.elementAt(index).isChecked.toString()}');
                             },
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
@@ -168,9 +170,47 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           indent: 138,
           endIndent: 138,
         ),
-        const ListTile(
-            leading: Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons')),
-            title: Text('Add reaminder')),
+        ListTile(
+          leading: Container(
+            height: double.infinity,
+            child: Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons'))),
+          title: rTitle!,
+          subtitle: rSubtitle,
+          onTap: () async {
+            DateTime? date = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime(DateTime.now().year + 10),
+            );
+            TimeOfDay? time = await showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.now(),
+              builder: (context, child) {
+                return Theme(
+                  data: ThemeData.light(),
+                  child: child!,
+                );
+              },
+            );
+            setState(() {
+              rTitle = Text(
+                'Remind me at ${time?.hourOfPeriod}:${time?.minute} ${time?.period.name}',
+              );
+
+              rSubtitle = Row(
+                children: [
+                  Text(
+                      '${context.read<DateTimeProvider>().weekday(date!.weekday)}, '),
+                  context
+                      .read<DateTimeProvider>()
+                      .date(context, Theme.of(context).colorScheme, date, 14),
+                  Text(' ${date.year.toString()}'),
+                ],
+              );
+            });
+          },
+        ),
         const Divider(indent: 68),
         const ListTile(
             leading: Icon(IconData(0xe802, fontFamily: 'OutlinedFontIcons')),

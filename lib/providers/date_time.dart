@@ -62,38 +62,41 @@ class DateTimeProvider with ChangeNotifier {
     return m;
   }
 
-  Wrap date(BuildContext context, ColorScheme? lightDynamic) {
-    DateTime currentDateTime = DateTime.now();
+  Wrap date(BuildContext context, ColorScheme? lightDynamic, DateTime dateTime,
+      double? textSize) {
+    DateTime currentDateTime = dateTime;
     ThemeData themeData = Theme.of(context);
+    double? fontSize = textSize ?? 10;
     return Wrap(
       direction: Axis.horizontal,
       children: [
         Text(currentDateTime.day.toString(),
             style: TextStyle(
               color: lightDynamic?.secondary ?? themeData.secondaryHeaderColor,
-              fontSize: 10,
+              fontSize: fontSize,
             )),
         Text(ordinal(currentDateTime.day),
             style: TextStyle(
-                color: lightDynamic?.secondary ?? themeData.secondaryHeaderColor,
-                fontSize: 6,
+                color:
+                    lightDynamic?.secondary ?? themeData.secondaryHeaderColor,
+                fontSize: fontSize - 4,
                 fontFeatures: const [FontFeature.superscripts()])),
         Padding(
           padding: const EdgeInsets.only(left: 2.0),
           child: Text(month(currentDateTime.month),
               style: TextStyle(
-                color: lightDynamic?.secondary ?? themeData.secondaryHeaderColor,
-                fontSize: 10,
+                color:
+                    lightDynamic?.secondary ?? themeData.secondaryHeaderColor,
+                fontSize: fontSize,
               )),
         ),
       ],
     );
   }
 
-  String weekday() {
-    DateTime currentDateTime = DateTime.now();
+  String weekday(int weekdayNum) {
     late String day;
-    switch (currentDateTime.weekday) {
+    switch (weekdayNum) {
       case 1:
         day = 'Monday';
         break;

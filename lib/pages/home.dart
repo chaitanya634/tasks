@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(context.read<DateTimeProvider>().weekday(),
+                        Text(context.read<DateTimeProvider>().weekday(DateTime.now().weekday),
                             style: GoogleFonts.roboto(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w300,
@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                                     Theme.of(context).primaryColor)),
                         context
                             .read<DateTimeProvider>()
-                            .date(context, lightDynamic),
+                            .date(context, lightDynamic, DateTime.now(), null),
                       ],
                     ),
                     titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
