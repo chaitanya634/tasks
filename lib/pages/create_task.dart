@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +18,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   //title
   bool isStarred = false;
   bool isChecked = false;
-  late String title;
+  String title = '';
 
   //subtasks
   List<SubtaskModel> subtasks = [];
@@ -24,17 +26,19 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   //remainder
   DateTime? remainderDate;
   TimeOfDay? remainderTime;
+  Widget? rTitle = const Text('Add reaminder'), rSubtitle;
+  Icon rIcon = const Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons'));
 
   //due
   DateTime? dueDate;
+  Widget dTitle = const Text('Add due date');
 
   //repeat
   RepeatTask? repeat;
+  Widget repeatTitle = const Text('Repeat');
 
   //note
   String? note;
-
-  Widget? rTitle = const Text('Add reaminder'), rSubtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +61,20 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              debugPrint('Starred: $isStarred');
+              debugPrint('Checked: $isChecked');
+              debugPrint('Title: $title');
+
+              debugPrint('Subtasks: $subtasks');
+
+              debugPrint('Remainder title: $rTitle');
+              debugPrint('Remainder subtitle: $rSubtitle');
+
+              debugPrint('Due date: $dueDate');
+
+              debugPrint('Repeat: $repeat');
+            },
             child: Text(
               'Save',
               style: TextStyle(
@@ -71,6 +88,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         Padding(
           padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
           child: TextField(
+            onChanged: (value) {
+              title = value;
+            },
             decoration: InputDecoration(
                 label: const Text('Title'),
                 prefixIcon: IconButton(
@@ -179,9 +199,10 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
 
         //Remainder
         ListTile(
-          leading: const SizedBox(
-              height: double.infinity,
-              child: Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons'))),
+          leading: SizedBox(
+            height: double.infinity,
+            child: rIcon,
+          ),
           title: rTitle!,
           subtitle: rSubtitle,
           onTap: () async {
@@ -201,17 +222,69 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                 );
               },
             );
+
+            remainderDate = date;
+            remainderTime = time;
+
             setState(() {
-              rTitle = Text(
-                'Remind me at ${time?.hourOfPeriod}:${time?.minute} ${time?.period.name}',
+              rIcon = Icon(
+                Icons.notifications_active_rounded,
+                color: Theme.of(context).colorScheme.primary,
               );
 
-              rSubtitle = Row(
+              rTitle = Text(
+                'Remind me at ${time?.hourOfPeriod}:${time?.minute} ${time?.period.name}',
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              );
+
+              rSubtitle = Wrap(
                 children: [
+                  Text(
+                    '${DaysOfWeek.values[date!.weekday - 1].name}, ',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary),
+                  ),
+                  Text(date.day.toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                  Text(
+                    context.read<DateTimeProvider>().ordinal(date.day),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 10,
+                        fontFeatures: const [FontFeature.superscripts()]),
+                  ),
+                  Text(' ${Months.values[date.month - 1].name}', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                  Text(' ${date.year.toString()}', style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                ],
+              );
+            });
+          },
+        ),
+        const Divider(indent: 68),
+        ListTile(
+          leading:
+              const Icon(IconData(0xe802, fontFamily: 'OutlinedFontIcons')),
+          title: dTitle,
+          onTap: () async {
+            DateTime? date = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime(DateTime.now().year + 10),
+            );
+            dueDate = date;
+            setState(() {
+              dTitle = Wrap(
+                children: [
+                  const Text('Due '),
                   Text('${DaysOfWeek.values[date!.weekday - 1].name}, '),
-                  context
-                      .read<DateTimeProvider>()
-                      .date(context, Theme.of(context).colorScheme, date, 14),
+                  Text(date.day.toString()),
+                  Text(
+                    context.read<DateTimeProvider>().ordinal(date.day),
+                    style: const TextStyle(
+                        fontSize: 11,
+                        fontFeatures: [FontFeature.superscripts()]),
+                  ),
+                  Text(' ${Months.values[date.month - 1].name}'),
                   Text(' ${date.year.toString()}'),
                 ],
               );
@@ -219,18 +292,43 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           },
         ),
         const Divider(indent: 68),
-        const ListTile(
-            leading: Icon(IconData(0xe802, fontFamily: 'OutlinedFontIcons')),
-            title: Text('Add due date')),
-        Divider(indent: 68),
-        ListTile(
-            leading: Icon(IconData(0xe801, fontFamily: 'OutlinedFontIcons')),
-            title: Text('Repeat')),
-        Divider(indent: 68),
-        ListTile(
-            leading: Icon(IconData(0xe816, fontFamily: 'OutlinedFontIcons')),
-            title: Text('Add note')),
-        Divider(indent: 68),
+        PopupMenuButton<RepeatTask>(
+          offset: const Offset(1, 0),
+          child: ListTile(
+            leading: const Icon(
+              IconData(0xe801, fontFamily: 'OutlinedFontIcons'),
+            ),
+            title: repeatTitle,
+          ),
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<RepeatTask>>[
+            PopupMenuItem(
+                value: RepeatTask.Daily, child: Text(RepeatTask.Daily.name)),
+            PopupMenuItem(
+                value: RepeatTask.Monthly,
+                child: Text(RepeatTask.Monthly.name)),
+            PopupMenuItem(
+                value: RepeatTask.Weekdays,
+                child: Text(RepeatTask.Weekdays.name)),
+            PopupMenuItem(
+                value: RepeatTask.Weekends,
+                child: Text(RepeatTask.Weekends.name)),
+            PopupMenuItem(
+                value: RepeatTask.Weekly, child: Text(RepeatTask.Weekly.name)),
+            PopupMenuItem(
+                value: RepeatTask.Yearly, child: Text(RepeatTask.Yearly.name)),
+          ],
+          onSelected: (value) {
+            setState(() {
+              repeat = value;
+              repeatTitle = Text('Repeat ${value.name}');
+            });
+          },
+        ),
+        const Divider(indent: 68),
+        // ListTile(
+        //     leading: Icon(IconData(0xe816, fontFamily: 'OutlinedFontIcons')),
+        //     title: Text('Add note')),
+        // const Divider(indent: 68),
       ]),
     );
   }
