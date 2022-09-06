@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:tasks/data/models.dart';
 
 class ListMenu extends StatelessWidget {
   const ListMenu({Key? key}) : super(key: key);
@@ -21,19 +19,21 @@ class ListMenu extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     Text('Chaitanya',
-                        style: GoogleFonts.roboto(
+                        style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
                             height: 1)),
                     Text('Jadhav',
-                        style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w600, fontSize: 13, height: 1.2)),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            height: 1.2)),
                   ],
                 ),
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.logout_rounded))
+              IconButton(onPressed: () {}, icon: const Icon(Icons.logout_rounded))
             ],
           ),
         ),
@@ -47,11 +47,12 @@ class ListMenu extends StatelessWidget {
             children: [
               TextButton.icon(
                   onPressed: () {},
-                  icon: Icon(Icons.playlist_add_rounded),
-                  label: Text('New List')),
+                  icon: const Icon(Icons.playlist_add_rounded),
+                  label: const Text('New List')),
               const Expanded(child: SizedBox()),
               IconButton(
-                  onPressed: () {}, icon: Icon(Icons.create_new_folder_outlined))
+                  onPressed: () {},
+                  icon: const Icon(Icons.create_new_folder_outlined))
             ],
           ),
         ),
@@ -59,4 +60,3 @@ class ListMenu extends StatelessWidget {
     );
   }
 }
-

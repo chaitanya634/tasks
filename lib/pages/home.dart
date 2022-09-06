@@ -1,48 +1,68 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:tasks/data/enums.dart';
-import 'package:tasks/pages/create_task.dart';
-import 'package:tasks/pages/list_menu.dart';
-import 'package:tasks/providers/date_time.dart';
+
+import '../data/algos.dart';
+import '../data/enums.dart';
+import '../pages/create_task.dart';
+import '../pages/list_menu.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage(this.lightDynamic, this.darkDynamic,
-      {required BuildContext context, Key? key})
-      : super(key: key);
-
-  final ColorScheme? lightDynamic;
-  final ColorScheme? darkDynamic;
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+    var currentDateTime = DateTime.now();
     return Scaffold(
+      backgroundColor: colorScheme.background,
       body: Column(
         children: [
           Expanded(
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  backgroundColor: lightDynamic?.onInverseSurface ??
-                      Theme.of(context).bottomAppBarColor,
+                  backgroundColor: colorScheme.background,
+                  shadowColor: colorScheme.shadow,
                   floating: true,
-                  snap: true,
-                  expandedHeight: 150.0,
                   pinned: true,
+                  expandedHeight: 150.0,
                   flexibleSpace: FlexibleSpaceBar(
                     title: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(DaysOfWeek.values[DateTime.now().weekday - 1].name,
-                            style: GoogleFonts.roboto(
+                        Text(
+                            DaysOfWeek.values[currentDateTime.weekday - 1].name,
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w300,
-                                color: lightDynamic?.primary ??
-                                    Theme.of(context).primaryColor)),
-                        context
-                            .read<DateTimeProvider>()
-                            .date(context, lightDynamic, DateTime.now(), null),
+                                color: colorScheme.primary)),
+                        Wrap(
+                          children: [
+                            Text(currentDateTime.day.toString(),
+                                style: TextStyle(
+                                  color: colorScheme.secondary,
+                                  fontSize: 10,
+                                )),
+                            Text(Algos.ordinal(currentDateTime.day),
+                                style: TextStyle(
+                                    color: colorScheme.secondary,
+                                    fontSize: 6,
+                                    fontFeatures: const [
+                                      FontFeature.superscripts()
+                                    ])),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 2.0),
+                              child: Text(
+                                  Months.values[currentDateTime.month - 1].name,
+                                  style: TextStyle(
+                                    color: colorScheme.secondary,
+                                    fontSize: 10,
+                                  )),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                     titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
@@ -50,7 +70,7 @@ class HomePage extends StatelessWidget {
                   ),
                   actions: [
                     PopupMenuButton(
-                      color: lightDynamic?.secondaryContainer,
+                      color: colorScheme.secondaryContainer,
                       icon: const Icon(
                           IconData(0xe813, fontFamily: 'OutlinedFontIcons')),
                       itemBuilder: (context) => <PopupMenuEntry>[
@@ -74,7 +94,7 @@ class HomePage extends StatelessWidget {
                           IconData(0xe814, fontFamily: 'OutlinedFontIcons')),
                     ),
                     PopupMenuButton(
-                      color: lightDynamic?.secondaryContainer,
+                      color: colorScheme.secondaryContainer,
                       icon: const Icon(
                           IconData(0xe815, fontFamily: 'OutlinedFontIcons')),
                       itemBuilder: (context) => <PopupMenuEntry>[
@@ -109,8 +129,7 @@ class HomePage extends StatelessWidget {
           ),
           Container(
             height: 66,
-            color: lightDynamic?.onInverseSurface ??
-                Theme.of(context).bottomAppBarColor,
+            color: colorScheme.onInverseSurface,
             child: Row(
               children: [
                 Expanded(
@@ -119,7 +138,7 @@ class HomePage extends StatelessWidget {
                         onPressed: () {
                           showModalBottomSheet(
                             context: context,
-                            backgroundColor: lightDynamic?.secondaryContainer,
+                            backgroundColor: colorScheme.secondaryContainer,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16)),
                             builder: (context) => const ListMenu(),
@@ -144,20 +163,21 @@ class HomePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 6.0),
                   child: FloatingActionButton(
-                    backgroundColor:
-                        lightDynamic?.primary ?? Theme.of(context).primaryColor,
+                    backgroundColor: colorScheme.primary,
                     onPressed: () {
                       showGeneralDialog(
                         context: context,
                         pageBuilder: (context, animation, secondaryAnimation) {
-                          return CreateTaskPage(lightDynamic);
+                          return const CreateTaskPage();
                         },
                       );
                     },
                     mini: true,
                     elevation: 0,
-                    child: const Icon(
-                        IconData(0xe811, fontFamily: 'OutlinedFontIcons')),
+                    child: Icon(
+                      Icons.add,
+                      color: colorScheme.onPrimary,
+                    ),
                   ),
                 )
               ],
