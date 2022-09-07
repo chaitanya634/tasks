@@ -51,7 +51,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   void initState() {
     super.initState();
     if (widget.taskModelIndex != null && widget.colorScheme != null) {
-      var colorScheme = widget.colorScheme!;
+      ColorScheme colorScheme = widget.colorScheme!;
       TaskModel element =
           context.read<TaskLists>().planned.elementAt(widget.taskModelIndex!);
       title = element.title;
@@ -441,8 +441,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         Visibility(
           visible: widget.taskModelIndex == null ? false : true,
           child: ListTile(
-            leading: const Icon(IconData(0xe800, fontFamily: 'DeleteFontIcon')),
-            title: const Text('Delete Task'),
+            leading: Icon(const IconData(0xe800, fontFamily: 'DeleteFontIcon'), color: colorScheme.error,),
+            title: Text('Delete Task', style: TextStyle(color: colorScheme.error)),
             onTap: () {
               context.read<TaskLists>().removePlanned(widget.taskModelIndex!);
               Navigator.pop(context);

@@ -37,6 +37,7 @@ ThemeData darkTheme() => ThemeData(
         onErrorContainer: Color(0xFFFFB4AB),
         surfaceTint: Color(0xFFF9BB6C),
       ),
+      
     );
 
 ThemeData dynamicDarkTheme(ColorScheme darkDynamic) => ThemeData(
