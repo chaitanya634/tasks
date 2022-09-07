@@ -27,8 +27,8 @@ enum DaysOfWeek {
 
 enum RepeatTask {
   Daily,
-  Weekdays,
-  Weekends,
+  Weekday,
+  Weekend,
   Weekly,
   Monthly,
   Yearly,

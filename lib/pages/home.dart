@@ -144,7 +144,7 @@ class HomePage extends StatelessWidget {
                               .planned
                               .elementAt(index)
                               .title,
-                          style: TextStyle(color: colorScheme.secondary),
+                          style: TextStyle(color: colorScheme.secondary, fontSize: 18),
                         ),
                         subtitle: generateSubtitle(context.read<TaskLists>().planned.elementAt(index)),
                       ),

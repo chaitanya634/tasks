@@ -7,6 +7,7 @@ ThemeData dynamicLightTheme(ColorScheme lightDynamic) => ThemeData(
       appBarTheme: const AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark
         ),
       ),
     );
@@ -16,6 +17,7 @@ ThemeData lightTheme() => ThemeData(
       appBarTheme: const AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark
         ),
         actionsIconTheme: IconThemeData(color: Color(0xff2A1700)),
       ),

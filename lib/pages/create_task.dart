@@ -306,11 +306,11 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                 value: RepeatTask.Monthly,
                 child: Text(RepeatTask.Monthly.name)),
             PopupMenuItem(
-                value: RepeatTask.Weekdays,
-                child: Text(RepeatTask.Weekdays.name)),
+                value: RepeatTask.Weekday,
+                child: Text(RepeatTask.Weekday.name)),
             PopupMenuItem(
-                value: RepeatTask.Weekends,
-                child: Text(RepeatTask.Weekends.name)),
+                value: RepeatTask.Weekend,
+                child: Text(RepeatTask.Weekend.name)),
             PopupMenuItem(
                 value: RepeatTask.Weekly, child: Text(RepeatTask.Weekly.name)),
             PopupMenuItem(
