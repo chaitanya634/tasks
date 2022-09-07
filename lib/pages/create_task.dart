@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks/data/algos.dart';
-import 'package:tasks/data/task_lists.dart';
+import 'package:tasks/providers/task_lists.dart';
 import 'dart:ui';
 
 import '../data/enums.dart';
 import '../data/models.dart';
 
 class CreateTaskPage extends StatefulWidget {
-  const CreateTaskPage({Key? key}) : super(key: key);
+  const CreateTaskPage({
+    Key? key,
+    this.taskModelIndex,
+  }) : super(key: key);
+
+  final int? taskModelIndex;
+
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
 }
@@ -17,7 +23,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   //title
   bool isStarred = false;
   bool isChecked = false;
-  String title = '';
+  String? title;
 
   //subtasks
   List<SubtaskModel> subtasks = [];
@@ -43,6 +49,20 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   String? note;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.taskModelIndex != null) {
+      TaskModel element =
+          context.read<TaskLists>().planned.elementAt(widget.taskModelIndex!);
+      title = element.title;
+      isStarred = element.isStarred;
+      isChecked = element.isChecked;
+
+      subtasks = element.subtasks!;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
@@ -62,16 +82,31 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         actions: [
           TextButton(
             onPressed: () {
-              context.read<TaskLists>().addPlanned(TaskModel(
-                    isStarred: isStarred,
-                    isChecked: isChecked,
-                    title: title,
-                    subtasks: subtasks,
-                    dueDate: dueDate,
-                    remainderDate: remainderDate,
-                    remainderTime: remainderTime,
-                    repeat: repeat,
-                  ));
+              if (widget.taskModelIndex == null) {
+                context.read<TaskLists>().addPlanned(TaskModel(
+                      isStarred: isStarred,
+                      isChecked: isChecked,
+                      title: title!,
+                      subtasks: subtasks,
+                      dueDate: dueDate,
+                      remainderDate: remainderDate,
+                      remainderTime: remainderTime,
+                      repeat: repeat,
+                    ));
+              } else {
+                context.read<TaskLists>().updatePlanned(
+                    widget.taskModelIndex!,
+                    TaskModel(
+                      isStarred: isStarred,
+                      isChecked: isChecked,
+                      title: title!,
+                      dueDate: dueDate,
+                      remainderDate: remainderDate,
+                      remainderTime: remainderTime,
+                      repeat: repeat,
+                      subtasks: subtasks,
+                    ));
+              }
               Navigator.pop(context);
             },
             child: Text('Save', style: TextStyle(color: colorScheme.primary)),
@@ -83,6 +118,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         Padding(
           padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
           child: TextField(
+            controller: TextEditingController(text: title),
             onChanged: (value) {
               title = value;
             },
@@ -128,6 +164,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: TextField(
+                  controller: TextEditingController(
+                      text: subtasks.elementAt(index).title),
                   onChanged: (value) {
                     subtasks.elementAt(index).title = value;
                   },
@@ -180,10 +218,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             ),
           ),
         ),
-        const Divider(
-          indent: 138,
-          endIndent: 138,
-        ),
+        const Divider(indent: 138, endIndent: 138),
 
         //Remainder
         ListTile(
@@ -256,6 +291,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           },
         ),
         const Divider(indent: 68),
+
+        //Due
         ListTile(
           leading: dueIcon,
           title: dTitle,
@@ -293,6 +330,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           },
         ),
         const Divider(indent: 68),
+
+        //Repeat
         PopupMenuButton<RepeatTask>(
           offset: const Offset(1, 0),
           child: ListTile(
@@ -327,6 +366,24 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           },
         ),
         const Divider(indent: 68),
+
+        //Delete
+        Visibility(
+          visible: widget.taskModelIndex == null ? false : true,
+          child: ListTile(
+            leading: const Icon(IconData(0xe800, fontFamily: 'DeleteFontIcon')),
+            title: const Text('Delete Task'),
+            onTap: () {
+              context.read<TaskLists>().removePlanned(widget.taskModelIndex!);
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        Visibility(
+          visible: widget.taskModelIndex == null ? false : true,
+          child: const Divider(indent: 68),
+        ),
+
         // ListTile(
         //     leading: Icon(IconData(0xe816, fontFamily: 'OutlinedFontIcons')),
         //     title: Text('Add note')),

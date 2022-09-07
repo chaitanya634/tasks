@@ -1,11 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/data/task_lists.dart';
+import 'package:tasks/providers/task_lists.dart';
 import '../data/algos.dart';
 import '../data/enums.dart';
 import '../pages/create_task.dart';
 import '../pages/list_menu.dart';
+import '../providers/task_lists.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -120,7 +121,6 @@ class HomePage extends StatelessWidget {
                 ),
                 SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-
                   return Column(
                     children: [
                       ListTile(
@@ -144,9 +144,20 @@ class HomePage extends StatelessWidget {
                               .planned
                               .elementAt(index)
                               .title,
-                          style: TextStyle(color: colorScheme.secondary, fontSize: 18),
+                          style: TextStyle(
+                              color: colorScheme.secondary, fontSize: 18),
                         ),
-                        subtitle: generateSubtitle(context.read<TaskLists>().planned.elementAt(index)),
+                        subtitle: generateSubtitle(
+                            context.read<TaskLists>().planned.elementAt(index)),
+                        onTap: () {
+                          showGeneralDialog(
+                            context: context,
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return CreateTaskPage(taskModelIndex: index);
+                            },
+                          );
+                        },
                       ),
                       const Divider()
                     ],
@@ -216,5 +227,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-

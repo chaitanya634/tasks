@@ -11,6 +11,11 @@ class TaskLists with ChangeNotifier {
     notifyListeners();
   }
 
+  void updatePlanned(int index, TaskModel taskModel) {
+    planned[index] = taskModel;
+    notifyListeners();
+  }
+
   void addPlanned(TaskModel taskModel) {
     planned.add(taskModel);
     notifyListeners();
