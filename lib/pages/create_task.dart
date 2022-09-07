@@ -8,12 +8,11 @@ import '../data/enums.dart';
 import '../data/models.dart';
 
 class CreateTaskPage extends StatefulWidget {
-  const CreateTaskPage({
-    Key? key,
-    this.taskModelIndex,
-  }) : super(key: key);
+  const CreateTaskPage({Key? key, this.taskModelIndex, this.colorScheme})
+      : super(key: key);
 
   final int? taskModelIndex;
+  final ColorScheme? colorScheme;
 
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
@@ -51,7 +50,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.taskModelIndex != null) {
+    if (widget.taskModelIndex != null && widget.colorScheme != null) {
+      var colorScheme = widget.colorScheme!;
       TaskModel element =
           context.read<TaskLists>().planned.elementAt(widget.taskModelIndex!);
       title = element.title;
@@ -59,12 +59,82 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
       isChecked = element.isChecked;
 
       subtasks = element.subtasks!;
+
+      //remainder
+      remainderDate = element.remainderDate;
+      remainderTime = element.remainderTime;
+      rIcon = Icon(
+        Icons.notifications_active_rounded,
+        color: colorScheme.primary,
+      );
+      rTitle = Text(
+        'Remind me at ${remainderTime?.hourOfPeriod}:${remainderTime?.minute} ${remainderTime?.period.name}',
+        style: TextStyle(color: colorScheme.primary),
+      );
+      rSubtitle = Wrap(
+        children: [
+          Text(
+            '${DaysOfWeek.values[remainderDate!.weekday - 1].name}, ',
+            style: TextStyle(color: colorScheme.secondary),
+          ),
+          Text(
+            remainderDate!.day.toString(),
+            style: TextStyle(color: colorScheme.secondary),
+          ),
+          Text(
+            ordinal(remainderDate!.day),
+            style: TextStyle(
+                color: colorScheme.secondary,
+                fontSize: 10,
+                fontFeatures: const [FontFeature.superscripts()]),
+          ),
+          Text(
+            ' ${Months.values[remainderDate!.month - 1].name}',
+            style: TextStyle(color: colorScheme.secondary),
+          ),
+          Text(
+            ' ${remainderDate!.year.toString()}',
+            style: TextStyle(color: colorScheme.secondary),
+          ),
+        ],
+      );
+
+      //due
+      dueDate = element.dueDate;
+      dTitle = Wrap(
+        children: [
+          Text('Due ', style: TextStyle(color: colorScheme.primary)),
+          Text('${DaysOfWeek.values[dueDate!.weekday - 1].name}, ',
+              style: TextStyle(color: colorScheme.primary)),
+          Text(dueDate!.day.toString(),
+              style: TextStyle(color: colorScheme.primary)),
+          Text(
+            ordinal(dueDate!.day),
+            style: TextStyle(
+                color: colorScheme.primary,
+                fontSize: 11,
+                fontFeatures: const [FontFeature.superscripts()]),
+          ),
+          Text(' ${Months.values[dueDate!.month - 1].name}',
+              style: TextStyle(color: colorScheme.primary)),
+          Text(' ${dueDate!.year.toString()}',
+              style: TextStyle(color: colorScheme.primary)),
+        ],
+      );
+      dueIcon = Icon(Icons.event_rounded, color: colorScheme.primary);
+
+      //repeat
+      repeat = element.repeat;
+      repeatTitle = Text('Repeat ${repeat!.name}',
+          style: TextStyle(color: colorScheme.primary));
+      repeatIcon = Icon(Icons.event_repeat_rounded, color: colorScheme.primary);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorScheme.secondaryContainer,
@@ -384,6 +454,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           child: const Divider(indent: 68),
         ),
 
+        //Note
         // ListTile(
         //     leading: Icon(IconData(0xe816, fontFamily: 'OutlinedFontIcons')),
         //     title: Text('Add note')),

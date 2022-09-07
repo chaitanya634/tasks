@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var colorScheme = Theme.of(context).colorScheme;
+    ColorScheme? colorScheme = Theme.of(context).colorScheme;
     var currentDateTime = DateTime.now();
     return Scaffold(
       backgroundColor: colorScheme.background,
@@ -154,7 +154,7 @@ class HomePage extends StatelessWidget {
                             context: context,
                             pageBuilder:
                                 (context, animation, secondaryAnimation) {
-                              return CreateTaskPage(taskModelIndex: index);
+                              return CreateTaskPage(taskModelIndex: index, colorScheme: colorScheme,);
                             },
                           );
                         },
