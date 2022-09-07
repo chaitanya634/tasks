@@ -1,7 +1,7 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:tasks/data/task_lists.dart';
 import '../data/algos.dart';
 import '../data/enums.dart';
 import '../pages/create_task.dart';
@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
                                   color: colorScheme.secondary,
                                   fontSize: 10,
                                 )),
-                            Text(Algos.ordinal(currentDateTime.day),
+                            Text(ordinal(currentDateTime.day),
                                 style: TextStyle(
                                     color: colorScheme.secondary,
                                     fontSize: 6,
@@ -120,10 +120,38 @@ class HomePage extends StatelessWidget {
                 ),
                 SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                  return Container(
-                    height: 40,
+
+                  return Column(
+                    children: [
+                      ListTile(
+                        trailing: Checkbox(
+                            checkColor: colorScheme.onPrimary,
+                            activeColor: colorScheme.primary,
+                            value: context
+                                .watch<TaskLists>()
+                                .planned
+                                .elementAt(index)
+                                .isChecked,
+                            onChanged: (value) {
+                              var x = context.read<TaskLists>();
+                              x.updateChecked(x.planned, index, value!);
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5))),
+                        title: Text(
+                          context
+                              .watch<TaskLists>()
+                              .planned
+                              .elementAt(index)
+                              .title,
+                          style: TextStyle(color: colorScheme.secondary),
+                        ),
+                        subtitle: generateSubtitle(context.read<TaskLists>().planned.elementAt(index)),
+                      ),
+                      const Divider()
+                    ],
                   );
-                }, childCount: 60)),
+                }, childCount: context.watch<TaskLists>().planned.length)),
               ],
             ),
           ),
@@ -188,3 +216,5 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+

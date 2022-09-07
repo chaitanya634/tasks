@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tasks/data/algos.dart';
+import 'package:tasks/data/task_lists.dart';
 import 'dart:ui';
 
 import '../data/enums.dart';
@@ -60,18 +62,17 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         actions: [
           TextButton(
             onPressed: () {
-              debugPrint('Starred: $isStarred');
-              debugPrint('Checked: $isChecked');
-              debugPrint('Title: $title');
-
-              debugPrint('Subtasks: $subtasks');
-
-              debugPrint('Remainder title: $rTitle');
-              debugPrint('Remainder subtitle: $rSubtitle');
-
-              debugPrint('Due date: $dueDate');
-
-              debugPrint('Repeat: $repeat');
+              context.read<TaskLists>().addPlanned(TaskModel(
+                    isStarred: isStarred,
+                    isChecked: isChecked,
+                    title: title,
+                    subtasks: subtasks,
+                    dueDate: dueDate,
+                    remainderDate: remainderDate,
+                    remainderTime: remainderTime,
+                    repeat: repeat,
+                  ));
+              Navigator.pop(context);
             },
             child: Text('Save', style: TextStyle(color: colorScheme.primary)),
           )
@@ -235,7 +236,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     style: TextStyle(color: colorScheme.secondary),
                   ),
                   Text(
-                    Algos.ordinal(date.day),
+                    ordinal(date.day),
                     style: TextStyle(
                         color: colorScheme.secondary,
                         fontSize: 10,
@@ -275,7 +276,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                   Text(date.day.toString(),
                       style: TextStyle(color: colorScheme.primary)),
                   Text(
-                    Algos.ordinal(date.day),
+                    ordinal(date.day),
                     style: TextStyle(
                         color: colorScheme.primary,
                         fontSize: 11,
@@ -320,8 +321,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               repeat = value;
               repeatTitle = Text('Repeat ${value.name}',
                   style: TextStyle(color: colorScheme.primary));
-              repeatIcon = Icon(Icons.event_repeat_rounded,
-                  color: colorScheme.primary);
+              repeatIcon =
+                  Icon(Icons.event_repeat_rounded, color: colorScheme.primary);
             });
           },
         ),

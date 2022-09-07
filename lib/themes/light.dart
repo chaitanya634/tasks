@@ -4,6 +4,11 @@ import 'package:flutter/services.dart';
 ThemeData dynamicLightTheme(ColorScheme lightDynamic) => ThemeData(
       useMaterial3: true,
       colorScheme: lightDynamic,
+      appBarTheme: const AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ),
+      ),
     );
 
 ThemeData lightTheme() => ThemeData(
@@ -11,7 +16,6 @@ ThemeData lightTheme() => ThemeData(
       appBarTheme: const AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          systemNavigationBarColor: Color(0xffF8EFE9),
         ),
         actionsIconTheme: IconThemeData(color: Color(0xff2A1700)),
       ),

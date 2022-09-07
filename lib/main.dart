@@ -1,16 +1,16 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:tasks/data/task_lists.dart';
 import '../pages/home.dart';
 import '../themes/dark.dart';
 import '../themes/light.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(const MyApp()),
-  );
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (context) => TaskLists())],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
