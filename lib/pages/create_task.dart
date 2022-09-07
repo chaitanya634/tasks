@@ -51,83 +51,88 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   void initState() {
     super.initState();
     if (widget.taskModelIndex != null && widget.colorScheme != null) {
-      ColorScheme colorScheme = widget.colorScheme!;
+      ColorScheme? colorScheme = widget.colorScheme!;
       TaskModel element =
           context.read<TaskLists>().planned.elementAt(widget.taskModelIndex!);
+
       title = element.title;
       isStarred = element.isStarred;
       isChecked = element.isChecked;
 
       subtasks = element.subtasks!;
 
-      //remainder
-      remainderDate = element.remainderDate;
-      remainderTime = element.remainderTime;
-      rIcon = Icon(
-        Icons.notifications_active_rounded,
-        color: colorScheme.primary,
-      );
-      rTitle = Text(
-        'Remind me at ${remainderTime?.hourOfPeriod}:${remainderTime?.minute} ${remainderTime?.period.name}',
-        style: TextStyle(color: colorScheme.primary),
-      );
-      rSubtitle = Wrap(
-        children: [
-          Text(
-            '${DaysOfWeek.values[remainderDate!.weekday - 1].name}, ',
-            style: TextStyle(color: colorScheme.secondary),
-          ),
-          Text(
-            remainderDate!.day.toString(),
-            style: TextStyle(color: colorScheme.secondary),
-          ),
-          Text(
-            ordinal(remainderDate!.day),
-            style: TextStyle(
-                color: colorScheme.secondary,
-                fontSize: 10,
-                fontFeatures: const [FontFeature.superscripts()]),
-          ),
-          Text(
-            ' ${Months.values[remainderDate!.month - 1].name}',
-            style: TextStyle(color: colorScheme.secondary),
-          ),
-          Text(
-            ' ${remainderDate!.year.toString()}',
-            style: TextStyle(color: colorScheme.secondary),
-          ),
-        ],
-      );
+      if (element.remainderDate != null && element.remainderTime != null) {
+        remainderDate = element.remainderDate;
+        remainderTime = element.remainderTime;
+        rIcon = Icon(
+          Icons.notifications_active_rounded,
+          color: colorScheme.primary,
+        );
+        rTitle = Text(
+          'Remind me at ${remainderTime!.hourOfPeriod}:${remainderTime!.minute} ${remainderTime!.period.name}',
+          style: TextStyle(color: colorScheme.primary),
+        );
+        rSubtitle = Wrap(
+          children: [
+            Text(
+              '${DaysOfWeek.values[remainderDate!.weekday - 1].name}, ',
+              style: TextStyle(color: colorScheme.secondary),
+            ),
+            Text(
+              remainderDate!.day.toString(),
+              style: TextStyle(color: colorScheme.secondary),
+            ),
+            Text(
+              ordinal(remainderDate!.day),
+              style: TextStyle(
+                  color: colorScheme.secondary,
+                  fontSize: 10,
+                  fontFeatures: const [FontFeature.superscripts()]),
+            ),
+            Text(
+              ' ${Months.values[remainderDate!.month - 1].name}',
+              style: TextStyle(color: colorScheme.secondary),
+            ),
+            Text(
+              ' ${remainderDate!.year.toString()}',
+              style: TextStyle(color: colorScheme.secondary),
+            ),
+          ],
+        );
+      }
 
-      //due
-      dueDate = element.dueDate;
-      dTitle = Wrap(
-        children: [
-          Text('Due ', style: TextStyle(color: colorScheme.primary)),
-          Text('${DaysOfWeek.values[dueDate!.weekday - 1].name}, ',
-              style: TextStyle(color: colorScheme.primary)),
-          Text(dueDate!.day.toString(),
-              style: TextStyle(color: colorScheme.primary)),
-          Text(
-            ordinal(dueDate!.day),
-            style: TextStyle(
-                color: colorScheme.primary,
-                fontSize: 11,
-                fontFeatures: const [FontFeature.superscripts()]),
-          ),
-          Text(' ${Months.values[dueDate!.month - 1].name}',
-              style: TextStyle(color: colorScheme.primary)),
-          Text(' ${dueDate!.year.toString()}',
-              style: TextStyle(color: colorScheme.primary)),
-        ],
-      );
-      dueIcon = Icon(Icons.event_rounded, color: colorScheme.primary);
+      if (element.dueDate != null) {
+        dueDate = element.dueDate;
+        dTitle = Wrap(
+          children: [
+            Text('Due ', style: TextStyle(color: colorScheme.primary)),
+            Text('${DaysOfWeek.values[dueDate!.weekday - 1].name}, ',
+                style: TextStyle(color: colorScheme.primary)),
+            Text(dueDate!.day.toString(),
+                style: TextStyle(color: colorScheme.primary)),
+            Text(
+              ordinal(dueDate!.day),
+              style: TextStyle(
+                  color: colorScheme.primary,
+                  fontSize: 11,
+                  fontFeatures: const [FontFeature.superscripts()]),
+            ),
+            Text(' ${Months.values[dueDate!.month - 1].name}',
+                style: TextStyle(color: colorScheme.primary)),
+            Text(' ${dueDate!.year.toString()}',
+                style: TextStyle(color: colorScheme.primary)),
+          ],
+        );
+        dueIcon = Icon(Icons.event_rounded, color: colorScheme.primary);
+      }
 
-      //repeat
-      repeat = element.repeat;
-      repeatTitle = Text('Repeat ${repeat!.name}',
-          style: TextStyle(color: colorScheme.primary));
-      repeatIcon = Icon(Icons.event_repeat_rounded, color: colorScheme.primary);
+      if (element.repeat != null) {
+        repeat = element.repeat;
+        repeatTitle = Text('Repeat ${repeat!.name}',
+            style: TextStyle(color: colorScheme.primary));
+        repeatIcon =
+            Icon(Icons.event_repeat_rounded, color: colorScheme.primary);
+      }
     }
   }
 
@@ -441,8 +446,12 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         Visibility(
           visible: widget.taskModelIndex == null ? false : true,
           child: ListTile(
-            leading: Icon(const IconData(0xe800, fontFamily: 'DeleteFontIcon'), color: colorScheme.error,),
-            title: Text('Delete Task', style: TextStyle(color: colorScheme.error)),
+            leading: Icon(
+              const IconData(0xe800, fontFamily: 'DeleteFontIcon'),
+              color: colorScheme.error,
+            ),
+            title:
+                Text('Delete Task', style: TextStyle(color: colorScheme.error)),
             onTap: () {
               context.read<TaskLists>().removePlanned(widget.taskModelIndex!);
               Navigator.pop(context);
