@@ -184,7 +184,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               }
               Navigator.pop(context);
             },
-            child: Text('Save', style: TextStyle(color: colorScheme.primary)),
+            child: Text('Save', 
+            style: TextStyle(color: colorScheme.inverseSurface)
+            ),
           )
         ],
       ),

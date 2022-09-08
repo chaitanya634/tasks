@@ -5,8 +5,8 @@ import 'package:tasks/providers/task_lists.dart';
 import '../data/algos.dart';
 import '../data/enums.dart';
 import '../pages/create_task.dart';
-import '../pages/list_menu.dart';
 import '../providers/task_lists.dart';
+import 'list_menu.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -154,7 +154,10 @@ class HomePage extends StatelessWidget {
                             context: context,
                             pageBuilder:
                                 (context, animation, secondaryAnimation) {
-                              return CreateTaskPage(taskModelIndex: index, colorScheme: colorScheme,);
+                              return CreateTaskPage(
+                                taskModelIndex: index,
+                                colorScheme: colorScheme,
+                              );
                             },
                           );
                         },
@@ -166,64 +169,114 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            height: 66,
-            color: colorScheme.onInverseSurface,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Row(children: [
-                    IconButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            backgroundColor: colorScheme.secondaryContainer,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            builder: (context) => const ListMenu(),
-                          );
-                        },
-                        icon: const Icon(
-                            IconData(0xe810, fontFamily: 'OutlinedFontIcons'))),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                            IconData(0xe80f, fontFamily: 'OutlinedFontIcons'))),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                            IconData(0xe80e, fontFamily: 'OutlinedFontIcons'))),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                            IconData(0xe80d, fontFamily: 'OutlinedFontIcons'))),
-                  ]),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 6.0),
-                  child: FloatingActionButton(
-                    backgroundColor: colorScheme.primary,
-                    onPressed: () {
-                      showGeneralDialog(
-                        context: context,
-                        pageBuilder: (context, animation, secondaryAnimation) {
-                          return const CreateTaskPage();
-                        },
-                      );
-                    },
-                    mini: true,
-                    elevation: 0,
-                    child: Icon(
-                      Icons.add,
-                      color: colorScheme.onPrimary,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
+          // Container(
+          //   height: 66,
+          //   color: colorScheme.onInverseSurface,
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: Row(children: [
+          //           IconButton(
+          //               onPressed: () {
+          //                 showModalBottomSheet(
+          //                   context: context,
+          //                   backgroundColor: colorScheme.secondaryContainer,
+          //                   shape: RoundedRectangleBorder(
+          //                       borderRadius: BorderRadius.circular(16)),
+          //                   builder: (context) => const ListMenu(),
+          //                 );
+          //               },
+          //               icon: const Icon(
+          //                   IconData(0xe810, fontFamily: 'OutlinedFontIcons'))),
+          //           IconButton(
+          //               onPressed: () {},
+          //               icon: const Icon(
+          //                   IconData(0xe80f, fontFamily: 'OutlinedFontIcons'))),
+          //           IconButton(
+          //               onPressed: () {},
+          //               icon: const Icon(
+          //                   IconData(0xe80e, fontFamily: 'OutlinedFontIcons'))),
+          //           IconButton(
+          //               onPressed: () {},
+          //               icon: const Icon(
+          //                   IconData(0xe80d, fontFamily: 'OutlinedFontIcons'))),
+          //         ]),
+          //       ),
+          //       Padding(
+          //         padding: const EdgeInsets.only(right: 6.0),
+          //         child: FloatingActionButton(
+          //           backgroundColor: colorScheme.primary,
+          //           onPressed: () {
+          //             showGeneralDialog(
+          //               context: context,
+          //               pageBuilder: (context, animation, secondaryAnimation) {
+          //                 return const CreateTaskPage();
+          //               },
+          //             );
+          //           },
+          //           mini: true,
+          //           elevation: 0,
+          //           child: Icon(
+          //             Icons.add,
+          //             color: colorScheme.onPrimary,
+          //           ),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // )
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: colorScheme.secondaryContainer,
+        shape: const CircularNotchedRectangle(),
+        child: Wrap(
+          children: [
+            IconButton(
+                icon:
+                    Icon(Icons.menu_rounded, color: colorScheme.inverseSurface),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: colorScheme.secondaryContainer,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    builder: (context) => const ListMenu(),
+                  );
+                }),
+            IconButton(
+                icon: Icon(Icons.today, color: colorScheme.inverseSurface),
+                onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.task_alt_rounded,
+                    color: colorScheme.inverseSurface),
+                onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.star_border_rounded,
+                    color: colorScheme.inverseSurface),
+                onPressed: () {}),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+      floatingActionButton: FloatingActionButton(
+        elevation: 2.5,
+        backgroundColor: colorScheme.primaryContainer,
+        shape: const CircleBorder(),
+        onPressed: () {
+          showGeneralDialog(
+            context: context,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return const CreateTaskPage();
+            },
+          );
+        },
+        child: Icon(
+          Icons.add_rounded,
+          color: colorScheme.onPrimaryContainer,
+        ),
       ),
     );
   }
 }
+
