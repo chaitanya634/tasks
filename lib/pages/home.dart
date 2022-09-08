@@ -8,13 +8,63 @@ import '../pages/create_task.dart';
 import '../providers/task_lists.dart';
 import 'list_menu.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Widget? appBarTitle;
+
+  @override
+  void initState() {
+    super.initState();
+    appBarTitle = Builder(
+      builder: (context) {
+        var currentDateTime = DateTime.now();
+        var colorScheme = Theme.of(context).colorScheme;
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(DaysOfWeek.values[currentDateTime.weekday - 1].name,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w300,
+                    color: colorScheme.primary)),
+            Wrap(
+              children: [
+                Text(currentDateTime.day.toString(),
+                    style: TextStyle(
+                      color: colorScheme.secondary,
+                      fontSize: 10,
+                    )),
+                Text(ordinal(currentDateTime.day),
+                    style: TextStyle(
+                        color: colorScheme.secondary,
+                        fontSize: 6,
+                        fontFeatures: const [FontFeature.superscripts()])),
+                Padding(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  child: Text(Months.values[currentDateTime.month - 1].name,
+                      style: TextStyle(
+                        color: colorScheme.secondary,
+                        fontSize: 10,
+                      )),
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     ColorScheme? colorScheme = Theme.of(context).colorScheme;
-    var currentDateTime = DateTime.now();
     return Scaffold(
       backgroundColor: colorScheme.background,
       body: Column(
@@ -29,43 +79,7 @@ class HomePage extends StatelessWidget {
                   pinned: true,
                   expandedHeight: 150.0,
                   flexibleSpace: FlexibleSpaceBar(
-                    title: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                            DaysOfWeek.values[currentDateTime.weekday - 1].name,
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w300,
-                                color: colorScheme.primary)),
-                        Wrap(
-                          children: [
-                            Text(currentDateTime.day.toString(),
-                                style: TextStyle(
-                                  color: colorScheme.secondary,
-                                  fontSize: 10,
-                                )),
-                            Text(ordinal(currentDateTime.day),
-                                style: TextStyle(
-                                    color: colorScheme.secondary,
-                                    fontSize: 6,
-                                    fontFeatures: const [
-                                      FontFeature.superscripts()
-                                    ])),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 2.0),
-                              child: Text(
-                                  Months.values[currentDateTime.month - 1].name,
-                                  style: TextStyle(
-                                    color: colorScheme.secondary,
-                                    fontSize: 10,
-                                  )),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                    title: appBarTitle,
                     titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
                     expandedTitleScale: 2,
                   ),
@@ -120,111 +134,61 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        trailing: Checkbox(
-                            checkColor: colorScheme.onPrimary,
-                            activeColor: colorScheme.primary,
-                            value: context
-                                .watch<TaskLists>()
+                  delegate: SliverChildBuilderDelegate(
+                    childCount: context.watch<TaskLists>().planned.length,
+                    (context, index) {
+                      return Column(
+                        children: [
+                          ListTile(
+                            trailing: Checkbox(
+                                checkColor: colorScheme.onPrimary,
+                                activeColor: colorScheme.primary,
+                                value: context
+                                    .watch<TaskLists>()
+                                    .planned
+                                    .elementAt(index)
+                                    .isChecked,
+                                onChanged: (value) {
+                                  var x = context.read<TaskLists>();
+                                  x.updateChecked(x.planned, index, value!);
+                                },
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5))),
+                            title: Text(
+                              context
+                                  .watch<TaskLists>()
+                                  .planned
+                                  .elementAt(index)
+                                  .title,
+                              style: TextStyle(
+                                  color: colorScheme.secondary, fontSize: 18),
+                            ),
+                            subtitle: generateSubtitle(context
+                                .read<TaskLists>()
                                 .planned
-                                .elementAt(index)
-                                .isChecked,
-                            onChanged: (value) {
-                              var x = context.read<TaskLists>();
-                              x.updateChecked(x.planned, index, value!);
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5))),
-                        title: Text(
-                          context
-                              .watch<TaskLists>()
-                              .planned
-                              .elementAt(index)
-                              .title,
-                          style: TextStyle(
-                              color: colorScheme.secondary, fontSize: 18),
-                        ),
-                        subtitle: generateSubtitle(
-                            context.read<TaskLists>().planned.elementAt(index)),
-                        onTap: () {
-                          showGeneralDialog(
-                            context: context,
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) {
-                              return CreateTaskPage(
-                                taskModelIndex: index,
-                                colorScheme: colorScheme,
+                                .elementAt(index)),
+                            onTap: () {
+                              showGeneralDialog(
+                                context: context,
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) {
+                                  return CreateTaskPage(
+                                    taskModelIndex: index,
+                                    colorScheme: colorScheme,
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                      ),
-                      const Divider()
-                    ],
-                  );
-                }, childCount: context.watch<TaskLists>().planned.length)),
+                          ),
+                          const Divider()
+                        ],
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
-          // Container(
-          //   height: 66,
-          //   color: colorScheme.onInverseSurface,
-          //   child: Row(
-          //     children: [
-          //       Expanded(
-          //         child: Row(children: [
-          //           IconButton(
-          //               onPressed: () {
-          //                 showModalBottomSheet(
-          //                   context: context,
-          //                   backgroundColor: colorScheme.secondaryContainer,
-          //                   shape: RoundedRectangleBorder(
-          //                       borderRadius: BorderRadius.circular(16)),
-          //                   builder: (context) => const ListMenu(),
-          //                 );
-          //               },
-          //               icon: const Icon(
-          //                   IconData(0xe810, fontFamily: 'OutlinedFontIcons'))),
-          //           IconButton(
-          //               onPressed: () {},
-          //               icon: const Icon(
-          //                   IconData(0xe80f, fontFamily: 'OutlinedFontIcons'))),
-          //           IconButton(
-          //               onPressed: () {},
-          //               icon: const Icon(
-          //                   IconData(0xe80e, fontFamily: 'OutlinedFontIcons'))),
-          //           IconButton(
-          //               onPressed: () {},
-          //               icon: const Icon(
-          //                   IconData(0xe80d, fontFamily: 'OutlinedFontIcons'))),
-          //         ]),
-          //       ),
-          //       Padding(
-          //         padding: const EdgeInsets.only(right: 6.0),
-          //         child: FloatingActionButton(
-          //           backgroundColor: colorScheme.primary,
-          //           onPressed: () {
-          //             showGeneralDialog(
-          //               context: context,
-          //               pageBuilder: (context, animation, secondaryAnimation) {
-          //                 return const CreateTaskPage();
-          //               },
-          //             );
-          //           },
-          //           mini: true,
-          //           elevation: 0,
-          //           child: Icon(
-          //             Icons.add,
-          //             color: colorScheme.onPrimary,
-          //           ),
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // )
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -245,16 +209,80 @@ class HomePage extends StatelessWidget {
                   );
                 }),
             IconButton(
-                icon: Icon(Icons.today, color: colorScheme.inverseSurface),
-                onPressed: () {}),
+                icon: Icon(Icons.today, color: colorScheme.primary),
+                onPressed: () {
+                  setState(() {
+                    appBarTitle = Builder(
+                      builder: (context) {
+                        var currentDateTime = DateTime.now();
+                        var colorScheme = Theme.of(context).colorScheme;
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                DaysOfWeek
+                                    .values[currentDateTime.weekday - 1].name,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w300,
+                                    color: colorScheme.primary)),
+                            Wrap(
+                              children: [
+                                Text(currentDateTime.day.toString(),
+                                    style: TextStyle(
+                                      color: colorScheme.secondary,
+                                      fontSize: 10,
+                                    )),
+                                Text(ordinal(currentDateTime.day),
+                                    style: TextStyle(
+                                        color: colorScheme.secondary,
+                                        fontSize: 6,
+                                        fontFeatures: const [
+                                          FontFeature.superscripts()
+                                        ])),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: Text(
+                                      Months.values[currentDateTime.month - 1]
+                                          .name,
+                                      style: TextStyle(
+                                        color: colorScheme.secondary,
+                                        fontSize: 10,
+                                      )),
+                                ),
+                              ],
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  });
+                }),
             IconButton(
                 icon: Icon(Icons.task_alt_rounded,
                     color: colorScheme.inverseSurface),
-                onPressed: () {}),
+                onPressed: () {
+                  setState(() {
+                    appBarTitle = Text('Planned',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                            color: colorScheme.primary));
+                  });
+                }),
             IconButton(
                 icon: Icon(Icons.star_border_rounded,
                     color: colorScheme.inverseSurface),
-                onPressed: () {}),
+                onPressed: () {
+                  setState(() {
+                    appBarTitle = Text('Starred',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w300,
+                          color: colorScheme.primary));
+                  });
+                }),
           ],
         ),
       ),
@@ -279,4 +307,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-

@@ -1,15 +1,18 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks/data/algos.dart';
+import 'package:tasks/providers/lists/starred.dart';
 import 'package:tasks/providers/task_lists.dart';
-import 'dart:ui';
-
 import '../data/enums.dart';
 import '../data/models.dart';
 
 class CreateTaskPage extends StatefulWidget {
-  const CreateTaskPage({Key? key, this.taskModelIndex, this.colorScheme})
-      : super(key: key);
+  const CreateTaskPage({
+    Key? key,
+    this.taskModelIndex,
+    this.colorScheme,
+  }) : super(key: key);
 
   final int? taskModelIndex;
   final ColorScheme? colorScheme;
@@ -19,6 +22,7 @@ class CreateTaskPage extends StatefulWidget {
 }
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
+
   //title
   bool isStarred = false;
   bool isChecked = false;
@@ -157,36 +161,31 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         actions: [
           TextButton(
             onPressed: () {
+              var taskModel = TaskModel(
+                isStarred: isStarred,
+                isChecked: isChecked,
+                title: title!,
+                subtasks: subtasks,
+                dueDate: dueDate,
+                remainderDate: remainderDate,
+                remainderTime: remainderTime,
+                repeat: repeat,
+              );
+
               if (widget.taskModelIndex == null) {
-                context.read<TaskLists>().addPlanned(TaskModel(
-                      isStarred: isStarred,
-                      isChecked: isChecked,
-                      title: title!,
-                      subtasks: subtasks,
-                      dueDate: dueDate,
-                      remainderDate: remainderDate,
-                      remainderTime: remainderTime,
-                      repeat: repeat,
-                    ));
+                context.read<TaskLists>().addPlanned(taskModel);
+              } else if (widget.taskModelIndex == null && isStarred) {
+                //starred
+                context.read<StarredList>().addStarred(taskModel);
               } else {
-                context.read<TaskLists>().updatePlanned(
-                    widget.taskModelIndex!,
-                    TaskModel(
-                      isStarred: isStarred,
-                      isChecked: isChecked,
-                      title: title!,
-                      dueDate: dueDate,
-                      remainderDate: remainderDate,
-                      remainderTime: remainderTime,
-                      repeat: repeat,
-                      subtasks: subtasks,
-                    ));
+                context
+                    .read<TaskLists>()
+                    .updatePlanned(widget.taskModelIndex!, taskModel);
               }
               Navigator.pop(context);
             },
-            child: Text('Save', 
-            style: TextStyle(color: colorScheme.inverseSurface)
-            ),
+            child: Text('Save',
+                style: TextStyle(color: colorScheme.inverseSurface)),
           )
         ],
       ),
