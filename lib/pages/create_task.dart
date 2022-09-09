@@ -1,21 +1,22 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/data/algos.dart';
-import 'package:tasks/providers/lists/starred.dart';
-import 'package:tasks/providers/task_lists.dart';
+
+import '../providers/lists/starred.dart';
+import '../providers/lists/planned.dart';
+
 import '../data/enums.dart';
 import '../data/models.dart';
+import '../data/algos.dart';
 
 class CreateTaskPage extends StatefulWidget {
   const CreateTaskPage({
     Key? key,
-    this.taskModelIndex,
-    this.colorScheme,
+    this.editTaskIndex,
   }) : super(key: key);
 
-  final int? taskModelIndex;
-  final ColorScheme? colorScheme;
+  final int? editTaskIndex;
 
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
@@ -23,45 +24,21 @@ class CreateTaskPage extends StatefulWidget {
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
 
-  //title
-  bool isStarred = false;
-  bool isChecked = false;
-  String? title;
-
-  //subtasks
-  List<SubtaskModel> subtasks = [];
-
-  //remainder
-  DateTime? remainderDate;
-  TimeOfDay? remainderTime;
-  Widget? rTitle = const Text('Add reaminder'), rSubtitle;
-  Icon rIcon = const Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons'));
-
-  //due
-  DateTime? dueDate;
-  Widget dTitle = const Text('Add due date');
-  Icon dueIcon = const Icon(IconData(0xe802, fontFamily: 'OutlinedFontIcons'));
-
-  //repeat
-  RepeatTask? repeat;
-  Widget repeatTitle = const Text('Repeat');
-  Icon repeatIcon =
-      const Icon(IconData(0xe801, fontFamily: 'OutlinedFontIcons'));
-
-  //note
-  String? note;
+  TaskModel _taskModel = TaskModel();
 
   @override
   void initState() {
     super.initState();
-    if (widget.taskModelIndex != null && widget.colorScheme != null) {
-      ColorScheme? colorScheme = widget.colorScheme!;
+
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    if (widget.editTaskIndex != null) {
       TaskModel element =
-          context.read<TaskLists>().planned.elementAt(widget.taskModelIndex!);
+          context.read<PlannedList>().planned.elementAt(widget.taskModelIndex!);
 
       title = element.title;
-      isStarred = element.isStarred;
-      isChecked = element.isChecked;
+      isStarred = element.isStarred!;
+      isChecked = element.isChecked!;
 
       subtasks = element.subtasks!;
 
@@ -173,13 +150,13 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               );
 
               if (widget.taskModelIndex == null) {
-                context.read<TaskLists>().addPlanned(taskModel);
+                context.read<PlannedList>().addPlanned(taskModel);
               } else if (widget.taskModelIndex == null && isStarred) {
                 //starred
                 context.read<StarredList>().addStarred(taskModel);
               } else {
                 context
-                    .read<TaskLists>()
+                    .read<PlannedList>()
                     .updatePlanned(widget.taskModelIndex!, taskModel);
               }
               Navigator.pop(context);
@@ -454,7 +431,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             title:
                 Text('Delete Task', style: TextStyle(color: colorScheme.error)),
             onTap: () {
-              context.read<TaskLists>().removePlanned(widget.taskModelIndex!);
+              context.read<PlannedList>().removePlanned(widget.taskModelIndex!);
               Navigator.pop(context);
             },
           ),

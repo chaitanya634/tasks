@@ -35,7 +35,7 @@ enum RepeatTask {
 }
 
 enum DefaultLists {
-  Today,
+  MyDay,
   Planned,
   Starred,
 }

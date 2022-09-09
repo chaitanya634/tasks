@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:tasks/data/enums.dart';
 
 class SubtaskModel {
-  String? title;
-  bool isChecked;
+  SubtaskModel({
+    required this.title,
+    this.isChecked = false,
+  });
 
-  SubtaskModel({this.title, this.isChecked = false});
+  String title;
+  bool isChecked;
 }
 
 class TaskModel {
   TaskModel({
-    required this.isStarred,
-    required this.isChecked,
     required this.title,
+    this.isStarred = false,
+    this.isChecked = false,
     this.subtasks,
     this.remainderDate,
     this.remainderTime,
@@ -21,6 +24,7 @@ class TaskModel {
     this.note,
   });
 
+  //title
   bool isStarred;
   bool isChecked;
   String title;
