@@ -29,54 +29,58 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
     DateTime currentDateTime = DateTime.now();
 
     currentList = DefaultLists.MyDay;
-    appBarTitle = Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        //Title
-        Text(
-          DaysOfWeek.values[currentDateTime.weekday - 1].name,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w300,
-            color: colorScheme.primary,
-          ),
-        ),
-        //Subtitle
-        Wrap(
+    appBarTitle = Builder(
+      builder: (context) {
+        ColorScheme colorScheme = Theme.of(context).colorScheme;
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //Title
             Text(
-              currentDateTime.day.toString(),
+              DaysOfWeek.values[currentDateTime.weekday - 1].name,
               style: TextStyle(
-                color: colorScheme.secondary,
-                fontSize: 10,
+                fontSize: 20,
+                fontWeight: FontWeight.w300,
+                color: colorScheme.primary,
               ),
             ),
-            Text(
-              ordinal(currentDateTime.day),
-              style: TextStyle(
-                color: colorScheme.secondary,
-                fontSize: 6,
-                fontFeatures: const [FontFeature.superscripts()],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 2.0),
-              child: Text(
-                Months.values[currentDateTime.month - 1].name,
-                style: TextStyle(
-                  color: colorScheme.secondary,
-                  fontSize: 10,
+            //Subtitle
+            Wrap(
+              children: [
+                Text(
+                  currentDateTime.day.toString(),
+                  style: TextStyle(
+                    color: colorScheme.secondary,
+                    fontSize: 10,
+                  ),
                 ),
-              ),
-            ),
+                Text(
+                  ordinal(currentDateTime.day),
+                  style: TextStyle(
+                    color: colorScheme.secondary,
+                    fontSize: 6,
+                    fontFeatures: const [FontFeature.superscripts()],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  child: Text(
+                    Months.values[currentDateTime.month - 1].name,
+                    style: TextStyle(
+                      color: colorScheme.secondary,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
-        )
-      ],
+        );
+      },
     );
   }
 
@@ -182,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                         .watch<MyDayList>()
                         .myDayTasks
                         .elementAt(index)
-                        .title;
+                        .title!;
                     taskSubtitle =
                         context.watch<MyDayList>().myDayTasks.elementAt(index);
                     break;
@@ -196,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                         .watch<PlannedList>()
                         .plannedTasks
                         .elementAt(index)
-                        .title;
+                        .title!;
                     taskSubtitle = context
                         .watch<PlannedList>()
                         .plannedTasks
@@ -212,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                         .watch<StarredList>()
                         .starredTasks
                         .elementAt(index)
-                        .title;
+                        .title!;
                     taskSubtitle = context
                         .watch<StarredList>()
                         .starredTasks
@@ -261,15 +265,16 @@ class _HomePageState extends State<HomePage> {
                       ),
                       subtitle: generateSubtitle(taskSubtitle),
                       onTap: () {
-                        // showGeneralDialog(
-                        //   context: context,
-                        //   pageBuilder:
-                        //       (context, animation, secondaryAnimation) {
-                        //     return CreateTaskPage(
-                        //       editTaskIndex: index,
-                        //     );
-                        //   },
-                        // );
+                        showGeneralDialog(
+                          context: context,
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return CreateTaskPage(
+                              editTaskIndex: index,
+                              currentList: currentList,
+                            );
+                          },
+                        );
                       },
                     ),
                     const Divider(),

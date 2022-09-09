@@ -3,17 +3,17 @@ import 'package:tasks/data/enums.dart';
 
 class SubtaskModel {
   SubtaskModel({
-    required this.title,
+    this.title,
     this.isChecked = false,
   });
 
-  String title;
+  String? title;
   bool isChecked;
 }
 
 class TaskModel {
   TaskModel({
-    required this.title,
+    this.title,
     this.isStarred = false,
     this.isChecked = false,
     this.subtasks,
@@ -27,7 +27,7 @@ class TaskModel {
   //title
   bool isStarred;
   bool isChecked;
-  String title;
+  String? title;
 
   //subtasks
   List<SubtaskModel>? subtasks;

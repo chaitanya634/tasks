@@ -1,7 +1,9 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/providers/lists/myday.dart';
 
 import '../providers/lists/starred.dart';
 import '../providers/lists/planned.dart';
@@ -14,106 +16,61 @@ class CreateTaskPage extends StatefulWidget {
   const CreateTaskPage({
     Key? key,
     this.editTaskIndex,
+    this.currentList,
   }) : super(key: key);
 
   final int? editTaskIndex;
+  final DefaultLists? currentList;
 
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
 }
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
+  TaskModel? taskModel;
 
-  TaskModel _taskModel = TaskModel();
+  Icon remainderIcon =
+      const Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons'));
+  Text remainderTitle = const Text('Add remainder');
+  Widget? remainderSubtitle;
+
+  Icon dueIcon = const Icon(IconData(0xe80f, fontFamily: 'OutlinedFontIcons'));
+  Widget dueTitle = const Text('Add due date');
+
+  Icon repeatIcon =
+      const Icon(IconData(0xe801, fontFamily: 'OutlinedFontIcons'));
+  Text repeatTitle = const Text('Repeat');
 
   @override
   void initState() {
     super.initState();
 
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-
     if (widget.editTaskIndex != null) {
-      TaskModel element =
-          context.read<PlannedList>().planned.elementAt(widget.taskModelIndex!);
-
-      title = element.title;
-      isStarred = element.isStarred!;
-      isChecked = element.isChecked!;
-
-      subtasks = element.subtasks!;
-
-      if (element.remainderDate != null && element.remainderTime != null) {
-        remainderDate = element.remainderDate;
-        remainderTime = element.remainderTime;
-        rIcon = Icon(
-          Icons.notifications_active_rounded,
-          color: colorScheme.primary,
-        );
-        rTitle = Text(
-          'Remind me at ${remainderTime!.hourOfPeriod}:${remainderTime!.minute} ${remainderTime!.period.name}',
-          style: TextStyle(color: colorScheme.primary),
-        );
-        rSubtitle = Wrap(
-          children: [
-            Text(
-              '${DaysOfWeek.values[remainderDate!.weekday - 1].name}, ',
-              style: TextStyle(color: colorScheme.secondary),
-            ),
-            Text(
-              remainderDate!.day.toString(),
-              style: TextStyle(color: colorScheme.secondary),
-            ),
-            Text(
-              ordinal(remainderDate!.day),
-              style: TextStyle(
-                  color: colorScheme.secondary,
-                  fontSize: 10,
-                  fontFeatures: const [FontFeature.superscripts()]),
-            ),
-            Text(
-              ' ${Months.values[remainderDate!.month - 1].name}',
-              style: TextStyle(color: colorScheme.secondary),
-            ),
-            Text(
-              ' ${remainderDate!.year.toString()}',
-              style: TextStyle(color: colorScheme.secondary),
-            ),
-          ],
-        );
+      switch (widget.currentList) {
+        case DefaultLists.MyDay:
+          taskModel = context
+              .read<MyDayList>()
+              .myDayTasks
+              .elementAt(widget.editTaskIndex!);
+          break;
+        case DefaultLists.Planned:
+          taskModel = context
+              .read<PlannedList>()
+              .plannedTasks
+              .elementAt(widget.editTaskIndex!);
+          break;
+        case DefaultLists.Starred:
+          taskModel = context
+              .read<StarredList>()
+              .starredTasks
+              .elementAt(widget.editTaskIndex!);
+          break;
+        case null:
+          break;
       }
-
-      if (element.dueDate != null) {
-        dueDate = element.dueDate;
-        dTitle = Wrap(
-          children: [
-            Text('Due ', style: TextStyle(color: colorScheme.primary)),
-            Text('${DaysOfWeek.values[dueDate!.weekday - 1].name}, ',
-                style: TextStyle(color: colorScheme.primary)),
-            Text(dueDate!.day.toString(),
-                style: TextStyle(color: colorScheme.primary)),
-            Text(
-              ordinal(dueDate!.day),
-              style: TextStyle(
-                  color: colorScheme.primary,
-                  fontSize: 11,
-                  fontFeatures: const [FontFeature.superscripts()]),
-            ),
-            Text(' ${Months.values[dueDate!.month - 1].name}',
-                style: TextStyle(color: colorScheme.primary)),
-            Text(' ${dueDate!.year.toString()}',
-                style: TextStyle(color: colorScheme.primary)),
-          ],
-        );
-        dueIcon = Icon(Icons.event_rounded, color: colorScheme.primary);
-      }
-
-      if (element.repeat != null) {
-        repeat = element.repeat;
-        repeatTitle = Text('Repeat ${repeat!.name}',
-            style: TextStyle(color: colorScheme.primary));
-        repeatIcon =
-            Icon(Icons.event_repeat_rounded, color: colorScheme.primary);
-      }
+    } else {
+      taskModel = TaskModel();
+      taskModel!.subtasks = <SubtaskModel>[];
     }
   }
 
@@ -125,11 +82,12 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
       appBar: AppBar(
         backgroundColor: colorScheme.secondaryContainer,
         leading: IconButton(
-            icon: Icon(
-              Icons.close_rounded,
-              color: colorScheme.onSecondaryContainer,
-            ),
-            onPressed: (() => Navigator.pop(context))),
+          icon: Icon(
+            Icons.close_rounded,
+            color: colorScheme.onSecondaryContainer,
+          ),
+          onPressed: (() => Navigator.pop(context)),
+        ),
         title: const Text('Create Task'),
         titleTextStyle: TextStyle(
           color: colorScheme.onSecondaryContainer,
@@ -138,31 +96,48 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         actions: [
           TextButton(
             onPressed: () {
-              var taskModel = TaskModel(
-                isStarred: isStarred,
-                isChecked: isChecked,
-                title: title!,
-                subtasks: subtasks,
-                dueDate: dueDate,
-                remainderDate: remainderDate,
-                remainderTime: remainderTime,
-                repeat: repeat,
-              );
-
-              if (widget.taskModelIndex == null) {
-                context.read<PlannedList>().addPlanned(taskModel);
-              } else if (widget.taskModelIndex == null && isStarred) {
-                //starred
-                context.read<StarredList>().addStarred(taskModel);
+              if (widget.editTaskIndex != null) {
+                switch (widget.currentList) {
+                  case DefaultLists.MyDay:
+                    context
+                        .read<MyDayList>()
+                        .updateTask(widget.editTaskIndex!, taskModel!);
+                    break;
+                  case DefaultLists.Planned:
+                    context
+                        .read<PlannedList>()
+                        .updateTask(widget.editTaskIndex!, taskModel!);
+                    break;
+                  case DefaultLists.Starred:
+                    context
+                        .read<StarredList>()
+                        .updateTask(widget.editTaskIndex!, taskModel!);
+                    break;
+                  case null:
+                    break;
+                }
               } else {
-                context
-                    .read<PlannedList>()
-                    .updatePlanned(widget.taskModelIndex!, taskModel);
+                switch (widget.currentList) {
+                  case DefaultLists.MyDay:
+                    context.read<MyDayList>().addTask(taskModel!);
+                    break;
+                  case DefaultLists.Planned:
+                    context.read<PlannedList>().addTask(taskModel!);
+                    break;
+                  case DefaultLists.Starred:
+                    context.read<StarredList>().addTask(taskModel!);
+                    break;
+                  case null:
+                    context.read<PlannedList>().addTask(taskModel!);
+                    break;
+                }
               }
               Navigator.pop(context);
             },
-            child: Text('Save',
-                style: TextStyle(color: colorScheme.inverseSurface)),
+            child: Text(
+              'Save',
+              style: TextStyle(color: colorScheme.inverseSurface),
+            ),
           )
         ],
       ),
@@ -171,34 +146,40 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         Padding(
           padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
           child: TextField(
-            controller: TextEditingController(text: title),
-            onChanged: (value) {
-              title = value;
-            },
+            controller: TextEditingController(
+              text: taskModel!.title,
+            ),
+            onChanged: (value) => taskModel!.title = value,
             decoration: InputDecoration(
               label: const Text('Title'),
               prefixIcon: IconButton(
                 icon: Icon(
-                  isStarred ? Icons.star_rounded : Icons.star_border_rounded,
-                  color: isStarred ? colorScheme.primary : null,
+                  taskModel!.isStarred
+                      ? Icons.star_rounded
+                      : Icons.star_border_rounded,
+                  color: taskModel!.isStarred ? colorScheme.primary : null,
                 ),
                 onPressed: () {
                   setState(() {
-                    isStarred ? isStarred = false : isStarred = true;
+                    taskModel!.isStarred
+                        ? taskModel!.isStarred = false
+                        : taskModel!.isStarred = true;
                   });
                 },
               ),
               suffixIcon: Checkbox(
-                  checkColor: colorScheme.onPrimary,
-                  activeColor: colorScheme.primary,
-                  value: isChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      isChecked = value!;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5))),
+                checkColor: colorScheme.onPrimary,
+                activeColor: colorScheme.primary,
+                value: taskModel!.isChecked,
+                onChanged: (value) {
+                  setState(() {
+                    taskModel!.isChecked = value!;
+                  });
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: colorScheme.outline),
                 borderRadius: BorderRadius.circular(18),
@@ -212,15 +193,16 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           padding: const EdgeInsets.only(left: 46, right: 8),
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: subtasks.length,
+            itemCount: taskModel!.subtasks!.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: TextField(
                   controller: TextEditingController(
-                      text: subtasks.elementAt(index).title),
+                    text: taskModel!.subtasks!.elementAt(index).title,
+                  ),
                   onChanged: (value) {
-                    subtasks.elementAt(index).title = value;
+                    taskModel!.subtasks!.elementAt(index).title = value;
                   },
                   decoration: InputDecoration(
                       label: const Text('Subtitle'),
@@ -229,10 +211,13 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                         Checkbox(
                             checkColor: colorScheme.onSecondary,
                             activeColor: colorScheme.secondary,
-                            value: subtasks.elementAt(index).isChecked,
+                            value:
+                                taskModel!.subtasks!.elementAt(index).isChecked,
                             onChanged: (value) {
                               setState(() {
-                                subtasks.elementAt(index).isChecked = value!;
+                                taskModel!.subtasks!
+                                    .elementAt(index)
+                                    .isChecked = value!;
                               });
                             },
                             shape: RoundedRectangleBorder(
@@ -242,7 +227,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                             icon: const Icon(Icons.close_rounded),
                             onPressed: () {
                               setState(() {
-                                subtasks.removeAt(index);
+                                taskModel!.subtasks!.removeAt(index);
                               });
                             }),
                       ]),
@@ -262,7 +247,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             child: OutlinedButton.icon(
               onPressed: () {
                 setState(() {
-                  subtasks.add(SubtaskModel());
+                  taskModel!.subtasks!.add(SubtaskModel());
                 });
               },
               icon:
@@ -277,10 +262,10 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         ListTile(
           leading: SizedBox(
             height: double.infinity,
-            child: rIcon,
+            child: remainderIcon,
           ),
-          title: rTitle!,
-          subtitle: rSubtitle,
+          title: remainderTitle,
+          subtitle: remainderSubtitle,
           onTap: () async {
             DateTime? date = await showDatePicker(
               context: context,
@@ -299,21 +284,21 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               },
             );
 
-            remainderDate = date;
-            remainderTime = time;
+            taskModel!.remainderDate = date;
+            taskModel!.remainderTime = time;
 
             setState(() {
-              rIcon = Icon(
+              remainderIcon = Icon(
                 Icons.notifications_active_rounded,
                 color: colorScheme.primary,
               );
 
-              rTitle = Text(
+              remainderTitle = Text(
                 'Remind me at ${time?.hourOfPeriod}:${time?.minute} ${time?.period.name}',
                 style: TextStyle(color: colorScheme.primary),
               );
 
-              rSubtitle = Wrap(
+              remainderSubtitle = Wrap(
                 children: [
                   Text(
                     '${DaysOfWeek.values[date!.weekday - 1].name}, ',
@@ -348,7 +333,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         //Due
         ListTile(
           leading: dueIcon,
-          title: dTitle,
+          title: dueTitle,
           onTap: () async {
             DateTime? date = await showDatePicker(
               context: context,
@@ -356,9 +341,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               firstDate: DateTime.now(),
               lastDate: DateTime(DateTime.now().year + 10),
             );
-            dueDate = date;
+            taskModel!.dueDate = date;
             setState(() {
-              dTitle = Wrap(
+              dueTitle = Wrap(
                 children: [
                   Text('Due ', style: TextStyle(color: colorScheme.primary)),
                   Text('${DaysOfWeek.values[date!.weekday - 1].name}, ',
@@ -410,7 +395,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           ],
           onSelected: (value) {
             setState(() {
-              repeat = value;
+              taskModel!.repeat = value;
               repeatTitle = Text('Repeat ${value.name}',
                   style: TextStyle(color: colorScheme.primary));
               repeatIcon =
@@ -422,7 +407,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
 
         //Delete
         Visibility(
-          visible: widget.taskModelIndex == null ? false : true,
+          visible: widget.editTaskIndex == null ? false : true,
           child: ListTile(
             leading: Icon(
               const IconData(0xe800, fontFamily: 'DeleteFontIcon'),
@@ -431,13 +416,25 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             title:
                 Text('Delete Task', style: TextStyle(color: colorScheme.error)),
             onTap: () {
-              context.read<PlannedList>().removePlanned(widget.taskModelIndex!);
+              switch (widget.currentList) {
+                case DefaultLists.MyDay:
+                  context.read<MyDayList>().removeTask(widget.editTaskIndex!);
+                  break;
+                case DefaultLists.Planned:
+                  context.read<PlannedList>().removeTask(widget.editTaskIndex!);
+                  break;
+                case DefaultLists.Starred:
+                  context.read<StarredList>().removeTask(widget.editTaskIndex!);
+                  break;
+                case null:
+                  break;
+              }
               Navigator.pop(context);
             },
           ),
         ),
         Visibility(
-          visible: widget.taskModelIndex == null ? false : true,
+          visible: widget.editTaskIndex == null ? false : true,
           child: const Divider(indent: 68),
         ),
 
