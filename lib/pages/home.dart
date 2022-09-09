@@ -17,10 +17,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Widget? appBarTitle;
+  late DefaultLists currentList;
 
   @override
   void initState() {
     super.initState();
+    currentList = DefaultLists.Today;
     appBarTitle = Builder(
       builder: (context) {
         var currentDateTime = DateTime.now();
@@ -196,6 +198,7 @@ class _HomePageState extends State<HomePage> {
         shape: const CircularNotchedRectangle(),
         child: Wrap(
           children: [
+            //Menu
             IconButton(
                 icon:
                     Icon(Icons.menu_rounded, color: colorScheme.inverseSurface),
@@ -208,10 +211,20 @@ class _HomePageState extends State<HomePage> {
                     builder: (context) => const ListMenu(),
                   );
                 }),
+
+            //Today
             IconButton(
-                icon: Icon(Icons.today, color: colorScheme.primary),
+                icon: Icon(
+                  currentList == DefaultLists.Today
+                      ? Icons.today
+                      : Icons.today_outlined,
+                  color: currentList == DefaultLists.Today
+                      ? colorScheme.primary
+                      : colorScheme.inverseSurface,
+                ),
                 onPressed: () {
                   setState(() {
+                    currentList = DefaultLists.Today;
                     appBarTitle = Builder(
                       builder: (context) {
                         var currentDateTime = DateTime.now();
@@ -259,11 +272,18 @@ class _HomePageState extends State<HomePage> {
                     );
                   });
                 }),
+
+            //Planned
             IconButton(
-                icon: Icon(Icons.task_alt_rounded,
-                    color: colorScheme.inverseSurface),
+                icon: Icon(
+                  Icons.task_alt_rounded,
+                  color: currentList == DefaultLists.Planned
+                      ? colorScheme.primary
+                      : colorScheme.inverseSurface,
+                ),
                 onPressed: () {
                   setState(() {
+                    currentList = DefaultLists.Planned;
                     appBarTitle = Text('Planned',
                         style: TextStyle(
                             fontSize: 20,
@@ -271,16 +291,25 @@ class _HomePageState extends State<HomePage> {
                             color: colorScheme.primary));
                   });
                 }),
+
+            //Starred
             IconButton(
-                icon: Icon(Icons.star_border_rounded,
-                    color: colorScheme.inverseSurface),
+                icon: Icon(
+                  currentList == DefaultLists.Starred
+                      ? Icons.star_rounded
+                      : Icons.star_outline_rounded,
+                  color: currentList == DefaultLists.Starred
+                      ? colorScheme.primary
+                      : colorScheme.inverseSurface,
+                ),
                 onPressed: () {
                   setState(() {
+                    currentList = DefaultLists.Starred;
                     appBarTitle = Text('Starred',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w300,
-                          color: colorScheme.primary));
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                            color: colorScheme.primary));
                   });
                 }),
           ],

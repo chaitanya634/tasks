@@ -33,3 +33,9 @@ enum RepeatTask {
   Monthly,
   Yearly,
 }
+
+enum DefaultLists {
+  Today,
+  Planned,
+  Starred,
+}
