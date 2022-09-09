@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -68,6 +67,10 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         case null:
           break;
       }
+
+      if (taskModel!.dueDate != null) {}
+
+      if (taskModel!.repeat != null) {}
     } else {
       taskModel = TaskModel();
       taskModel!.subtasks = <SubtaskModel>[];
@@ -77,6 +80,76 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    if (taskModel!.remainderDate != null && taskModel!.remainderTime != null) {
+      remainderIcon = Icon(
+        Icons.notifications_active_rounded,
+        color: colorScheme.primary,
+      );
+
+      remainderTitle = Text(
+        'Remind me at ${taskModel!.remainderTime!.hourOfPeriod}:${taskModel!.remainderTime!.minute} ${taskModel!.remainderTime!.period.name}',
+        style: TextStyle(color: colorScheme.primary),
+      );
+
+      remainderSubtitle = Wrap(
+        children: [
+          Text(
+            '${DaysOfWeek.values[taskModel!.remainderDate!.weekday - 1].name}, ',
+            style: TextStyle(color: colorScheme.secondary),
+          ),
+          Text(
+            taskModel!.remainderDate!.day.toString(),
+            style: TextStyle(color: colorScheme.secondary),
+          ),
+          Text(
+            ordinal(taskModel!.remainderDate!.day),
+            style: TextStyle(
+                color: colorScheme.secondary,
+                fontSize: 10,
+                fontFeatures: const [FontFeature.superscripts()]),
+          ),
+          Text(
+            ' ${Months.values[taskModel!.remainderDate!.month - 1].name}',
+            style: TextStyle(color: colorScheme.secondary),
+          ),
+          Text(
+            ' ${taskModel!.remainderDate!.year.toString()}',
+            style: TextStyle(color: colorScheme.secondary),
+          ),
+        ],
+      );
+    }
+
+    if (taskModel!.dueDate != null) {
+      dueTitle = Wrap(
+        children: [
+          Text('Due ', style: TextStyle(color: colorScheme.primary)),
+          Text('${DaysOfWeek.values[taskModel!.dueDate!.weekday - 1].name}, ',
+              style: TextStyle(color: colorScheme.primary)),
+          Text(taskModel!.dueDate!.day.toString(),
+              style: TextStyle(color: colorScheme.primary)),
+          Text(
+            ordinal(taskModel!.dueDate!.day),
+            style: TextStyle(
+                color: colorScheme.primary,
+                fontSize: 11,
+                fontFeatures: const [FontFeature.superscripts()]),
+          ),
+          Text(' ${Months.values[taskModel!.dueDate!.month - 1].name}',
+              style: TextStyle(color: colorScheme.primary)),
+          Text(' ${taskModel!.dueDate!.year.toString()}',
+              style: TextStyle(color: colorScheme.primary)),
+        ],
+      );
+      dueIcon = Icon(Icons.event_rounded, color: colorScheme.primary);
+    }
+
+    if (taskModel!.repeat != null) {
+      repeatTitle = Text('Repeat ${taskModel!.repeat!.name}',
+          style: TextStyle(color: colorScheme.primary));
+      repeatIcon = Icon(Icons.event_repeat_rounded, color: colorScheme.primary);
+    }
 
     return Scaffold(
       appBar: AppBar(
