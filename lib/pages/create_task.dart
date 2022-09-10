@@ -167,6 +167,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           fontSize: 19,
         ),
         actions: [
+          //Save btn
           TextButton(
             onPressed: () {
               if (widget.editTaskIndex != null) {
@@ -188,6 +189,11 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     break;
                   case null:
                     break;
+                }
+                if (!taskModel!.isStarred) {
+                  context.read<StarredList>().removeTaskModel(taskModel!);
+                } else {
+                  context.read<StarredList>().addTask(taskModel!);
                 }
               } else {
                 switch (widget.currentList) {
@@ -212,7 +218,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             },
             child: Text(
               'Save',
-              style: TextStyle(color: colorScheme.inverseSurface),
+              style: TextStyle(color: colorScheme.inverseSurface, fontWeight: FontWeight.w600),
             ),
           )
         ],
