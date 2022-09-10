@@ -177,6 +177,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           TextButton(
             onPressed: () {
               if (taskModel!.title != null) {
+                //Edit task
                 if (widget.editTaskIndex != null) {
                   switch (widget.currentList) {
                     case DefaultLists.MyDay:
@@ -226,10 +227,11 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               } else {
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: colorScheme.primaryContainer,
+                    backgroundColor: colorScheme.primary,
                     content: Text('Please enter title',
                         style: TextStyle(
-                          color: colorScheme.onPrimaryContainer,
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onPrimary,
                         ))));
               }
             },
@@ -522,6 +524,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                   context.read<MyDayList>().removeTask(widget.editTaskIndex!);
                   break;
                 case DefaultLists.Planned:
+                  if(taskModel!.isStarred) {
+                    context.read<StarredList>().removeTaskModel(taskModel!);
+                  }
                   context.read<PlannedList>().removeTask(widget.editTaskIndex!);
                   break;
                 case DefaultLists.Starred:

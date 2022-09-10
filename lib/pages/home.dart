@@ -120,7 +120,6 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: [
               PopupMenuButton(
-                color: colorScheme.secondaryContainer,
                 icon: const Icon(
                     IconData(0xe813, fontFamily: 'OutlinedFontIcons')),
                 itemBuilder: (context) => <PopupMenuEntry>[
@@ -144,7 +143,6 @@ class _HomePageState extends State<HomePage> {
                     IconData(0xe814, fontFamily: 'OutlinedFontIcons')),
               ),
               PopupMenuButton(
-                color: colorScheme.secondaryContainer,
                 icon: const Icon(
                     IconData(0xe815, fontFamily: 'OutlinedFontIcons')),
                 itemBuilder: (context) => <PopupMenuEntry>[
