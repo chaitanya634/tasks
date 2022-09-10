@@ -14,28 +14,31 @@ import '../data/algos.dart';
 class CreateTaskPage extends StatefulWidget {
   const CreateTaskPage({
     Key? key,
-    this.editTaskIndex,
-    this.currentList,
+    this.taskIndex,
+    required this.currentList,
   }) : super(key: key);
 
-  final int? editTaskIndex;
-  final DefaultLists? currentList;
+  final int? taskIndex;
+  final DefaultLists currentList;
 
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
 }
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
-  TaskModel? taskModel;
+  late TaskModel taskModel;
 
+  //remainder widget
   Icon remainderIcon =
       const Icon(IconData(0xe803, fontFamily: 'OutlinedFontIcons'));
   Text remainderTitle = const Text('Add remainder');
   Widget? remainderSubtitle;
 
+  //due widget
   Icon dueIcon = const Icon(IconData(0xe80f, fontFamily: 'OutlinedFontIcons'));
   Widget dueTitle = const Text('Add due date');
 
+  //repeat widget
   Icon repeatIcon =
       const Icon(IconData(0xe801, fontFamily: 'OutlinedFontIcons'));
   Text repeatTitle = const Text('Repeat');
@@ -44,38 +47,34 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   void initState() {
     super.initState();
 
-    if (widget.editTaskIndex != null) {
+    //instatiate task model
+    if (widget.taskIndex != null) {
+      //previous task
       switch (widget.currentList) {
         case DefaultLists.MyDay:
-          taskModel = context
-              .read<MyDayList>()
-              .myDayTasks
-              .elementAt(widget.editTaskIndex!);
+          taskModel =
+              context.read<MyDayList>().myDayTasks.elementAt(widget.taskIndex!);
           break;
         case DefaultLists.Planned:
           taskModel = context
               .read<PlannedList>()
               .plannedTasks
-              .elementAt(widget.editTaskIndex!);
+              .elementAt(widget.taskIndex!);
           break;
         case DefaultLists.Starred:
           taskModel = context
               .read<StarredList>()
               .starredTasks
-              .elementAt(widget.editTaskIndex!);
-          break;
-        case null:
+              .elementAt(widget.taskIndex!);
           break;
       }
-
-      if (taskModel!.dueDate != null) {}
-
-      if (taskModel!.repeat != null) {}
-    } else {
+    }
+    //new task
+    else {
       taskModel = TaskModel();
-      taskModel!.subtasks = <SubtaskModel>[];
+      taskModel.subtasks = <SubtaskModel>[];
       if (widget.currentList == DefaultLists.Starred) {
-        taskModel!.isStarred = true;
+        taskModel.isStarred = true;
       }
     }
   }
@@ -84,72 +83,72 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    if (taskModel!.remainderDate != null && taskModel!.remainderTime != null) {
+    if (taskModel.remainderDate != null && taskModel.remainderTime != null) {
       remainderIcon = Icon(
         Icons.notifications_active_rounded,
         color: colorScheme.primary,
       );
 
       remainderTitle = Text(
-        'Remind me at ${taskModel!.remainderTime!.hourOfPeriod}:${taskModel!.remainderTime!.minute} ${taskModel!.remainderTime!.period.name}',
+        'Remind me at ${taskModel.remainderTime!.hourOfPeriod}:${taskModel.remainderTime!.minute} ${taskModel.remainderTime!.period.name}',
         style: TextStyle(color: colorScheme.primary),
       );
 
       remainderSubtitle = Wrap(
         children: [
           Text(
-            '${DaysOfWeek.values[taskModel!.remainderDate!.weekday - 1].name}, ',
+            '${DaysOfWeek.values[taskModel.remainderDate!.weekday - 1].name}, ',
             style: TextStyle(color: colorScheme.secondary),
           ),
           Text(
-            taskModel!.remainderDate!.day.toString(),
+            taskModel.remainderDate!.day.toString(),
             style: TextStyle(color: colorScheme.secondary),
           ),
           Text(
-            ordinal(taskModel!.remainderDate!.day),
+            ordinal(taskModel.remainderDate!.day),
             style: TextStyle(
                 color: colorScheme.secondary,
                 fontSize: 10,
                 fontFeatures: const [FontFeature.superscripts()]),
           ),
           Text(
-            ' ${Months.values[taskModel!.remainderDate!.month - 1].name}',
+            ' ${Months.values[taskModel.remainderDate!.month - 1].name}',
             style: TextStyle(color: colorScheme.secondary),
           ),
           Text(
-            ' ${taskModel!.remainderDate!.year.toString()}',
+            ' ${taskModel.remainderDate!.year.toString()}',
             style: TextStyle(color: colorScheme.secondary),
           ),
         ],
       );
     }
 
-    if (taskModel!.dueDate != null) {
+    if (taskModel.dueDate != null) {
       dueTitle = Wrap(
         children: [
           Text('Due ', style: TextStyle(color: colorScheme.primary)),
-          Text('${DaysOfWeek.values[taskModel!.dueDate!.weekday - 1].name}, ',
+          Text('${DaysOfWeek.values[taskModel.dueDate!.weekday - 1].name}, ',
               style: TextStyle(color: colorScheme.primary)),
-          Text(taskModel!.dueDate!.day.toString(),
+          Text(taskModel.dueDate!.day.toString(),
               style: TextStyle(color: colorScheme.primary)),
           Text(
-            ordinal(taskModel!.dueDate!.day),
+            ordinal(taskModel.dueDate!.day),
             style: TextStyle(
                 color: colorScheme.primary,
                 fontSize: 11,
                 fontFeatures: const [FontFeature.superscripts()]),
           ),
-          Text(' ${Months.values[taskModel!.dueDate!.month - 1].name}',
+          Text(' ${Months.values[taskModel.dueDate!.month - 1].name}',
               style: TextStyle(color: colorScheme.primary)),
-          Text(' ${taskModel!.dueDate!.year.toString()}',
+          Text(' ${taskModel.dueDate!.year.toString()}',
               style: TextStyle(color: colorScheme.primary)),
         ],
       );
       dueIcon = Icon(Icons.event_rounded, color: colorScheme.primary);
     }
 
-    if (taskModel!.repeat != null) {
-      repeatTitle = Text('Repeat ${taskModel!.repeat!.name}',
+    if (taskModel.repeat != null) {
+      repeatTitle = Text('Repeat ${taskModel.repeat!.name}',
           style: TextStyle(color: colorScheme.primary));
       repeatIcon = Icon(Icons.event_repeat_rounded, color: colorScheme.primary);
     }
@@ -158,6 +157,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
       appBar: AppBar(
         backgroundColor: colorScheme.secondaryContainer,
         leading: IconButton(
+          //close button
           icon: Icon(
             Icons.close_rounded,
             color: colorScheme.onSecondaryContainer,
@@ -173,74 +173,215 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           fontSize: 19,
         ),
         actions: [
-          //Save btn
+          //Save button
           TextButton(
+            child: Text(
+              'Save',
+              style: TextStyle(
+                color: colorScheme.inverseSurface,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             onPressed: () {
-              if (taskModel!.title != null) {
-                //Edit task
-                if (widget.editTaskIndex != null) {
+              //title is not null
+              if (taskModel.title != null) {
+                //update task
+                if (widget.taskIndex != null) {
                   switch (widget.currentList) {
                     case DefaultLists.MyDay:
                       context
                           .read<MyDayList>()
-                          .updateTask(widget.editTaskIndex!, taskModel!);
+                          .updateTask(widget.taskIndex!, taskModel);
+                      if (taskModel.isStarred &&
+                          !context
+                              .read<StarredList>()
+                              .starredTasks
+                              .contains(taskModel)) {
+                        context.read<StarredList>().addTask(taskModel);
+                      }
+                      if (taskModel.remainderDate != null) {
+                        var currentDate = DateTime.now();
+                        if (!(taskModel.remainderDate!.day == currentDate.day &&
+                            taskModel.remainderDate!.month ==
+                                currentDate.month &&
+                            taskModel.remainderDate!.year ==
+                                currentDate.year)) {
+                          context.read<MyDayList>().removeTaskModel(taskModel);
+                        }
+                      }
+                      if (!taskModel.isStarred &&
+                          context
+                              .read<StarredList>()
+                              .starredTasks
+                              .contains(taskModel)) {
+                        context.read<StarredList>().removeTaskModel(taskModel);
+                      }
                       break;
                     case DefaultLists.Planned:
                       context
                           .read<PlannedList>()
-                          .updateTask(widget.editTaskIndex!, taskModel!);
+                          .updateTask(widget.taskIndex!, taskModel);
+                      if (taskModel.isStarred &&
+                          !context
+                              .read<StarredList>()
+                              .starredTasks
+                              .contains(taskModel)) {
+                        context.read<StarredList>().addTask(taskModel);
+                      }
+
+                      if (!taskModel.isStarred &&
+                          context
+                              .read<StarredList>()
+                              .starredTasks
+                              .contains(taskModel)) {
+                        context.read<StarredList>().removeTaskModel(taskModel);
+                      }
+                      if (taskModel.remainderDate != null) {
+                        var currentDate = DateTime.now();
+                        if (taskModel.remainderDate!.day == currentDate.day &&
+                            taskModel.remainderDate!.month ==
+                                currentDate.month &&
+                            taskModel.remainderDate!.year == currentDate.year &&
+                            !context
+                                .read<MyDayList>()
+                                .myDayTasks
+                                .contains(taskModel)) {
+                          context.read<MyDayList>().addTask(taskModel);
+                        } 
+                        if(!(taskModel.remainderDate!.day == currentDate.day &&
+                            taskModel.remainderDate!.month ==
+                                currentDate.month &&
+                            taskModel.remainderDate!.year == currentDate.year)) {
+                          context.read<MyDayList>().removeTaskModel(taskModel);
+                        }
+                      }
                       break;
                     case DefaultLists.Starred:
                       context
                           .read<StarredList>()
-                          .updateTask(widget.editTaskIndex!, taskModel!);
-                      break;
-                    case null:
+                          .updateTask(widget.taskIndex!, taskModel);
+                      if (!taskModel.isStarred) {
+                        context.read<StarredList>().removeTaskModel(taskModel);
+                      }
+                    if (taskModel.remainderDate != null) {
+                        var currentDate = DateTime.now();
+                        if (taskModel.remainderDate!.day == currentDate.day &&
+                            taskModel.remainderDate!.month ==
+                                currentDate.month &&
+                            taskModel.remainderDate!.year == currentDate.year &&
+                            !context
+                                .read<MyDayList>()
+                                .myDayTasks
+                                .contains(taskModel)) {
+                          context.read<MyDayList>().addTask(taskModel);
+                        } 
+                        if(!(taskModel.remainderDate!.day == currentDate.day &&
+                            taskModel.remainderDate!.month ==
+                                currentDate.month &&
+                            taskModel.remainderDate!.year == currentDate.year)) {
+                          context.read<MyDayList>().removeTaskModel(taskModel);
+                        }
+                      }
                       break;
                   }
-                  if (!taskModel!.isStarred) {
-                    context.read<StarredList>().removeTaskModel(taskModel!);
-                  } else {
-                    context.read<StarredList>().addTask(taskModel!);
-                  }
-                } else {
+                }
+                //new task
+                else {
                   switch (widget.currentList) {
                     case DefaultLists.MyDay:
-                      context.read<MyDayList>().addTask(taskModel!);
+                      context.read<MyDayList>().addTask(taskModel);
+                      if (!context
+                          .read<PlannedList>()
+                          .plannedTasks
+                          .contains(taskModel)) {
+                        context.read<PlannedList>().addTask(taskModel);
+                      }
+                      if (taskModel.isStarred &&
+                          !context
+                              .read<StarredList>()
+                              .starredTasks
+                              .contains(taskModel)) {
+                        context.read<StarredList>().addTask(taskModel);
+                      }
+                      if (taskModel.remainderDate != null) {
+                        var currentDate = DateTime.now();
+                        if (!(taskModel.remainderDate!.day == currentDate.day &&
+                            taskModel.remainderDate!.month ==
+                                currentDate.month &&
+                            taskModel.remainderDate!.year ==
+                                currentDate.year)) {
+                          context.read<MyDayList>().removeTaskModel(taskModel);
+                        }
+                      }
                       break;
                     case DefaultLists.Planned:
-                      context.read<PlannedList>().addTask(taskModel!);
+                      context.read<PlannedList>().addTask(taskModel);
+                      if (taskModel.isStarred &&
+                          !context
+                              .read<StarredList>()
+                              .starredTasks
+                              .contains(taskModel)) {
+                        context.read<StarredList>().addTask(taskModel);
+                      }
+                      if (taskModel.remainderDate != null) {
+                        var currentDate = DateTime.now();
+                        if (taskModel.remainderDate!.day == currentDate.day &&
+                            taskModel.remainderDate!.month ==
+                                currentDate.month &&
+                            taskModel.remainderDate!.year == currentDate.year &&
+                            !context
+                                .read<MyDayList>()
+                                .myDayTasks
+                                .contains(taskModel)) {
+                          context.read<MyDayList>().addTask(taskModel);
+                        }
+                      }
+
                       break;
                     case DefaultLists.Starred:
-                      context.read<StarredList>().addTask(taskModel!);
+                      context.read<StarredList>().addTask(taskModel);
+                      if (taskModel.remainderDate != null) {
+                        var currentDate = DateTime.now();
+                        if (taskModel.remainderDate!.day == currentDate.day &&
+                            taskModel.remainderDate!.month ==
+                                currentDate.month &&
+                            taskModel.remainderDate!.year == currentDate.year &&
+                            !context
+                                .read<MyDayList>()
+                                .myDayTasks
+                                .contains(taskModel)) {
+                          context.read<MyDayList>().addTask(taskModel);
+                        }
+                      }
+                      if (!context
+                          .read<PlannedList>()
+                          .plannedTasks
+                          .contains(taskModel)) {
+                        context.read<PlannedList>().addTask(taskModel);
+                      }
                       break;
-                    case null:
-                      context.read<PlannedList>().addTask(taskModel!);
-                      break;
-                  }
-                  if (taskModel!.isStarred) {
-                    context.read<StarredList>().addTask(taskModel!);
                   }
                 }
                 ScaffoldMessenger.of(context).clearSnackBars();
                 Navigator.pop(context);
-              } else {
+              }
+              //title is null
+              else {
                 ScaffoldMessenger.of(context).clearSnackBars();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
                     backgroundColor: colorScheme.primary,
-                    content: Text('Please enter title',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: colorScheme.onPrimary,
-                        ))));
+                    content: Text(
+                      'Please enter title',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onPrimary,
+                      ),
+                    ),
+                  ),
+                );
               }
             },
-            child: Text(
-              'Save',
-              style: TextStyle(
-                  color: colorScheme.inverseSurface,
-                  fontWeight: FontWeight.w600),
-            ),
           )
         ],
       ),
@@ -250,33 +391,33 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
           child: TextField(
             controller: TextEditingController(
-              text: taskModel!.title,
+              text: taskModel.title,
             ),
-            onChanged: (value) => taskModel!.title = value,
+            onChanged: (value) => taskModel.title = value,
             decoration: InputDecoration(
               label: const Text('Title'),
               prefixIcon: IconButton(
                 icon: Icon(
-                  taskModel!.isStarred
+                  taskModel.isStarred
                       ? Icons.star_rounded
                       : Icons.star_border_rounded,
-                  color: taskModel!.isStarred ? colorScheme.primary : null,
+                  color: taskModel.isStarred ? colorScheme.primary : null,
                 ),
                 onPressed: () {
                   setState(() {
-                    taskModel!.isStarred
-                        ? taskModel!.isStarred = false
-                        : taskModel!.isStarred = true;
+                    taskModel.isStarred
+                        ? taskModel.isStarred = false
+                        : taskModel.isStarred = true;
                   });
                 },
               ),
               suffixIcon: Checkbox(
                 checkColor: colorScheme.onPrimary,
                 activeColor: colorScheme.primary,
-                value: taskModel!.isChecked,
+                value: taskModel.isChecked,
                 onChanged: (value) {
                   setState(() {
-                    taskModel!.isChecked = value!;
+                    taskModel.isChecked = value!;
                   });
                 },
                 shape: RoundedRectangleBorder(
@@ -296,16 +437,16 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           padding: const EdgeInsets.only(left: 46, right: 8),
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: taskModel!.subtasks!.length,
+            itemCount: taskModel.subtasks!.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: TextField(
                   controller: TextEditingController(
-                    text: taskModel!.subtasks!.elementAt(index).title,
+                    text: taskModel.subtasks!.elementAt(index).title,
                   ),
                   onChanged: (value) {
-                    taskModel!.subtasks!.elementAt(index).title = value;
+                    taskModel.subtasks!.elementAt(index).title = value;
                   },
                   decoration: InputDecoration(
                       label: const Text('Subtitle'),
@@ -315,12 +456,11 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                             checkColor: colorScheme.onSecondary,
                             activeColor: colorScheme.secondary,
                             value:
-                                taskModel!.subtasks!.elementAt(index).isChecked,
+                                taskModel.subtasks!.elementAt(index).isChecked,
                             onChanged: (value) {
                               setState(() {
-                                taskModel!.subtasks!
-                                    .elementAt(index)
-                                    .isChecked = value!;
+                                taskModel.subtasks!.elementAt(index).isChecked =
+                                    value!;
                               });
                             },
                             shape: RoundedRectangleBorder(
@@ -330,7 +470,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                             icon: const Icon(Icons.close_rounded),
                             onPressed: () {
                               setState(() {
-                                taskModel!.subtasks!.removeAt(index);
+                                taskModel.subtasks!.removeAt(index);
                               });
                             }),
                       ]),
@@ -350,7 +490,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             child: OutlinedButton.icon(
               onPressed: () {
                 setState(() {
-                  taskModel!.subtasks!.add(SubtaskModel());
+                  taskModel.subtasks!.add(SubtaskModel());
                 });
               },
               icon:
@@ -387,8 +527,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               },
             );
 
-            taskModel!.remainderDate = date;
-            taskModel!.remainderTime = time;
+            taskModel.remainderDate = date;
+            taskModel.remainderTime = time;
 
             setState(() {
               remainderIcon = Icon(
@@ -444,7 +584,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               firstDate: DateTime.now(),
               lastDate: DateTime(DateTime.now().year + 10),
             );
-            taskModel!.dueDate = date;
+            taskModel.dueDate = date;
             setState(() {
               dueTitle = Wrap(
                 children: [
@@ -498,7 +638,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           ],
           onSelected: (value) {
             setState(() {
-              taskModel!.repeat = value;
+              taskModel.repeat = value;
               repeatTitle = Text('Repeat ${value.name}',
                   style: TextStyle(color: colorScheme.primary));
               repeatIcon =
@@ -510,7 +650,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
 
         //Delete
         Visibility(
-          visible: widget.editTaskIndex == null ? false : true,
+          visible: widget.taskIndex == null ? false : true,
           child: ListTile(
             leading: Icon(
               const IconData(0xe800, fontFamily: 'DeleteFontIcon'),
@@ -521,18 +661,16 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             onTap: () {
               switch (widget.currentList) {
                 case DefaultLists.MyDay:
-                  context.read<MyDayList>().removeTask(widget.editTaskIndex!);
+                  context.read<MyDayList>().removeTask(widget.taskIndex!);
                   break;
                 case DefaultLists.Planned:
-                  if(taskModel!.isStarred) {
-                    context.read<StarredList>().removeTaskModel(taskModel!);
+                  if (taskModel.isStarred) {
+                    context.read<StarredList>().removeTaskModel(taskModel);
                   }
-                  context.read<PlannedList>().removeTask(widget.editTaskIndex!);
+                  context.read<PlannedList>().removeTask(widget.taskIndex!);
                   break;
                 case DefaultLists.Starred:
-                  context.read<StarredList>().removeTask(widget.editTaskIndex!);
-                  break;
-                case null:
+                  context.read<StarredList>().removeTask(widget.taskIndex!);
                   break;
               }
               Navigator.pop(context);
@@ -540,7 +678,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           ),
         ),
         Visibility(
-          visible: widget.editTaskIndex == null ? false : true,
+          visible: widget.taskIndex == null ? false : true,
           child: const Divider(indent: 68),
         ),
 

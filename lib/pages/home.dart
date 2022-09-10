@@ -162,6 +162,10 @@ class _HomePageState extends State<HomePage> {
                       child: ListTile(
                     title: Text('Change theme'),
                   )),
+                  const PopupMenuItem(
+                      child: ListTile(
+                    title: Text('Clear list'),
+                  )),
                 ],
               )
             ],
@@ -268,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                           pageBuilder:
                               (context, animation, secondaryAnimation) {
                             return CreateTaskPage(
-                              editTaskIndex: index,
+                              taskIndex: index,
                               currentList: currentList,
                             );
                           },

@@ -23,4 +23,10 @@ class MyDayList with ChangeNotifier {
     myDayTasks.removeAt(index);
     notifyListeners();
   }
+
+  void removeTaskModel(TaskModel taskModel) {
+    myDayTasks.remove(taskModel);
+    notifyListeners();
+  }
+
 }
