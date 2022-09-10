@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+ThemeData dynamicDarkTheme(ColorScheme darkDynamic) => ThemeData(
+      useMaterial3: true,
+      colorScheme: darkDynamic,
+      appBarTheme: const AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ),
+      ),
+    );
+
 ThemeData darkTheme() => ThemeData(
       useMaterial3: true,
       appBarTheme: const AppBarTheme(
@@ -39,12 +49,4 @@ ThemeData darkTheme() => ThemeData(
       ),
     );
 
-ThemeData dynamicDarkTheme(ColorScheme darkDynamic) => ThemeData(
-      useMaterial3: true,
-      colorScheme: darkDynamic,
-      appBarTheme: const AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-        ),
-      ),
-    );
+

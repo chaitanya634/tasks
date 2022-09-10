@@ -297,9 +297,10 @@ class _HomePageState extends State<HomePage> {
                 showModalBottomSheet(
                   context: context,
                   backgroundColor: colorScheme.secondaryContainer,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16))),
                   builder: (context) => const BottomAppBarMenu(),
                 );
               },
@@ -417,7 +418,7 @@ class _HomePageState extends State<HomePage> {
           showGeneralDialog(
             context: context,
             pageBuilder: (context, animation, secondaryAnimation) =>
-                const CreateTaskPage(),
+                CreateTaskPage(currentList: currentList),
           );
         },
         child: Icon(

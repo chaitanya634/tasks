@@ -74,6 +74,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
     } else {
       taskModel = TaskModel();
       taskModel!.subtasks = <SubtaskModel>[];
+      if (widget.currentList == DefaultLists.Starred) {
+        taskModel!.isStarred = true;
+      }
     }
   }
 
@@ -159,7 +162,10 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             Icons.close_rounded,
             color: colorScheme.onSecondaryContainer,
           ),
-          onPressed: (() => Navigator.pop(context)),
+          onPressed: (() {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            Navigator.pop(context);
+          }),
         ),
         title: const Text('Create Task'),
         titleTextStyle: TextStyle(
@@ -167,49 +173,71 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           fontSize: 19,
         ),
         actions: [
+          //Save btn
           TextButton(
             onPressed: () {
-              if (widget.editTaskIndex != null) {
-                switch (widget.currentList) {
-                  case DefaultLists.MyDay:
-                    context
-                        .read<MyDayList>()
-                        .updateTask(widget.editTaskIndex!, taskModel!);
-                    break;
-                  case DefaultLists.Planned:
-                    context
-                        .read<PlannedList>()
-                        .updateTask(widget.editTaskIndex!, taskModel!);
-                    break;
-                  case DefaultLists.Starred:
-                    context
-                        .read<StarredList>()
-                        .updateTask(widget.editTaskIndex!, taskModel!);
-                    break;
-                  case null:
-                    break;
-                }
-              } else {
-                switch (widget.currentList) {
-                  case DefaultLists.MyDay:
-                    context.read<MyDayList>().addTask(taskModel!);
-                    break;
-                  case DefaultLists.Planned:
-                    context.read<PlannedList>().addTask(taskModel!);
-                    break;
-                  case DefaultLists.Starred:
+              if (taskModel!.title != null) {
+                if (widget.editTaskIndex != null) {
+                  switch (widget.currentList) {
+                    case DefaultLists.MyDay:
+                      context
+                          .read<MyDayList>()
+                          .updateTask(widget.editTaskIndex!, taskModel!);
+                      break;
+                    case DefaultLists.Planned:
+                      context
+                          .read<PlannedList>()
+                          .updateTask(widget.editTaskIndex!, taskModel!);
+                      break;
+                    case DefaultLists.Starred:
+                      context
+                          .read<StarredList>()
+                          .updateTask(widget.editTaskIndex!, taskModel!);
+                      break;
+                    case null:
+                      break;
+                  }
+                  if (!taskModel!.isStarred) {
+                    context.read<StarredList>().removeTaskModel(taskModel!);
+                  } else {
                     context.read<StarredList>().addTask(taskModel!);
-                    break;
-                  case null:
-                    context.read<PlannedList>().addTask(taskModel!);
-                    break;
+                  }
+                } else {
+                  switch (widget.currentList) {
+                    case DefaultLists.MyDay:
+                      context.read<MyDayList>().addTask(taskModel!);
+                      break;
+                    case DefaultLists.Planned:
+                      context.read<PlannedList>().addTask(taskModel!);
+                      break;
+                    case DefaultLists.Starred:
+                      context.read<StarredList>().addTask(taskModel!);
+                      break;
+                    case null:
+                      context.read<PlannedList>().addTask(taskModel!);
+                      break;
+                  }
+                  if (taskModel!.isStarred) {
+                    context.read<StarredList>().addTask(taskModel!);
+                  }
                 }
+                ScaffoldMessenger.of(context).clearSnackBars();
+                Navigator.pop(context);
+              } else {
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: colorScheme.primaryContainer,
+                    content: Text('Please enter title',
+                        style: TextStyle(
+                          color: colorScheme.onPrimaryContainer,
+                        ))));
               }
-              Navigator.pop(context);
             },
             child: Text(
               'Save',
-              style: TextStyle(color: colorScheme.inverseSurface),
+              style: TextStyle(
+                  color: colorScheme.inverseSurface,
+                  fontWeight: FontWeight.w600),
             ),
           )
         ],
