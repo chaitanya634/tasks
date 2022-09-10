@@ -204,6 +204,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     context.read<PlannedList>().addTask(taskModel!);
                     break;
                 }
+                if (taskModel!.isStarred) {
+                  context.read<StarredList>().addTask(taskModel!);
+                }
               }
               Navigator.pop(context);
             },

@@ -23,4 +23,10 @@ class StarredList with ChangeNotifier {
     starredTasks.removeAt(index);
     notifyListeners();
   }
+
+  void removeTaskModel(TaskModel taskModel) {
+    starredTasks.remove(taskModel);
+    notifyListeners();
+  }
+
 }
