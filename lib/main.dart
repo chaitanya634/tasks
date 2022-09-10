@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => DynamicColorBuilder(
-        builder: (lightDynamic, darkDynamic) => MaterialApp(
+  Widget build(BuildContext context) =>
+      DynamicColorBuilder(builder: (lightDynamic, darkDynamic) => MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: lightDynamic == null
               ? lightTheme()
@@ -37,6 +37,6 @@ class MyApp extends StatelessWidget {
               darkDynamic == null ? darkTheme() : dynamicDarkTheme(darkDynamic),
           themeMode: ThemeMode.system,
           home: const HomePage(),
-        ),
-      );
+        )
+    );
 }
