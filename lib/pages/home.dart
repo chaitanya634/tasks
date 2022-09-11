@@ -228,34 +228,38 @@ class _HomePageState extends State<HomePage> {
                 return Column(
                   children: [
                     ListTile(
-                      trailing: Checkbox(
-                        checkColor: colorScheme.onPrimary,
-                        activeColor: colorScheme.primary,
-                        value: isTaskChecked,
-                        onChanged: (value) {
-                          switch (currentList) {
-                            case DefaultLists.MyDay:
-                              context.read<MyDayList>().updateTaskChecked(
-                                    isChecked: value!,
-                                    taskIndex: index,
-                                  );
-                              break;
-                            case DefaultLists.Planned:
-                              context.read<PlannedList>().updateTaskChecked(
-                                    isChecked: value!,
-                                    taskIndex: index,
-                                  );
-                              break;
-                            case DefaultLists.Starred:
-                              context.read<StarredList>().updateTaskChecked(
-                                    isChecked: value!,
-                                    taskIndex: index,
-                                  );
-                              break;
-                          }
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
+                      minVerticalPadding: 18,
+                      trailing: SizedBox(
+                        height: double.infinity,
+                        child: Checkbox(
+                          checkColor: colorScheme.onPrimary,
+                          activeColor: colorScheme.primary,
+                          value: isTaskChecked,
+                          onChanged: (value) {
+                            switch (currentList) {
+                              case DefaultLists.MyDay:
+                                context.read<MyDayList>().updateTaskChecked(
+                                      isChecked: value!,
+                                      taskIndex: index,
+                                    );
+                                break;
+                              case DefaultLists.Planned:
+                                context.read<PlannedList>().updateTaskChecked(
+                                      isChecked: value!,
+                                      taskIndex: index,
+                                    );
+                                break;
+                              case DefaultLists.Starred:
+                                context.read<StarredList>().updateTaskChecked(
+                                      isChecked: value!,
+                                      taskIndex: index,
+                                    );
+                                break;
+                            }
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                         ),
                       ),
                       title: Text(
@@ -279,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-                    const Divider(),
+                    const Divider(height: 1,),
                   ],
                 );
               },
