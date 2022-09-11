@@ -247,11 +247,12 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                                 .myDayTasks
                                 .contains(taskModel)) {
                           context.read<MyDayList>().addTask(taskModel);
-                        } 
-                        if(!(taskModel.remainderDate!.day == currentDate.day &&
+                        }
+                        if (!(taskModel.remainderDate!.day == currentDate.day &&
                             taskModel.remainderDate!.month ==
                                 currentDate.month &&
-                            taskModel.remainderDate!.year == currentDate.year)) {
+                            taskModel.remainderDate!.year ==
+                                currentDate.year)) {
                           context.read<MyDayList>().removeTaskModel(taskModel);
                         }
                       }
@@ -263,7 +264,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                       if (!taskModel.isStarred) {
                         context.read<StarredList>().removeTaskModel(taskModel);
                       }
-                    if (taskModel.remainderDate != null) {
+                      if (taskModel.remainderDate != null) {
                         var currentDate = DateTime.now();
                         if (taskModel.remainderDate!.day == currentDate.day &&
                             taskModel.remainderDate!.month ==
@@ -274,11 +275,12 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                                 .myDayTasks
                                 .contains(taskModel)) {
                           context.read<MyDayList>().addTask(taskModel);
-                        } 
-                        if(!(taskModel.remainderDate!.day == currentDate.day &&
+                        }
+                        if (!(taskModel.remainderDate!.day == currentDate.day &&
                             taskModel.remainderDate!.month ==
                                 currentDate.month &&
-                            taskModel.remainderDate!.year == currentDate.year)) {
+                            taskModel.remainderDate!.year ==
+                                currentDate.year)) {
                           context.read<MyDayList>().removeTaskModel(taskModel);
                         }
                       }
@@ -499,10 +501,20 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             ),
           ),
         ),
-        const Divider(indent: 138, endIndent: 138),
+
+        const SizedBox(
+          height: 8,
+        ),
+
+        const Divider(
+          indent: 138,
+          endIndent: 138,
+          height: 1,
+        ),
 
         //Remainder
         ListTile(
+          minVerticalPadding: 18,
           leading: SizedBox(
             height: double.infinity,
             child: remainderIcon,
@@ -571,10 +583,14 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             });
           },
         ),
-        const Divider(indent: 68),
+        const Divider(
+          indent: 68,
+          height: 1,
+        ),
 
         //Due
         ListTile(
+          minVerticalPadding: 18,
           leading: dueIcon,
           title: dueTitle,
           onTap: () async {
@@ -610,12 +626,16 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             });
           },
         ),
-        const Divider(indent: 68),
+        const Divider(
+          indent: 68,
+          height: 1,
+        ),
 
         //Repeat
         PopupMenuButton<RepeatTask>(
           offset: const Offset(1, 0),
           child: ListTile(
+            minVerticalPadding: 18,
             leading: repeatIcon,
             title: repeatTitle,
           ),
@@ -646,12 +666,16 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             });
           },
         ),
-        const Divider(indent: 68),
+        const Divider(
+          indent: 68,
+          height: 1,
+        ),
 
         //Delete
         Visibility(
           visible: widget.taskIndex == null ? false : true,
           child: ListTile(
+            minVerticalPadding: 18,
             leading: Icon(
               const IconData(0xe800, fontFamily: 'DeleteFontIcon'),
               color: colorScheme.error,
@@ -662,14 +686,38 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               switch (widget.currentList) {
                 case DefaultLists.MyDay:
                   context.read<MyDayList>().removeTask(widget.taskIndex!);
-                  break;
-                case DefaultLists.Planned:
-                  if (taskModel.isStarred) {
+                  if (context
+                      .read<PlannedList>()
+                      .plannedTasks
+                      .contains(taskModel)) {
+                    context.read<PlannedList>().removeTaskModel(taskModel);
+                  }
+                  if (context
+                      .read<StarredList>()
+                      .starredTasks
+                      .contains(taskModel)) {
                     context.read<StarredList>().removeTaskModel(taskModel);
                   }
+                  break;
+                case DefaultLists.Planned:
                   context.read<PlannedList>().removeTask(widget.taskIndex!);
+                  if (context
+                      .read<StarredList>()
+                      .starredTasks
+                      .contains(taskModel)) {
+                    context.read<StarredList>().removeTaskModel(taskModel);
+                  }
+                  if(context.read<MyDayList>().myDayTasks.contains(taskModel)) {
+                    context.read<MyDayList>().removeTaskModel(taskModel);
+                  }
                   break;
                 case DefaultLists.Starred:
+                  if(context.read<MyDayList>().myDayTasks.contains(taskModel)) {
+                    context.read<MyDayList>().removeStarred(taskModel);
+                  }
+                  if(context.read<PlannedList>().plannedTasks.contains(taskModel)) {
+                    context.read<PlannedList>().removeStarred(taskModel);
+                  }
                   context.read<StarredList>().removeTask(widget.taskIndex!);
                   break;
               }
