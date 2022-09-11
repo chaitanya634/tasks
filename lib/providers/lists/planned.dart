@@ -23,4 +23,14 @@ class PlannedList with ChangeNotifier {
     plannedTasks.removeAt(index);
     notifyListeners();
   }
+
+  void removeStarred(TaskModel taskModel) {
+    taskModel.isStarred = false;
+    notifyListeners();
+  }
+
+  void removeTaskModel(TaskModel taskModel) {
+    plannedTasks.remove(taskModel);
+    notifyListeners();
+  }
 }

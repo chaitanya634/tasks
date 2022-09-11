@@ -686,14 +686,38 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               switch (widget.currentList) {
                 case DefaultLists.MyDay:
                   context.read<MyDayList>().removeTask(widget.taskIndex!);
-                  break;
-                case DefaultLists.Planned:
-                  if (taskModel.isStarred) {
+                  if (context
+                      .read<PlannedList>()
+                      .plannedTasks
+                      .contains(taskModel)) {
+                    context.read<PlannedList>().removeTaskModel(taskModel);
+                  }
+                  if (context
+                      .read<StarredList>()
+                      .starredTasks
+                      .contains(taskModel)) {
                     context.read<StarredList>().removeTaskModel(taskModel);
                   }
+                  break;
+                case DefaultLists.Planned:
                   context.read<PlannedList>().removeTask(widget.taskIndex!);
+                  if (context
+                      .read<StarredList>()
+                      .starredTasks
+                      .contains(taskModel)) {
+                    context.read<StarredList>().removeTaskModel(taskModel);
+                  }
+                  if(context.read<MyDayList>().myDayTasks.contains(taskModel)) {
+                    context.read<MyDayList>().removeTaskModel(taskModel);
+                  }
                   break;
                 case DefaultLists.Starred:
+                  if(context.read<MyDayList>().myDayTasks.contains(taskModel)) {
+                    context.read<MyDayList>().removeStarred(taskModel);
+                  }
+                  if(context.read<PlannedList>().plannedTasks.contains(taskModel)) {
+                    context.read<PlannedList>().removeStarred(taskModel);
+                  }
                   context.read<StarredList>().removeTask(widget.taskIndex!);
                   break;
               }
