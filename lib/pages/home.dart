@@ -2,13 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/pages/drawer.dart';
 
 import '../data/algos.dart';
 import '../data/enums.dart';
 import '../data/models.dart';
 
 import '../pages/create_task.dart';
-import '../pages/bottom_app_bar_menu.dart';
 
 import '../providers/lists/myday.dart';
 import '../providers/lists/planned.dart';
@@ -22,6 +22,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   late DefaultLists currentList;
   late Widget appBarTitle;
 
@@ -104,11 +106,12 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: colorScheme.background,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            // backgroundColor: colorScheme.background,
+            automaticallyImplyLeading: false,
             shadowColor: colorScheme.shadow,
             floating: true,
             pinned: true,
@@ -283,13 +286,24 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-                    const Divider(height: 1,),
+                    const Divider(
+                      height: 1,
+                    ),
                   ],
                 );
               },
             ),
           ),
         ],
+      ),
+      drawer: const Drawer(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(16),
+            bottomRight: Radius.circular(16),
+          ),
+        ),
+        child: DrawerBody(),
       ),
       bottomNavigationBar: BottomAppBar(
         color: colorScheme.secondaryContainer,
@@ -300,15 +314,7 @@ class _HomePageState extends State<HomePage> {
             IconButton(
               icon: Icon(Icons.menu_rounded, color: colorScheme.inverseSurface),
               onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  backgroundColor: colorScheme.secondaryContainer,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16))),
-                  builder: (context) => const BottomAppBarMenu(),
-                );
+                _scaffoldKey.currentState?.openDrawer();
               },
             ),
 
