@@ -23,7 +23,7 @@ class _DrawerBody extends State<DrawerBody> {
                 style: TextStyle(
                   fontFamily: 'GreatVibes',
                   fontSize: 28,
-                  color: colorScheme.onPrimaryContainer,
+                  color: colorScheme.onSecondaryContainer,
                 ),
               ),
               titlePadding: const EdgeInsets.only(
@@ -32,10 +32,10 @@ class _DrawerBody extends State<DrawerBody> {
               ),
             ),
             shadowColor: colorScheme.shadow,
-            backgroundColor: colorScheme.background,
+            backgroundColor: colorScheme.secondaryContainer,
             floating: true,
             pinned: true,
-            expandedHeight: 150.0,
+            expandedHeight: 128.0,
             actions: [
               IconButton(
                 onPressed: () {},
@@ -43,10 +43,21 @@ class _DrawerBody extends State<DrawerBody> {
               )
             ],
           ),
+          SliverToBoxAdapter(
+            child: ListTile(
+              title: Text(
+                'My Lists',
+                style: TextStyle(color: colorScheme.onPrimaryContainer),
+              ),
+            ),
+          ),
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-              return const FlutterLogo();
-            }, childCount: 100),
+              return ListTile(
+                leading: const Icon(Icons.checklist_rounded),
+                title: Text('List $index'),
+              );
+            }, childCount: 20),
           ),
         ],
       ),
@@ -54,14 +65,21 @@ class _DrawerBody extends State<DrawerBody> {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           TextButton.icon(
-              onPressed: () {},
-              icon: Icon(Icons.playlist_add),
-              label: Text('Add list')),
+            onPressed: () {},
+            icon: Icon(
+              Icons.playlist_add_rounded,
+              color: colorScheme.onSecondaryContainer,
+            ),
+            label: Text(
+              'Add list',
+              style: TextStyle(color: colorScheme.onSecondaryContainer),
+            ),
+          ),
           IconButton(
               onPressed: () {},
               icon: Icon(
                 Icons.create_new_folder_outlined,
-                color: colorScheme.primary,
+                color: colorScheme.onSecondaryContainer,
               ))
         ]),
       ),
