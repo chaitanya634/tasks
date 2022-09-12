@@ -47,39 +47,79 @@ class _DrawerBody extends State<DrawerBody> {
             child: ListTile(
               title: Text(
                 'My Lists',
-                style: TextStyle(color: colorScheme.onPrimaryContainer),
+                style: TextStyle(color: colorScheme.primary),
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
+          SliverReorderableList(
+            itemBuilder: (context, index) {
               return ListTile(
-                leading: const Icon(Icons.checklist_rounded),
+                key: UniqueKey(),
+                leading: Icon(Icons.checklist_rounded),
                 title: Text('List $index'),
               );
-            }, childCount: 20),
+            },
+            itemCount: 3,
+            onReorder: (oldIndex, newIndex) {},
           ),
+          SliverToBoxAdapter(
+            child: Divider(
+              indent: 16,
+              endIndent: 16,
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: ListTile(
+              title: Text(
+                'My Groups',
+                style: TextStyle(color: colorScheme.primary),
+              ),
+            ),
+          ),
+          SliverReorderableList(
+            itemBuilder: (context, index) {
+              return ListTile(
+                key: UniqueKey(),
+                leading: Icon(Icons.folder_outlined),
+                title: Text('Group $index'),
+                trailing: IconButton(
+                    onPressed: () {}, icon: Icon(Icons.expand_more_rounded)),
+              );
+            },
+            itemCount: 1,
+            onReorder: (oldIndex, newIndex) {},
+          )
         ],
       ),
       bottomNavigationBar: BottomAppBar(
+        elevation: 12,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Container(
+                    height: 60,
+                  );
+                },
+              );
+            },
             icon: Icon(
               Icons.playlist_add_rounded,
-              color: colorScheme.onSecondaryContainer,
+              color: colorScheme.primary,
             ),
             label: Text(
               'Add list',
-              style: TextStyle(color: colorScheme.onSecondaryContainer),
+              style: TextStyle(color: colorScheme.primary),
             ),
           ),
           IconButton(
               onPressed: () {},
               icon: Icon(
                 Icons.create_new_folder_outlined,
-                color: colorScheme.onSecondaryContainer,
+                color: colorScheme.primary,
               ))
         ]),
       ),
