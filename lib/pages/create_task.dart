@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/providers/lists/myday.dart';
 
-import '../providers/lists/starred.dart';
-import '../providers/lists/planned.dart';
+import '../providers/default_lists/myday.dart';
+import '../providers/default_lists/starred.dart';
+import '../providers/default_lists/planned.dart';
 
 import '../data/enums.dart';
 import '../data/models.dart';

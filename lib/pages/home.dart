@@ -10,9 +10,9 @@ import '../data/models.dart';
 
 import '../pages/create_task.dart';
 
-import '../providers/lists/myday.dart';
-import '../providers/lists/planned.dart';
-import '../providers/lists/starred.dart';
+import '../providers/default_lists/myday.dart';
+import '../providers/default_lists/planned.dart';
+import '../providers/default_lists/starred.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

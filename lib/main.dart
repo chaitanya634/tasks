@@ -1,10 +1,12 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/providers/my_groups.dart';
+import 'package:tasks/providers/my_lists.dart';
 
-import 'providers/lists/myday.dart';
-import 'providers/lists/planned.dart';
-import 'providers/lists/starred.dart';
+import 'providers/default_lists/myday.dart';
+import 'providers/default_lists/planned.dart';
+import 'providers/default_lists/starred.dart';
 
 import '../pages/home.dart';
 import '../themes/dark.dart';
@@ -17,6 +19,8 @@ void main() {
         ChangeNotifierProvider(create: (context) => StarredList()),
         ChangeNotifierProvider(create: (context) => PlannedList()),
         ChangeNotifierProvider(create: (context) => MyDayList()),
+        ChangeNotifierProvider(create: (context) => MyLists()),
+        ChangeNotifierProvider(create: (context) => MyGroups()),
       ],
       child: const MyApp(),
     ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tasks/providers/my_groups.dart';
+import 'package:tasks/providers/my_lists.dart';
 
 class DrawerBody extends StatefulWidget {
   const DrawerBody({Key? key}) : super(key: key);
@@ -51,18 +54,20 @@ class _DrawerBody extends State<DrawerBody> {
               ),
             ),
           ),
+          //my lists
           SliverReorderableList(
             itemBuilder: (context, index) {
+              var element = context.watch<MyLists>().myLists.elementAt(index);
               return ListTile(
-                key: UniqueKey(),
-                leading: Icon(Icons.checklist_rounded),
-                title: Text('List $index'),
+                key: ObjectKey(element),
+                leading: const Icon(Icons.checklist_rounded),
+                title: Text(element.key),
               );
             },
-            itemCount: 3,
+            itemCount: context.watch<MyLists>().myLists.length,
             onReorder: (oldIndex, newIndex) {},
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Divider(
               indent: 16,
               endIndent: 16,
@@ -76,17 +81,19 @@ class _DrawerBody extends State<DrawerBody> {
               ),
             ),
           ),
+          //my groups
           SliverReorderableList(
             itemBuilder: (context, index) {
+              var element = context.watch<MyGroups>().myGroups.elementAt(index);
               return ListTile(
-                key: UniqueKey(),
-                leading: Icon(Icons.folder_outlined),
-                title: Text('Group $index'),
+                key: ObjectKey(element),
+                leading: const Icon(Icons.folder_outlined),
+                title: Text(element.key),
                 trailing: IconButton(
-                    onPressed: () {}, icon: Icon(Icons.expand_more_rounded)),
+                    onPressed: () {}, icon: const Icon(Icons.expand_more_rounded)),
               );
             },
-            itemCount: 1,
+            itemCount: context.watch<MyGroups>().myGroups.length,
             onReorder: (oldIndex, newIndex) {},
           )
         ],
