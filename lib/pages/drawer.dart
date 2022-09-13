@@ -15,6 +15,7 @@ class _DrawerBody extends State<DrawerBody> {
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -61,6 +62,15 @@ class _DrawerBody extends State<DrawerBody> {
               return ListTile(
                 key: ObjectKey(element),
                 leading: const Icon(Icons.checklist_rounded),
+                trailing: IconButton(
+                  icon: const Icon(
+                    Icons.remove_rounded,
+                    size: 18,
+                  ),
+                  onPressed: () {
+                    context.read<MyLists>().removeAt(index);
+                  },
+                ),
                 title: Text(element.key),
               );
             },
@@ -90,7 +100,8 @@ class _DrawerBody extends State<DrawerBody> {
                 leading: const Icon(Icons.folder_outlined),
                 title: Text(element.key),
                 trailing: IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.expand_more_rounded)),
+                    onPressed: () {},
+                    icon: const Icon(Icons.expand_more_rounded)),
               );
             },
             itemCount: context.watch<MyGroups>().myGroups.length,
@@ -104,14 +115,36 @@ class _DrawerBody extends State<DrawerBody> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           TextButton.icon(
             onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return Container(
-                    height: 60,
-                  );
-                },
-              );
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    late String listName;
+                    return AlertDialog(
+                      title: const Text('New List'),
+                      content: TextField(
+                          onChanged: (value) => listName = value,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16)),
+                              label: const Text('List Name'))),
+                      actions: [
+                        //cancel
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel')),
+                        TextButton(
+                            onPressed: () {
+                              bool added = context
+                                  .read<MyLists>()
+                                  .addList(MapEntry(listName, []));
+                              if (added) Navigator.pop(context);
+                            },
+                            child: const Text('Save')),
+                      ],
+                    );
+                  });
             },
             icon: Icon(
               Icons.playlist_add_rounded,
@@ -123,7 +156,38 @@ class _DrawerBody extends State<DrawerBody> {
             ),
           ),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      late String groupName;
+                      return AlertDialog(
+                        title: const Text('New Group'),
+                        content: TextField(
+                            onChanged: (value) => groupName = value,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16)),
+                                label: const Text('Group Name'))),
+                        actions: [
+                          //cancel
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel')),
+                          TextButton(
+                              onPressed: () {
+                                bool added = context
+                                    .read<MyGroups>()
+                                    .addGroup(MapEntry(groupName, []));
+                                if (added) Navigator.pop(context);
+                              },
+                              child: const Text('Save')),
+                        ],
+                      );
+                    });
+              },
               icon: Icon(
                 Icons.create_new_folder_outlined,
                 color: colorScheme.primary,

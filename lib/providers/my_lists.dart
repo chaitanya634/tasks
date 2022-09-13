@@ -19,4 +19,10 @@ class MyLists with ChangeNotifier {
     notifyListeners();
     return myLists.contains(listMap);
   }
+
+  void removeAt(int index) {
+    myLists.removeAt(index);
+    notifyListeners();
+  }
+
 }

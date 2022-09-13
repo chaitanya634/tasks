@@ -297,6 +297,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: const Drawer(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(12),bottomRight: Radius.circular(12))),
         child: DrawerBody(),
       ),
       bottomNavigationBar: BottomAppBar(
