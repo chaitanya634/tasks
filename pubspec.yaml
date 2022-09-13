@@ -76,7 +76,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   
-  # Font Icons
+  # font icons
   fonts:
    - family: OutlinedFontIcons
      fonts:
@@ -84,6 +84,11 @@ flutter:
    - family: DeleteFontIcon
      fonts:
       - asset: lib/assets/icons/delete_font.ttf
+  
+  # fonts
+   - family: GreatVibes
+     fonts:
+      - asset: lib/assets/fonts/GreatVibes-Regular.ttf
 
   # fonts:
   #   - family: Schyler

@@ -2,17 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/pages/drawer.dart';
 
 import '../data/algos.dart';
 import '../data/enums.dart';
 import '../data/models.dart';
 
 import '../pages/create_task.dart';
-import '../pages/bottom_app_bar_menu.dart';
 
-import '../providers/lists/myday.dart';
-import '../providers/lists/planned.dart';
-import '../providers/lists/starred.dart';
+import '../providers/default_lists/myday.dart';
+import '../providers/default_lists/planned.dart';
+import '../providers/default_lists/starred.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,6 +22,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   late DefaultLists currentList;
   late Widget appBarTitle;
 
@@ -104,11 +106,12 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: colorScheme.background,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            // backgroundColor: colorScheme.background,
+            automaticallyImplyLeading: false,
             shadowColor: colorScheme.shadow,
             floating: true,
             pinned: true,
@@ -283,13 +286,19 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-                    const Divider(height: 1,),
+                    const Divider(
+                      height: 1,
+                    ),
                   ],
                 );
               },
             ),
           ),
         ],
+      ),
+      drawer: const Drawer(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(12),bottomRight: Radius.circular(12))),
+        child: DrawerBody(),
       ),
       bottomNavigationBar: BottomAppBar(
         color: colorScheme.secondaryContainer,
@@ -298,17 +307,9 @@ class _HomePageState extends State<HomePage> {
           children: [
             //Menu
             IconButton(
-              icon: Icon(Icons.menu_rounded, color: colorScheme.inverseSurface),
+              icon: Icon(Icons.menu_rounded, color: colorScheme.inverseSurface,),
               onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  backgroundColor: colorScheme.secondaryContainer,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16))),
-                  builder: (context) => const BottomAppBarMenu(),
-                );
+                _scaffoldKey.currentState?.openDrawer();
               },
             ),
 
@@ -321,6 +322,7 @@ class _HomePageState extends State<HomePage> {
                 color: currentList == DefaultLists.MyDay
                     ? colorScheme.primary
                     : colorScheme.inverseSurface,
+                    size: 21,
               ),
               onPressed: () {
                 DateTime currentDateTime = DateTime.now();
@@ -373,6 +375,7 @@ class _HomePageState extends State<HomePage> {
                 color: currentList == DefaultLists.Planned
                     ? colorScheme.primary
                     : colorScheme.inverseSurface,
+                    size: 21,
               ),
               onPressed: () {
                 setState(() {
