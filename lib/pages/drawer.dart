@@ -72,15 +72,19 @@ class _DrawerBody extends State<DrawerBody> {
                   },
                 ),
                 title: Text(element.key),
+                onTap: () {},
               );
             },
             itemCount: context.watch<MyLists>().myLists.length,
             onReorder: (oldIndex, newIndex) {},
           ),
-          const SliverToBoxAdapter(
-            child: Divider(
-              indent: 16,
-              endIndent: 16,
+          SliverToBoxAdapter(
+            child: Visibility(
+              visible: context.watch<MyLists>().myLists.isNotEmpty,
+              child: const Divider(
+                indent: 16,
+                endIndent: 16,
+              ),
             ),
           ),
           SliverToBoxAdapter(
@@ -100,13 +104,49 @@ class _DrawerBody extends State<DrawerBody> {
                 leading: const Icon(Icons.folder_outlined),
                 title: Text(element.key),
                 trailing: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.expand_more_rounded)),
+                  onPressed: () {},
+                  icon: const Icon(Icons.expand_more_rounded),
+                ),
               );
             },
             itemCount: context.watch<MyGroups>().myGroups.length,
             onReorder: (oldIndex, newIndex) {},
-          )
+          ),
+          const SliverToBoxAdapter(
+            child: Divider(
+              indent: 16,
+              endIndent: 16,
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: ListTile(
+              title: Text(
+                'Info',
+                style: TextStyle(color: colorScheme.primary),
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(
+            child: ListTile(
+              leading: Icon(Icons.policy_outlined),
+              title: Text('Privacy policy'),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: ListTile(
+              leading: const Icon(Icons.article_outlined),
+              title: const Text('License'),
+              onTap: () => showLicensePage(
+                  context: context,
+                  applicationName: 'Tasks',),
+            ),
+          ),
+          const SliverToBoxAdapter(
+            child: ListTile(
+              leading: Icon(Icons.notes_rounded),
+              title: Text('About'),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: BottomAppBar(

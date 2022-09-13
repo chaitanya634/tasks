@@ -307,7 +307,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             //Menu
             IconButton(
-              icon: Icon(Icons.menu_rounded, color: colorScheme.inverseSurface),
+              icon: Icon(Icons.menu_rounded, color: colorScheme.inverseSurface,),
               onPressed: () {
                 _scaffoldKey.currentState?.openDrawer();
               },
@@ -322,6 +322,7 @@ class _HomePageState extends State<HomePage> {
                 color: currentList == DefaultLists.MyDay
                     ? colorScheme.primary
                     : colorScheme.inverseSurface,
+                    size: 21,
               ),
               onPressed: () {
                 DateTime currentDateTime = DateTime.now();
@@ -374,6 +375,7 @@ class _HomePageState extends State<HomePage> {
                 color: currentList == DefaultLists.Planned
                     ? colorScheme.primary
                     : colorScheme.inverseSurface,
+                    size: 21,
               ),
               onPressed: () {
                 setState(() {
