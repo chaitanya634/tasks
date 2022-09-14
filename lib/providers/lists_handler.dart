@@ -25,6 +25,7 @@ class ListsHandler with ChangeNotifier {
 
     taskListGroup = [];
     taskListGroup.add(MapEntry(DefaultListGroup.main.name, defaultLists));
+    taskListGroup.add(MapEntry(DefaultListGroup.office.name, []));
 
     activeListName = DefaultLists.MyDay.name;
     activeGroupName = DefaultListGroup.main.name;

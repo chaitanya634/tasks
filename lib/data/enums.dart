@@ -43,4 +43,4 @@ enum DefaultLists {
   Plans,
 }
 
-enum DefaultListGroup { main }
+enum DefaultListGroup { main, office }
