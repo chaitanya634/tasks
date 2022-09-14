@@ -1,18 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/pages/drawer.dart';
+import 'package:tasks/data/enums.dart';
 
+import '../providers/lists_handler.dart';
 import '../data/algos.dart';
-import '../data/enums.dart';
-import '../data/models.dart';
-
-import '../pages/create_task.dart';
-
-import '../providers/default_lists/myday.dart';
-import '../providers/default_lists/planned.dart';
-import '../providers/default_lists/starred.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,86 +15,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  late DefaultLists currentList;
-  late Widget appBarTitle;
-
-  @override
-  void initState() {
-    super.initState();
-
-    DateTime currentDateTime = DateTime.now();
-
-    currentList = DefaultLists.MyDay;
-    appBarTitle = Builder(
-      builder: (context) {
-        ColorScheme colorScheme = Theme.of(context).colorScheme;
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //Title
-            Text(
-              DaysOfWeek.values[currentDateTime.weekday - 1].name,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
-                color: colorScheme.primary,
-              ),
-            ),
-            //Subtitle
-            Wrap(
-              children: [
-                Text(
-                  currentDateTime.day.toString(),
-                  style: TextStyle(
-                    color: colorScheme.secondary,
-                    fontSize: 10,
-                  ),
-                ),
-                Text(
-                  ordinal(currentDateTime.day),
-                  style: TextStyle(
-                    color: colorScheme.secondary,
-                    fontSize: 6,
-                    fontFeatures: const [FontFeature.superscripts()],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 2.0),
-                  child: Text(
-                    Months.values[currentDateTime.month - 1].name,
-                    style: TextStyle(
-                      color: colorScheme.secondary,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-    late int currentListChildCount;
-
-    switch (currentList) {
-      case DefaultLists.MyDay:
-        currentListChildCount = context.watch<MyDayList>().myDayTasks.length;
-        break;
-      case DefaultLists.Planned:
-        currentListChildCount =
-            context.watch<PlannedList>().plannedTasks.length;
-        break;
-      case DefaultLists.Starred:
-        currentListChildCount =
-            context.watch<StarredList>().starredTasks.length;
-        break;
-    }
 
     return Scaffold(
       key: _scaffoldKey,
@@ -117,7 +31,7 @@ class _HomePageState extends State<HomePage> {
             pinned: true,
             expandedHeight: 150.0,
             flexibleSpace: FlexibleSpaceBar(
-              title: appBarTitle,
+              title: context.watch<ListsHandler>().appBarTitle,
               titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
               expandedTitleScale: 2,
             ),
@@ -175,59 +89,23 @@ class _HomePageState extends State<HomePage> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              childCount: currentListChildCount,
+              childCount: context
+                  .watch<ListsHandler>()
+                  .taskLists
+                  .singleWhere((element) =>
+                      element.key ==
+                      context.watch<ListsHandler>().activeListName)
+                  .value
+                  .length,
               (context, index) {
-                late bool isTaskChecked;
-                late String taskTitle;
-                late TaskModel taskSubtitle;
-                switch (currentList) {
-                  case DefaultLists.MyDay:
-                    isTaskChecked = context
-                        .watch<MyDayList>()
-                        .myDayTasks
-                        .elementAt(index)
-                        .isChecked;
-                    taskTitle = context
-                        .watch<MyDayList>()
-                        .myDayTasks
-                        .elementAt(index)
-                        .title!;
-                    taskSubtitle =
-                        context.watch<MyDayList>().myDayTasks.elementAt(index);
-                    break;
-                  case DefaultLists.Planned:
-                    isTaskChecked = context
-                        .watch<PlannedList>()
-                        .plannedTasks
-                        .elementAt(index)
-                        .isChecked;
-                    taskTitle = context
-                        .watch<PlannedList>()
-                        .plannedTasks
-                        .elementAt(index)
-                        .title!;
-                    taskSubtitle = context
-                        .watch<PlannedList>()
-                        .plannedTasks
-                        .elementAt(index);
-                    break;
-                  case DefaultLists.Starred:
-                    isTaskChecked = context
-                        .watch<StarredList>()
-                        .starredTasks
-                        .elementAt(index)
-                        .isChecked;
-                    taskTitle = context
-                        .watch<StarredList>()
-                        .starredTasks
-                        .elementAt(index)
-                        .title!;
-                    taskSubtitle = context
-                        .watch<StarredList>()
-                        .starredTasks
-                        .elementAt(index);
-                    break;
-                }
+                var taskModel = context
+                    .watch<ListsHandler>()
+                    .taskLists
+                    .singleWhere((element) =>
+                        element.key ==
+                        context.watch<ListsHandler>().activeListName)
+                    .value
+                    .elementAt(index);
                 return Column(
                   children: [
                     ListTile(
@@ -237,28 +115,11 @@ class _HomePageState extends State<HomePage> {
                         child: Checkbox(
                           checkColor: colorScheme.onPrimary,
                           activeColor: colorScheme.primary,
-                          value: isTaskChecked,
+                          value: taskModel.isChecked,
                           onChanged: (value) {
-                            switch (currentList) {
-                              case DefaultLists.MyDay:
-                                context.read<MyDayList>().updateTaskChecked(
-                                      isChecked: value!,
-                                      taskIndex: index,
-                                    );
-                                break;
-                              case DefaultLists.Planned:
-                                context.read<PlannedList>().updateTaskChecked(
-                                      isChecked: value!,
-                                      taskIndex: index,
-                                    );
-                                break;
-                              case DefaultLists.Starred:
-                                context.read<StarredList>().updateTaskChecked(
-                                      isChecked: value!,
-                                      taskIndex: index,
-                                    );
-                                break;
-                            }
+                            context
+                                .read<ListsHandler>()
+                                .updateTaskChecked(value ?? false, index);
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -266,29 +127,27 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       title: Text(
-                        taskTitle,
+                        taskModel.title ?? 'NO TITLE',
                         style: TextStyle(
                           color: colorScheme.secondary,
                           fontSize: 18,
                         ),
                       ),
-                      subtitle: generateSubtitle(taskSubtitle),
+                      subtitle: generateSubtitle(taskModel),
                       onTap: () {
-                        showGeneralDialog(
-                          context: context,
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return CreateTaskPage(
-                              taskIndex: index,
-                              currentList: currentList,
-                            );
-                          },
-                        );
+                        // showGeneralDialog(
+                        //   context: context,
+                        //   pageBuilder:
+                        //       (context, animation, secondaryAnimation) {
+                        //     return CreateTaskPage(
+                        //       taskIndex: index,
+                        //       currentList: currentList!,
+                        //     );
+                        //   },
+                        // );
                       },
                     ),
-                    const Divider(
-                      height: 1,
-                    ),
+                    const Divider(height: 1),
                   ],
                 );
               },
@@ -296,10 +155,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      drawer: const Drawer(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(12),bottomRight: Radius.circular(12))),
-        child: DrawerBody(),
-      ),
+      // drawer: const Drawer(
+      //   shape: RoundedRectangleBorder(
+      //       borderRadius: BorderRadius.only(
+      //           topRight: Radius.circular(12),
+      //           bottomRight: Radius.circular(12))),
+      //   child: DrawerBody(),
+      // ),
       bottomNavigationBar: BottomAppBar(
         color: colorScheme.secondaryContainer,
         shape: const CircularNotchedRectangle(),
@@ -307,64 +169,33 @@ class _HomePageState extends State<HomePage> {
           children: [
             //Menu
             IconButton(
-              icon: Icon(Icons.menu_rounded, color: colorScheme.inverseSurface,),
+              icon: Icon(
+                Icons.menu_rounded,
+                color: colorScheme.inverseSurface,
+              ),
               onPressed: () {
-                _scaffoldKey.currentState?.openDrawer();
+                // _scaffoldKey.currentState?.openDrawer();
               },
             ),
 
             //MyDay
             IconButton(
               icon: Icon(
-                currentList == DefaultLists.MyDay
+                context.watch<ListsHandler>().activeListName ==
+                        DefaultLists.MyDay.name
                     ? Icons.today
                     : Icons.today_outlined,
-                color: currentList == DefaultLists.MyDay
+                color: context.watch<ListsHandler>().activeListName ==
+                        DefaultLists.MyDay.name
                     ? colorScheme.primary
                     : colorScheme.inverseSurface,
-                    size: 21,
+                size: 21,
               ),
               onPressed: () {
-                DateTime currentDateTime = DateTime.now();
-                setState(() {
-                  currentList = DefaultLists.MyDay;
-                  appBarTitle = Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(DaysOfWeek.values[currentDateTime.weekday - 1].name,
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w300,
-                              color: colorScheme.primary)),
-                      Wrap(
-                        children: [
-                          Text(currentDateTime.day.toString(),
-                              style: TextStyle(
-                                color: colorScheme.secondary,
-                                fontSize: 10,
-                              )),
-                          Text(ordinal(currentDateTime.day),
-                              style: TextStyle(
-                                  color: colorScheme.secondary,
-                                  fontSize: 6,
-                                  fontFeatures: const [
-                                    FontFeature.superscripts()
-                                  ])),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 2.0),
-                            child: Text(
-                                Months.values[currentDateTime.month - 1].name,
-                                style: TextStyle(
-                                  color: colorScheme.secondary,
-                                  fontSize: 10,
-                                )),
-                          ),
-                        ],
-                      ),
-                    ],
-                  );
-                });
+                context
+                    .read<ListsHandler>()
+                    .setActiveList(DefaultLists.MyDay.name);
+                context.read<ListsHandler>().setCurrentDayTitle();
               },
             ),
 
@@ -372,48 +203,41 @@ class _HomePageState extends State<HomePage> {
             IconButton(
               icon: Icon(
                 Icons.task_alt_rounded,
-                color: currentList == DefaultLists.Planned
+                color: context.watch<ListsHandler>().activeListName ==
+                        DefaultLists.Planned.name
                     ? colorScheme.primary
                     : colorScheme.inverseSurface,
-                    size: 21,
+                size: 21,
               ),
               onPressed: () {
-                setState(() {
-                  currentList = DefaultLists.Planned;
-                  appBarTitle = Text(
-                    'Planned',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w300,
-                      color: colorScheme.primary,
-                    ),
-                  );
-                });
+                context
+                    .read<ListsHandler>()
+                    .setCustomTitle(DefaultLists.Planned.name);
+                context
+                    .read<ListsHandler>()
+                    .setActiveList(DefaultLists.Planned.name);
               },
             ),
 
             //Starred
             IconButton(
               icon: Icon(
-                currentList == DefaultLists.Starred
+                context.watch<ListsHandler>().activeListName ==
+                        DefaultLists.Starred.name
                     ? Icons.star_rounded
                     : Icons.star_outline_rounded,
-                color: currentList == DefaultLists.Starred
+                color: context.watch<ListsHandler>().activeListName ==
+                        DefaultLists.Starred.name
                     ? colorScheme.primary
                     : colorScheme.inverseSurface,
               ),
               onPressed: () {
-                setState(() {
-                  currentList = DefaultLists.Starred;
-                  appBarTitle = Text(
-                    'Starred',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w300,
-                      color: colorScheme.primary,
-                    ),
-                  );
-                });
+                context
+                    .read<ListsHandler>()
+                    .setCustomTitle(DefaultLists.Starred.name);
+                context
+                    .read<ListsHandler>()
+                    .setActiveList(DefaultLists.Starred.name);
               },
             ),
           ],
@@ -424,11 +248,11 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: colorScheme.primaryContainer,
         shape: const CircleBorder(),
         onPressed: () {
-          showGeneralDialog(
-            context: context,
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                CreateTaskPage(currentList: currentList),
-          );
+          // showGeneralDialog(
+          //   context: context,
+          //   pageBuilder: (context, animation, secondaryAnimation) =>
+          //       CreateTaskPage(currentList: currentList!),
+          // );
         },
         child: Icon(
           Icons.add_rounded,
