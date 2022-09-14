@@ -14,6 +14,11 @@ class MyDayList with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeStarred(TaskModel taskModel) {
+    taskModel.isStarred = false;
+    notifyListeners();
+  }
+
   void updateTask(int index, TaskModel taskModel) {
     myDayTasks[index] = taskModel;
     notifyListeners();
@@ -23,4 +28,10 @@ class MyDayList with ChangeNotifier {
     myDayTasks.removeAt(index);
     notifyListeners();
   }
+
+  void removeTaskModel(TaskModel taskModel) {
+    myDayTasks.remove(taskModel);
+    notifyListeners();
+  }
+
 }
