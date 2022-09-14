@@ -4,6 +4,7 @@ import 'package:tasks/data/enums.dart';
 
 import '../providers/lists_handler.dart';
 import '../data/algos.dart';
+import 'create_task.dart';
 import 'drawer.dart';
 
 class HomePage extends StatelessWidget {
@@ -139,16 +140,13 @@ class HomePage extends StatelessWidget {
                       ),
                       subtitle: generateSubtitle(taskModel),
                       onTap: () {
-                        // showGeneralDialog(
-                        //   context: context,
-                        //   pageBuilder:
-                        //       (context, animation, secondaryAnimation) {
-                        //     return CreateTaskPage(
-                        //       taskIndex: index,
-                        //       currentList: currentList!,
-                        //     );
-                        //   },
-                        // );
+                        showGeneralDialog(
+                          context: context,
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return CreateTaskPage(taskIndex: index);
+                          },
+                        );
                       },
                     ),
                     const Divider(height: 1),
@@ -250,11 +248,11 @@ class HomePage extends StatelessWidget {
         backgroundColor: colorScheme.primaryContainer,
         shape: const CircleBorder(),
         onPressed: () {
-          // showGeneralDialog(
-          //   context: context,
-          //   pageBuilder: (context, animation, secondaryAnimation) =>
-          //       CreateTaskPage(currentList: currentList!),
-          // );
+          showGeneralDialog(
+            context: context,
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const CreateTaskPage(),
+          );
         },
         child: Icon(
           Icons.add_rounded,

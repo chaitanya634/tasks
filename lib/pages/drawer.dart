@@ -212,7 +212,7 @@ class DrawerBody extends StatelessWidget {
                               context.read<ListsHandler>().addList(
                                   DefaultListGroup.main.name,
                                   MapEntry(
-                                      listName, [TaskModel(title: listName)]));
+                                      listName, []));
                               Navigator.pop(context);
                             },
                           ),
