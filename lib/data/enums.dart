@@ -38,4 +38,9 @@ enum DefaultLists {
   MyDay,
   Planned,
   Starred,
+  Shopping,
+  Ideas,
+  Plans,
 }
+
+enum DefaultListGroup { main }

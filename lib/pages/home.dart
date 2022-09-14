@@ -87,7 +87,11 @@ class HomePage extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               childCount: context
                   .watch<ListsHandler>()
-                  .taskLists
+                  .taskListGroup
+                  .singleWhere((element) =>
+                      element.key ==
+                      context.watch<ListsHandler>().activeGroupName)
+                  .value
                   .singleWhere((element) =>
                       element.key ==
                       context.watch<ListsHandler>().activeListName)
@@ -96,7 +100,11 @@ class HomePage extends StatelessWidget {
               (context, index) {
                 var taskModel = context
                     .watch<ListsHandler>()
-                    .taskLists
+                    .taskListGroup
+                    .singleWhere((element) =>
+                        element.key ==
+                        context.watch<ListsHandler>().activeGroupName)
+                    .value
                     .singleWhere((element) =>
                         element.key ==
                         context.watch<ListsHandler>().activeListName)

@@ -2,7 +2,6 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import 'providers/list_groups_handler.dart';
 import 'providers/lists_handler.dart';
 
 import 'pages/home.dart';
@@ -15,7 +14,6 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ListsHandler()),
-        ChangeNotifierProvider(create: (context) => ListGroupsHandler()),
       ],
       child: const MyApp(),
     ),

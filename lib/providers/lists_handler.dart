@@ -7,21 +7,27 @@ import '../data/enums.dart';
 import 'dart:ui';
 
 class ListsHandler with ChangeNotifier {
-  late List<MapEntry<String, List<TaskModel>>> taskLists;
+  late List<MapEntry<String, List<MapEntry<String, List<TaskModel>>>>>
+      taskListGroup;
+  late String activeGroupName;
   late String activeListName;
   late Widget appBarTitle;
 
   ListsHandler() {
-    Map<String, List<TaskModel>> defaultLists = {
-      DefaultLists.MyDay.name: [],
-      DefaultLists.Planned.name: [],
-      DefaultLists.Starred.name: [],
-    };
+    List<MapEntry<String, List<TaskModel>>> defaultLists = [
+      MapEntry(DefaultLists.MyDay.name, []),
+      MapEntry(DefaultLists.Planned.name, []),
+      MapEntry(DefaultLists.Starred.name, []),
+      MapEntry(DefaultLists.Shopping.name, []),
+      MapEntry(DefaultLists.Plans.name, []),
+      MapEntry(DefaultLists.Ideas.name, []),
+    ];
 
-    taskLists = [];
-    taskLists.addAll(defaultLists.entries);
+    taskListGroup = [];
+    taskListGroup.add(MapEntry(DefaultListGroup.main.name, defaultLists));
 
     activeListName = DefaultLists.MyDay.name;
+    activeGroupName = DefaultListGroup.main.name;
     setCurrentDayTitle();
   }
 
@@ -99,27 +105,44 @@ class ListsHandler with ChangeNotifier {
   }
 
   //working on lists
-  bool addList(MapEntry<String, List<TaskModel>> listMap) {
-    taskLists.add(listMap);
-    notifyListeners();
-    // ignore: avoid_function_literals_in_foreach_calls
-    taskLists.forEach((element) => debugPrint(element.key));
-    return taskLists.contains(listMap);
-  }
 
-  void removeListAt(int index) {
-    taskLists.removeAt(index);
+  void addGroup(String groupName) {
+    taskListGroup.add(MapEntry(groupName, []));
     notifyListeners();
   }
 
-  void setActiveList(String listKey) {
-    activeListName = listKey;
+  void addList(String groupName, MapEntry<String, List<TaskModel>> newTaskList) {
+    taskListGroup
+        .singleWhere((element) => element.key == groupName)
+        .value
+        .add(newTaskList);
+    notifyListeners();
+  }
+
+  void removeListAt(String groupName, int index) {
+    taskListGroup
+        .singleWhere((element) => element.key == groupName)
+        .value
+        .removeAt(index);
+    notifyListeners();
+  }
+
+  void setActiveList(String listName) {
+    activeListName = listName;
+    notifyListeners();
+  }
+
+  void setActiveGroup(String groupName) {
+    activeGroupName = groupName;
     notifyListeners();
   }
 
   //working on tasks
-  void updateTaskChecked(bool checkValue, int taskModelIndex) {
-    taskLists
+  void updateTaskChecked(
+      bool checkValue, int taskModelIndex) {
+    taskListGroup
+        .singleWhere((element) => element.key == activeGroupName)
+        .value
         .singleWhere((element) => element.key == activeListName)
         .value
         .elementAt(taskModelIndex)
