@@ -4,14 +4,9 @@ import 'package:tasks/data/enums.dart';
 import 'package:tasks/data/models.dart';
 import 'package:tasks/providers/lists_handler.dart';
 
-class DrawerBody extends StatefulWidget {
-  const DrawerBody({Key? key}) : super(key: key);
+class DrawerBody extends StatelessWidget {
+  const DrawerBody({super.key});
 
-  @override
-  State<DrawerBody> createState() => _DrawerBody();
-}
-
-class _DrawerBody extends State<DrawerBody> {
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -59,14 +54,31 @@ class _DrawerBody extends State<DrawerBody> {
           ),
 
           //my lists
-          if (context.watch<ListsHandler>().taskLists.length > 3)
+          if (context
+                  .watch<ListsHandler>()
+                  .taskListGroup
+                  .singleWhere(
+                      (element) => element.key == DefaultListGroup.main.name)
+                  .value
+                  .length >
+              3)
             SliverList(
                 delegate: SliverChildBuilderDelegate(
-              childCount: context.watch<ListsHandler>().taskLists.length - 3,
+              childCount: context
+                      .watch<ListsHandler>()
+                      .taskListGroup
+                      .singleWhere((element) =>
+                          element.key == DefaultListGroup.main.name)
+                      .value
+                      .length -
+                  3,
               (context, index) {
                 var element = context
                     .watch<ListsHandler>()
-                    .taskLists
+                    .taskListGroup
+                    .singleWhere(
+                        (element) => element.key == DefaultListGroup.main.name)
+                    .value
                     .elementAt(index + 3);
                 return ListTile(
                   leading: const Icon(Icons.checklist_rounded),
@@ -80,14 +92,15 @@ class _DrawerBody extends State<DrawerBody> {
                           .read<ListsHandler>()
                           .setActiveList(DefaultLists.MyDay.name);
                       context.read<ListsHandler>().setCurrentDayTitle();
-                      context.read<ListsHandler>().removeListAt(index + 3);
+                      context
+                          .read<ListsHandler>()
+                          .removeListAt(DefaultListGroup.main.name, index + 3);
                     },
                   ),
                   title: Text(element.key),
                   onTap: () {
                     context.read<ListsHandler>().setCustomTitle(element.key);
                     context.read<ListsHandler>().setActiveList(element.key);
-
                     Navigator.pop(context);
                   },
                 );
@@ -96,7 +109,14 @@ class _DrawerBody extends State<DrawerBody> {
 
           SliverToBoxAdapter(
             child: Visibility(
-              visible: context.watch<ListsHandler>().taskLists.length > 3,
+              visible: context
+                      .watch<ListsHandler>()
+                      .taskListGroup
+                      .singleWhere((element) =>
+                          element.key == DefaultListGroup.main.name)
+                      .value
+                      .length >
+                  3,
               child: const Divider(indent: 16, endIndent: 16),
             ),
           ),
@@ -186,10 +206,11 @@ class _DrawerBody extends State<DrawerBody> {
                           TextButton(
                             child: const Text('Save'),
                             onPressed: () {
-                              bool isListAdded = context
-                                  .read<ListsHandler>()
-                                  .addList(MapEntry(listName, []));
-                              if (isListAdded) Navigator.pop(context);
+                              context.read<ListsHandler>().addList(
+                                  DefaultListGroup.main.name,
+                                  MapEntry(
+                                      listName, [TaskModel(title: listName)]));
+                              Navigator.pop(context);
                             },
                           ),
                         ],
