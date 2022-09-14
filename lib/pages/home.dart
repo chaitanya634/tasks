@@ -4,15 +4,11 @@ import 'package:tasks/data/enums.dart';
 
 import '../providers/lists_handler.dart';
 import '../data/algos.dart';
+import 'drawer.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -155,13 +151,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      // drawer: const Drawer(
-      //   shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.only(
-      //           topRight: Radius.circular(12),
-      //           bottomRight: Radius.circular(12))),
-      //   child: DrawerBody(),
-      // ),
+      drawer: const Drawer(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(12),
+                bottomRight: Radius.circular(12))),
+        child: DrawerBody(),
+      ),
       bottomNavigationBar: BottomAppBar(
         color: colorScheme.secondaryContainer,
         shape: const CircularNotchedRectangle(),
@@ -173,9 +169,7 @@ class _HomePageState extends State<HomePage> {
                 Icons.menu_rounded,
                 color: colorScheme.inverseSurface,
               ),
-              onPressed: () {
-                // _scaffoldKey.currentState?.openDrawer();
-              },
+              onPressed: () => _scaffoldKey.currentState?.openDrawer(),
             ),
 
             //MyDay

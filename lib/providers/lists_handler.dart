@@ -102,6 +102,8 @@ class ListsHandler with ChangeNotifier {
   bool addList(MapEntry<String, List<TaskModel>> listMap) {
     taskLists.add(listMap);
     notifyListeners();
+    // ignore: avoid_function_literals_in_foreach_calls
+    taskLists.forEach((element) => debugPrint(element.key));
     return taskLists.contains(listMap);
   }
 

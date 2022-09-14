@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           darkTheme:
               darkDynamic == null ? darkTheme() : dynamicDarkTheme(darkDynamic),
           themeMode: ThemeMode.system,
-          home: const HomePage(),
+          home: HomePage(),
         )
     );
 }
