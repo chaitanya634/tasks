@@ -25,6 +25,7 @@ class ListsHandler with ChangeNotifier {
 
     taskListGroup = [];
     taskListGroup.add(MapEntry(DefaultListGroup.main.name, defaultLists));
+    taskListGroup.add(MapEntry(DefaultListGroup.office.name, []));
 
     activeListName = DefaultLists.MyDay.name;
     activeGroupName = DefaultListGroup.main.name;
@@ -111,7 +112,8 @@ class ListsHandler with ChangeNotifier {
     notifyListeners();
   }
 
-  void addList(String groupName, MapEntry<String, List<TaskModel>> newTaskList) {
+  void addList(
+      String groupName, MapEntry<String, List<TaskModel>> newTaskList) {
     taskListGroup
         .singleWhere((element) => element.key == groupName)
         .value
@@ -138,8 +140,7 @@ class ListsHandler with ChangeNotifier {
   }
 
   //working on tasks
-  void updateTaskChecked(
-      bool checkValue, int taskModelIndex) {
+  void updateTaskChecked(bool checkValue, int taskModelIndex) {
     taskListGroup
         .singleWhere((element) => element.key == activeGroupName)
         .value
@@ -147,6 +148,46 @@ class ListsHandler with ChangeNotifier {
         .value
         .elementAt(taskModelIndex)
         .isChecked = checkValue;
+    notifyListeners();
+  }
+
+  void addTask(TaskModel taskModel) {
+        taskListGroup
+        .singleWhere((element) => element.key == activeGroupName)
+        .value
+        .singleWhere((element) => element.key == activeListName)
+        .value
+        .add(taskModel);
+    notifyListeners();
+  }
+
+
+  void updateTask(int index, TaskModel taskModel){
+        taskListGroup
+        .singleWhere((element) => element.key == activeGroupName)
+        .value
+        .singleWhere((element) => element.key == activeListName)
+        .value[index] = taskModel;
+    notifyListeners();
+  }
+
+  void removeTask(TaskModel taskModel) {
+    taskListGroup
+        .singleWhere((element) => element.key == activeGroupName)
+        .value
+        .singleWhere((element) => element.key == activeListName)
+        .value
+        .remove(taskModel);
+    notifyListeners();
+  }
+
+  void removeTaskAt(int index) {
+    taskListGroup
+        .singleWhere((element) => element.key == activeGroupName)
+        .value
+        .singleWhere((element) => element.key == activeListName)
+        .value
+        .removeAt(index);
     notifyListeners();
   }
 }

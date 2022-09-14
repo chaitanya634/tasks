@@ -130,23 +130,26 @@ class DrawerBody extends StatelessWidget {
             ),
           ),
 
-          //my groups
-          // SliverReorderableList(
-          //   itemBuilder: (context, index) {
-          //     var element = context.watch<MyGroups>().myGroups.elementAt(index);
-          //     return ListTile(
-          //       key: ObjectKey(element),
-          //       leading: const Icon(Icons.folder_outlined),
-          //       title: Text(element.key),
-          //       trailing: IconButton(
-          //         onPressed: () {},
-          //         icon: const Icon(Icons.expand_more_rounded),
-          //       ),
-          //     );
-          //   },
-          //   itemCount: context.watch<MyGroups>().myGroups.length,
-          //   onReorder: (oldIndex, newIndex) {},
-          // ),
+          if (context.watch<ListsHandler>().taskListGroup.length > 1)
+            SliverList(
+                delegate: SliverChildBuilderDelegate(
+              childCount:
+                  context.watch<ListsHandler>().taskListGroup.length - 1,
+              (context, index) {
+                var element = context
+                    .watch<ListsHandler>()
+                    .taskListGroup
+                    .elementAt(index + 1);
+                return ListTile(
+                  leading: const Icon(Icons.folder_outlined),
+                  title: Text(element.key),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.expand_more_rounded),
+                  ),
+                );
+              },
+            )),
 
           const SliverToBoxAdapter(child: Divider(indent: 16, endIndent: 16)),
           SliverToBoxAdapter(
@@ -209,7 +212,7 @@ class DrawerBody extends StatelessWidget {
                               context.read<ListsHandler>().addList(
                                   DefaultListGroup.main.name,
                                   MapEntry(
-                                      listName, [TaskModel(title: listName)]));
+                                      listName, []));
                               Navigator.pop(context);
                             },
                           ),
@@ -227,43 +230,41 @@ class DrawerBody extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {
-                // showDialog(
-                //     context: context,
-                //     builder: (context) {
-                //       // ignore: unused_local_variable
-                //       late String groupName;
-                //       return AlertDialog(
-                //         title: const Text('New Group'),
-                //         content: TextField(
-                //             onChanged: (value) => groupName = value,
-                //             decoration: InputDecoration(
-                //                 border: OutlineInputBorder(
-                //                     borderRadius: BorderRadius.circular(16)),
-                //                 label: const Text('Group Name'))),
-                //         actions: [
-                //           //cancel
-                //           TextButton(
-                //               onPressed: () {
-                //                 Navigator.pop(context);
-                //               },
-                //               child: const Text('Cancel')),
-                //           TextButton(
-                //               onPressed: () {
-                //                 // bool added = context
-                //                 //     .read<MyGroups>()
-                //                 //     .addGroup(MapEntry(groupName, []));
-                //                 // if (added) Navigator.pop(context);
-                //               },
-                //               child: const Text('Save')),
-                //         ],
-                //       );
-                //     });
-              },
               icon: Icon(
                 Icons.create_new_folder_outlined,
                 color: colorScheme.primary,
               ),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      // ignore: unused_local_variable
+                      late String groupName;
+                      return AlertDialog(
+                        title: const Text('New Group'),
+                        content: TextField(
+                            onChanged: (value) => groupName = value,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16)),
+                                label: const Text('Group Name'))),
+                        actions: [
+                          //cancel
+                          TextButton(
+                              onPressed: () =>
+                                Navigator.pop(context)
+                              ,
+                              child: const Text('Cancel')),
+                          TextButton(
+                              onPressed: () {
+                                context.read<ListsHandler>().addGroup(groupName);
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Save')),
+                        ],
+                      );
+                    });
+              },
             )
           ],
         ),
