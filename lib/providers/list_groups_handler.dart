@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import '../data/models.dart';
 
-class MyGroups with ChangeNotifier {
+class ListGroupsHandler with ChangeNotifier {
   late List<MapEntry<String, List<MapEntry<String, List<TaskModel>>>>> myGroups;
 
-  MyGroups() {
+  ListGroupsHandler() {
     myGroups = [];
     myGroups.add(MapEntry('Office', []));
   }

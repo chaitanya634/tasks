@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/providers/my_groups.dart';
-import 'package:tasks/providers/my_lists.dart';
+import 'package:tasks/data/enums.dart';
+import 'package:tasks/data/models.dart';
+import 'package:tasks/providers/lists_handler.dart';
 
 class DrawerBody extends StatefulWidget {
   const DrawerBody({Key? key}) : super(key: key);
@@ -47,6 +48,7 @@ class _DrawerBody extends State<DrawerBody> {
               )
             ],
           ),
+
           SliverToBoxAdapter(
             child: ListTile(
               title: Text(
@@ -55,38 +57,50 @@ class _DrawerBody extends State<DrawerBody> {
               ),
             ),
           ),
+
           //my lists
-          SliverReorderableList(
-            itemBuilder: (context, index) {
-              var element = context.watch<MyLists>().myLists.elementAt(index);
-              return ListTile(
-                key: ObjectKey(element),
-                leading: const Icon(Icons.checklist_rounded),
-                trailing: IconButton(
-                  icon: const Icon(
-                    Icons.remove_rounded,
-                    size: 18,
+          if (context.watch<ListsHandler>().taskLists.length > 3)
+            SliverList(
+                delegate: SliverChildBuilderDelegate(
+              childCount: context.watch<ListsHandler>().taskLists.length - 3,
+              (context, index) {
+                var element = context
+                    .watch<ListsHandler>()
+                    .taskLists
+                    .elementAt(index + 3);
+                return ListTile(
+                  leading: const Icon(Icons.checklist_rounded),
+                  trailing: IconButton(
+                    icon: const Icon(
+                      Icons.remove_rounded,
+                      size: 18,
+                    ),
+                    onPressed: () {
+                      context
+                          .read<ListsHandler>()
+                          .setActiveList(DefaultLists.MyDay.name);
+                      context.read<ListsHandler>().setCurrentDayTitle();
+                      context.read<ListsHandler>().removeListAt(index + 3);
+                    },
                   ),
-                  onPressed: () {
-                    context.read<MyLists>().removeAt(index);
+                  title: Text(element.key),
+                  onTap: () {
+                    context.read<ListsHandler>().setCustomTitle(element.key);
+                    context.read<ListsHandler>().setActiveList(element.key);
+
+                    Navigator.pop(context);
                   },
-                ),
-                title: Text(element.key),
-                onTap: () {},
-              );
-            },
-            itemCount: context.watch<MyLists>().myLists.length,
-            onReorder: (oldIndex, newIndex) {},
-          ),
+                );
+              },
+            )),
+
           SliverToBoxAdapter(
             child: Visibility(
-              visible: context.watch<MyLists>().myLists.isNotEmpty,
-              child: const Divider(
-                indent: 16,
-                endIndent: 16,
-              ),
+              visible: context.watch<ListsHandler>().taskLists.length > 3,
+              child: const Divider(indent: 16, endIndent: 16),
             ),
           ),
+
           SliverToBoxAdapter(
             child: ListTile(
               title: Text(
@@ -95,35 +109,29 @@ class _DrawerBody extends State<DrawerBody> {
               ),
             ),
           ),
+
           //my groups
-          SliverReorderableList(
-            itemBuilder: (context, index) {
-              var element = context.watch<MyGroups>().myGroups.elementAt(index);
-              return ListTile(
-                key: ObjectKey(element),
-                leading: const Icon(Icons.folder_outlined),
-                title: Text(element.key),
-                trailing: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.expand_more_rounded),
-                ),
-              );
-            },
-            itemCount: context.watch<MyGroups>().myGroups.length,
-            onReorder: (oldIndex, newIndex) {},
-          ),
-          const SliverToBoxAdapter(
-            child: Divider(
-              indent: 16,
-              endIndent: 16,
-            ),
-          ),
+          // SliverReorderableList(
+          //   itemBuilder: (context, index) {
+          //     var element = context.watch<MyGroups>().myGroups.elementAt(index);
+          //     return ListTile(
+          //       key: ObjectKey(element),
+          //       leading: const Icon(Icons.folder_outlined),
+          //       title: Text(element.key),
+          //       trailing: IconButton(
+          //         onPressed: () {},
+          //         icon: const Icon(Icons.expand_more_rounded),
+          //       ),
+          //     );
+          //   },
+          //   itemCount: context.watch<MyGroups>().myGroups.length,
+          //   onReorder: (oldIndex, newIndex) {},
+          // ),
+
+          const SliverToBoxAdapter(child: Divider(indent: 16, endIndent: 16)),
           SliverToBoxAdapter(
             child: ListTile(
-              title: Text(
-                'Info',
-                style: TextStyle(color: colorScheme.primary),
-              ),
+              title: Text('Info', style: TextStyle(color: colorScheme.primary)),
             ),
           ),
           const SliverToBoxAdapter(
@@ -137,8 +145,9 @@ class _DrawerBody extends State<DrawerBody> {
               leading: const Icon(Icons.article_outlined),
               title: const Text('License'),
               onTap: () => showLicensePage(
-                  context: context,
-                  applicationName: 'Tasks',),
+                context: context,
+                applicationName: 'Tasks',
+              ),
             ),
           ),
           const SliverToBoxAdapter(
@@ -151,88 +160,92 @@ class _DrawerBody extends State<DrawerBody> {
       ),
       bottomNavigationBar: BottomAppBar(
         elevation: 12,
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          TextButton.icon(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    late String listName;
-                    return AlertDialog(
-                      title: const Text('New List'),
-                      content: TextField(
-                          onChanged: (value) => listName = value,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16)),
-                              label: const Text('List Name'))),
-                      actions: [
-                        //cancel
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancel')),
-                        TextButton(
-                            onPressed: () {
-                              bool added = context
-                                  .read<MyLists>()
-                                  .addList(MapEntry(listName, []));
-                              if (added) Navigator.pop(context);
-                            },
-                            child: const Text('Save')),
-                      ],
-                    );
-                  });
-            },
-            icon: Icon(
-              Icons.playlist_add_rounded,
-              color: colorScheme.primary,
-            ),
-            label: Text(
-              'Add list',
-              style: TextStyle(color: colorScheme.primary),
-            ),
-          ),
-          IconButton(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton.icon(
               onPressed: () {
                 showDialog(
                     context: context,
                     builder: (context) {
-                      late String groupName;
+                      late String listName;
                       return AlertDialog(
-                        title: const Text('New Group'),
+                        title: const Text('New List'),
                         content: TextField(
-                            onChanged: (value) => groupName = value,
+                            onChanged: (value) => listName = value,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(16)),
-                                label: const Text('Group Name'))),
+                                label: const Text('List Name'))),
                         actions: [
                           //cancel
                           TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Cancel')),
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cancel'),
+                          ),
                           TextButton(
-                              onPressed: () {
-                                bool added = context
-                                    .read<MyGroups>()
-                                    .addGroup(MapEntry(groupName, []));
-                                if (added) Navigator.pop(context);
-                              },
-                              child: const Text('Save')),
+                            child: const Text('Save'),
+                            onPressed: () {
+                              bool isListAdded = context
+                                  .read<ListsHandler>()
+                                  .addList(MapEntry(listName, []));
+                              if (isListAdded) Navigator.pop(context);
+                            },
+                          ),
                         ],
                       );
                     });
               },
               icon: Icon(
+                Icons.playlist_add_rounded,
+                color: colorScheme.primary,
+              ),
+              label: Text(
+                'Add list',
+                style: TextStyle(color: colorScheme.primary),
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                // showDialog(
+                //     context: context,
+                //     builder: (context) {
+                //       // ignore: unused_local_variable
+                //       late String groupName;
+                //       return AlertDialog(
+                //         title: const Text('New Group'),
+                //         content: TextField(
+                //             onChanged: (value) => groupName = value,
+                //             decoration: InputDecoration(
+                //                 border: OutlineInputBorder(
+                //                     borderRadius: BorderRadius.circular(16)),
+                //                 label: const Text('Group Name'))),
+                //         actions: [
+                //           //cancel
+                //           TextButton(
+                //               onPressed: () {
+                //                 Navigator.pop(context);
+                //               },
+                //               child: const Text('Cancel')),
+                //           TextButton(
+                //               onPressed: () {
+                //                 // bool added = context
+                //                 //     .read<MyGroups>()
+                //                 //     .addGroup(MapEntry(groupName, []));
+                //                 // if (added) Navigator.pop(context);
+                //               },
+                //               child: const Text('Save')),
+                //         ],
+                //       );
+                //     });
+              },
+              icon: Icon(
                 Icons.create_new_folder_outlined,
                 color: colorScheme.primary,
-              ))
-        ]),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

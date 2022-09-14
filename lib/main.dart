@@ -1,26 +1,21 @@
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/providers/my_groups.dart';
-import 'package:tasks/providers/my_lists.dart';
+import 'package:flutter/material.dart';
 
-import 'providers/default_lists/myday.dart';
-import 'providers/default_lists/planned.dart';
-import 'providers/default_lists/starred.dart';
+import 'providers/list_groups_handler.dart';
+import 'providers/lists_handler.dart';
 
-import '../pages/home.dart';
-import '../themes/dark.dart';
-import '../themes/light.dart';
+import 'pages/home.dart';
+
+import 'themes/light.dart';
+import 'themes/dark.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => StarredList()),
-        ChangeNotifierProvider(create: (context) => PlannedList()),
-        ChangeNotifierProvider(create: (context) => MyDayList()),
-        ChangeNotifierProvider(create: (context) => MyLists()),
-        ChangeNotifierProvider(create: (context) => MyGroups()),
+        ChangeNotifierProvider(create: (context) => ListsHandler()),
+        ChangeNotifierProvider(create: (context) => ListGroupsHandler()),
       ],
       child: const MyApp(),
     ),
@@ -40,7 +35,7 @@ class MyApp extends StatelessWidget {
           darkTheme:
               darkDynamic == null ? darkTheme() : dynamicDarkTheme(darkDynamic),
           themeMode: ThemeMode.system,
-          home: const HomePage(),
+          home: HomePage(),
         )
     );
 }
