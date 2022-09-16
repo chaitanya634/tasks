@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
               title: context.watch<ListsHandler>().appBarTitle,
               titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
               expandedTitleScale: 2,
-            ),
+            ),/*
             actions: [
               PopupMenuButton(
                 icon: const Icon(
@@ -83,6 +83,7 @@ class HomePage extends StatelessWidget {
                 ],
               )
             ],
+          */
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(

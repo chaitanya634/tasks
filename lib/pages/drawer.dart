@@ -92,14 +92,14 @@ class DrawerBody extends StatelessWidget {
                           .read<ListsHandler>()
                           .setActiveList(DefaultLists.MyDay.name);
                       context.read<ListsHandler>().setCurrentDayTitle();
-                      context
-                          .read<ListsHandler>()
-                          .removeListAt(0, index + 3);
+                      context.read<ListsHandler>().removeListAt(0, index + 3);
                     },
                   ),
                   title: Text(element.key),
                   onTap: () {
-                    context.read<ListsHandler>().setActiveGroup(DefaultListGroup.main.name);
+                    context
+                        .read<ListsHandler>()
+                        .setActiveGroup(DefaultListGroup.main.name);
                     context.read<ListsHandler>().setCustomTitle(element.key);
                     context.read<ListsHandler>().setActiveList(element.key);
                     Navigator.pop(context);
@@ -153,13 +153,16 @@ class DrawerBody extends StatelessWidget {
                         size: 18,
                       )),
                   onTap: () {
-                    showGeneralDialog(
-                      context: context,
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          TaskGroup(
-                        groupIndex: index + 1,
-                      ),
-                    );
+                    showModalBottomSheet(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        )),
+                        context: context,
+                        builder: (context) => TaskGroup(
+                              groupIndex: index + 1,
+                            ));
                   },
                 );
               },
@@ -224,9 +227,9 @@ class DrawerBody extends StatelessWidget {
                           TextButton(
                             child: const Text('Save'),
                             onPressed: () {
-                              context.read<ListsHandler>().addList(
-                                  0,
-                                  MapEntry(listName, []));
+                              context
+                                  .read<ListsHandler>()
+                                  .addList(0, MapEntry(listName, []));
                               Navigator.pop(context);
                             },
                           ),
