@@ -35,6 +35,39 @@ class TaskGroup extends StatelessWidget {
                           minVerticalPadding: 18,
                           leading: const Icon(Icons.checklist_rounded),
                           title: Text(e.key),
+                          trailing: IconButton(
+                              onPressed: () {
+                                context
+                                    .read<ListsHandler>()
+                                    .removeListAt(groupIndex, index);
+                              },
+                              icon: const Icon(
+                                Icons.remove_rounded,
+                                size: 18,
+                              )),
+                          onTap: () {
+                            context.read<ListsHandler>().setActiveGroup(context
+                                .read<ListsHandler>()
+                                .taskListGroup
+                                .elementAt(groupIndex)
+                                .key);
+                            context.read<ListsHandler>().setActiveList(context
+                                .read<ListsHandler>()
+                                .taskListGroup
+                                .elementAt(groupIndex)
+                                .value
+                                .elementAt(index)
+                                .key);
+                                context.read<ListsHandler>().setCustomTitle(context
+                                .read<ListsHandler>()
+                                .taskListGroup
+                                .elementAt(groupIndex)
+                                .value
+                                .elementAt(index)
+                                .key);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
                         ))).elementAt(index);
           }),
       floatingActionButton: FloatingActionButton(
@@ -54,6 +87,7 @@ class TaskGroup extends StatelessWidget {
                             context
                                 .read<ListsHandler>()
                                 .addList(groupIndex, MapEntry(listName, []));
+                            Navigator.pop(context);
                           },
                           child: const Text('Save')),
                     ],

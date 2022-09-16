@@ -193,6 +193,8 @@ class HomePage extends StatelessWidget {
               ),
               onPressed: () {
                 context
+                    .read<ListsHandler>().setActiveGroup(DefaultListGroup.main.name);
+                context
                     .read<ListsHandler>()
                     .setActiveList(DefaultLists.MyDay.name);
                 context.read<ListsHandler>().setCurrentDayTitle();
@@ -210,6 +212,8 @@ class HomePage extends StatelessWidget {
                 size: 21,
               ),
               onPressed: () {
+                context
+                    .read<ListsHandler>().setActiveGroup(DefaultListGroup.main.name);
                 context
                     .read<ListsHandler>()
                     .setCustomTitle(DefaultLists.Planned.name);
@@ -232,6 +236,8 @@ class HomePage extends StatelessWidget {
                     : colorScheme.inverseSurface,
               ),
               onPressed: () {
+                context
+                    .read<ListsHandler>().setActiveGroup(DefaultListGroup.main.name);
                 context
                     .read<ListsHandler>()
                     .setCustomTitle(DefaultLists.Starred.name);

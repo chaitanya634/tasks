@@ -94,11 +94,12 @@ class DrawerBody extends StatelessWidget {
                       context.read<ListsHandler>().setCurrentDayTitle();
                       context
                           .read<ListsHandler>()
-                          .removeListAt(DefaultListGroup.main.name, index + 3);
+                          .removeListAt(0, index + 3);
                     },
                   ),
                   title: Text(element.key),
                   onTap: () {
+                    context.read<ListsHandler>().setActiveGroup(DefaultListGroup.main.name);
                     context.read<ListsHandler>().setCustomTitle(element.key);
                     context.read<ListsHandler>().setActiveList(element.key);
                     Navigator.pop(context);

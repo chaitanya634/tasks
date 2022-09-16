@@ -110,7 +110,8 @@ class ListsHandler with ChangeNotifier {
     taskListGroup.add(MapEntry(groupName, []));
     notifyListeners();
   }
-  void removeGroupAt(int index){
+
+  void removeGroupAt(int index) {
     taskListGroup.removeAt(index);
     notifyListeners();
   }
@@ -121,17 +122,13 @@ class ListsHandler with ChangeNotifier {
   }
 
 //working on list
-  void addList(
-      int groupIndex, MapEntry<String, List<TaskModel>> newTaskList) {
+  void addList(int groupIndex, MapEntry<String, List<TaskModel>> newTaskList) {
     taskListGroup.elementAt(groupIndex).value.add(newTaskList);
     notifyListeners();
   }
 
-  void removeListAt(String groupName, int index) {
-    taskListGroup
-        .singleWhere((element) => element.key == groupName)
-        .value
-        .removeAt(index);
+  void removeListAt(int groupIndex, int listIndex) {
+    taskListGroup.elementAt(groupIndex).value.removeAt(listIndex);
     notifyListeners();
   }
 
