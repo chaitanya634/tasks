@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks/data/enums.dart';
-import 'package:tasks/data/models.dart';
+import 'package:tasks/pages/task_group.dart';
 import 'package:tasks/providers/lists_handler.dart';
 
 class DrawerBody extends StatelessWidget {
@@ -144,14 +144,28 @@ class DrawerBody extends StatelessWidget {
                   leading: const Icon(Icons.folder_outlined),
                   title: Text(element.key),
                   trailing: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.expand_more_rounded),
-                  ),
+                      onPressed: () {
+                        context.read<ListsHandler>().removeGroupAt(index + 1);
+                      },
+                      icon: const Icon(
+                        Icons.remove_rounded,
+                        size: 18,
+                      )),
+                  onTap: () {
+                    showGeneralDialog(
+                      context: context,
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          TaskGroup(
+                        groupIndex: index + 1,
+                      ),
+                    );
+                  },
                 );
               },
             )),
 
-          const SliverToBoxAdapter(child: Divider(indent: 16, endIndent: 16)),
+          if (context.watch<ListsHandler>().taskListGroup.length > 1)
+            const SliverToBoxAdapter(child: Divider(indent: 16, endIndent: 16)),
           SliverToBoxAdapter(
             child: ListTile(
               title: Text('Info', style: TextStyle(color: colorScheme.primary)),
@@ -210,9 +224,8 @@ class DrawerBody extends StatelessWidget {
                             child: const Text('Save'),
                             onPressed: () {
                               context.read<ListsHandler>().addList(
-                                  DefaultListGroup.main.name,
-                                  MapEntry(
-                                      listName, []));
+                                  0,
+                                  MapEntry(listName, []));
                               Navigator.pop(context);
                             },
                           ),
@@ -251,13 +264,13 @@ class DrawerBody extends StatelessWidget {
                         actions: [
                           //cancel
                           TextButton(
-                              onPressed: () =>
-                                Navigator.pop(context)
-                              ,
+                              onPressed: () => Navigator.pop(context),
                               child: const Text('Cancel')),
                           TextButton(
                               onPressed: () {
-                                context.read<ListsHandler>().addGroup(groupName);
+                                context
+                                    .read<ListsHandler>()
+                                    .addGroup(groupName);
                                 Navigator.pop(context);
                               },
                               child: const Text('Save')),

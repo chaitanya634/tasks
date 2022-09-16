@@ -25,7 +25,7 @@ class ListsHandler with ChangeNotifier {
 
     taskListGroup = [];
     taskListGroup.add(MapEntry(DefaultListGroup.main.name, defaultLists));
-    taskListGroup.add(MapEntry(DefaultListGroup.office.name, []));
+    taskListGroup.add(MapEntry(DefaultListGroup.Office.name, []));
 
     activeListName = DefaultLists.MyDay.name;
     activeGroupName = DefaultListGroup.main.name;
@@ -105,19 +105,25 @@ class ListsHandler with ChangeNotifier {
     notifyListeners();
   }
 
-  //working on lists
-
+  //working on groups
   void addGroup(String groupName) {
     taskListGroup.add(MapEntry(groupName, []));
     notifyListeners();
   }
+  void removeGroupAt(int index){
+    taskListGroup.removeAt(index);
+    notifyListeners();
+  }
 
+  void setActiveGroup(String groupName) {
+    activeGroupName = groupName;
+    notifyListeners();
+  }
+
+//working on list
   void addList(
-      String groupName, MapEntry<String, List<TaskModel>> newTaskList) {
-    taskListGroup
-        .singleWhere((element) => element.key == groupName)
-        .value
-        .add(newTaskList);
+      int groupIndex, MapEntry<String, List<TaskModel>> newTaskList) {
+    taskListGroup.elementAt(groupIndex).value.add(newTaskList);
     notifyListeners();
   }
 
@@ -134,11 +140,6 @@ class ListsHandler with ChangeNotifier {
     notifyListeners();
   }
 
-  void setActiveGroup(String groupName) {
-    activeGroupName = groupName;
-    notifyListeners();
-  }
-
   //working on tasks
   void updateTaskChecked(bool checkValue, int taskModelIndex) {
     taskListGroup
@@ -152,7 +153,7 @@ class ListsHandler with ChangeNotifier {
   }
 
   void addTask(TaskModel taskModel) {
-        taskListGroup
+    taskListGroup
         .singleWhere((element) => element.key == activeGroupName)
         .value
         .singleWhere((element) => element.key == activeListName)
@@ -161,9 +162,8 @@ class ListsHandler with ChangeNotifier {
     notifyListeners();
   }
 
-
-  void updateTask(int index, TaskModel taskModel){
-        taskListGroup
+  void updateTask(int index, TaskModel taskModel) {
+    taskListGroup
         .singleWhere((element) => element.key == activeGroupName)
         .value
         .singleWhere((element) => element.key == activeListName)
