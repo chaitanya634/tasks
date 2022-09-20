@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/data/enums.dart';
 import 'package:tasks/isar_db/collections.dart';
 import 'package:tasks/isar_db/collections_provider.dart';
 import '../data/algos.dart';
-import 'create_task.dart';
-import 'drawer.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -92,27 +89,17 @@ class HomePage extends StatelessWidget {
           ),
 
           //tasks list
-          FutureBuilder(
-            future: context.read<CollectionsProvider>().getTasks(),
+          StreamBuilder(
+            stream: context.read<CollectionsProvider>().getTasks(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
                 var data = snapshot.data as List<Task>;
+                debugPrint(data.toString());
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                     childCount: data.length,
                     (context, index) {
-                      var taskModel = context
-                          .watch<ListsHandler>()
-                          .taskListGroup
-                          .singleWhere((element) =>
-                              element.key ==
-                              context.watch<ListsHandler>().activeGroupName)
-                          .value
-                          .singleWhere((element) =>
-                              element.key ==
-                              context.watch<ListsHandler>().activeListName)
-                          .value
-                          .elementAt(index);
+                      var task = data.elementAt(index);
                       return Column(
                         children: [
                           ListTile(
@@ -122,11 +109,14 @@ class HomePage extends StatelessWidget {
                               child: Checkbox(
                                 checkColor: colorScheme.onPrimary,
                                 activeColor: colorScheme.primary,
-                                value: taskModel.isChecked,
+                                value: task.isChecked,
                                 onChanged: (value) {
                                   context
-                                      .read<ListsHandler>()
-                                      .updateTaskChecked(value ?? false, index);
+                                      .read<CollectionsProvider>()
+                                      .updateTaskChecked(value!, task.title);
+                                  // context
+                                  //     .read<ListsHandler>()
+                                  //     .updateTaskChecked(value ?? false, index);
                                 },
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
@@ -134,13 +124,13 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             title: Text(
-                              taskModel.title ?? 'NO TITLE',
+                              task.title,
                               style: TextStyle(
                                 color: colorScheme.secondary,
                                 fontSize: 18,
                               ),
                             ),
-                            subtitle: generateSubtitle(taskModel),
+                            subtitle: generateSubtitle(task),
                             onTap: () {
                               // showGeneralDialog(
                               //   context: context,
@@ -160,9 +150,6 @@ class HomePage extends StatelessWidget {
               }
 
               return const SliverToBoxAdapter(child: Text('test'));
-              
-                
-              
             },
           ),
         ],

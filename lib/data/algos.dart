@@ -3,7 +3,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:tasks/data/models.dart';
 
 import '../isar_db/collections.dart';
 import 'enums.dart';

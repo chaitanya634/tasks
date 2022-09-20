@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../data/algos.dart';
 import '../data/enums.dart';
@@ -68,6 +66,18 @@ class CollectionsProvider with ChangeNotifier {
         await mainGroup!.lists.load();
         mainGroup.lists.addAll(defaultLists);
         await mainGroup.lists.save();
+
+        //test--
+        isar.tasks.put(Task()
+          ..groupName = activeGroupName
+          ..listName = activeListName
+          ..title = 'task 1'
+          ..isStarred = true
+          ..isChecked = true
+          ..remainder = DateTime.now()
+          ..due = DateTime.now()
+          ..repeatTask = RepeatTask.Daily.index
+          ..note = 'test task');
       });
     }
   }
@@ -145,12 +155,20 @@ class CollectionsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Task>> getTasks() async {
+  //work with tasks
+  Stream<List<Task>> getTasks() {
     return isar.tasks
         .filter()
         .groupNameEqualTo(activeGroupName)
         .and()
         .listNameEqualTo(activeListName)
-        .findAll();
+        .watch(fireImmediately: true);
+  }
+
+  void updateTaskChecked(bool checkValue, String title) async {
+    var task = await isar.tasks.getByTitle(title);
+    task!.isChecked = checkValue;
+    await isar.writeTxn(() async => await isar.tasks.putByTitle(task));
+    notifyListeners();
   }
 }
