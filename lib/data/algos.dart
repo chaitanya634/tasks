@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:tasks/data/models.dart';
 
+import '../isar_db/collections.dart';
 import 'enums.dart';
 
 String ordinal(int number) {
@@ -18,10 +19,10 @@ String ordinal(int number) {
     return 'th';
 }
 
-Widget? generateSubtitle(TaskModel taskModel) {
-  if (taskModel.remainderDate == null &&
-      taskModel.dueDate == null &&
-      taskModel.repeat == null)
+Widget? generateSubtitle(Task taskModel) {
+  if (taskModel.remainder == null &&
+      taskModel.due == null &&
+      taskModel.repeatTask == null)
     return null;
   else {
     return SizedBox(
@@ -30,7 +31,7 @@ Widget? generateSubtitle(TaskModel taskModel) {
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         children: [
-          if (taskModel.remainderDate != null)
+          if (taskModel.remainder != null)
             Wrap(
               children: [
                 const SizedBox(
@@ -38,18 +39,18 @@ Widget? generateSubtitle(TaskModel taskModel) {
                   child: Icon(Icons.notifications_active_outlined, size: 16),
                 ),
                 const SizedBox(width: 4),
-                Text(taskModel.remainderDate!.day.toString()),
+                Text(taskModel.remainder!.day.toString()),
                 Text(
-                  ordinal(taskModel.remainderDate!.day),
+                  ordinal(taskModel.remainder!.day),
                   style: const TextStyle(
                       fontFeatures: [FontFeature.superscripts()], fontSize: 10),
                 ),
                 Text(
-                    ' ${Months.values.elementAt(taskModel.remainderDate!.month - 1).name}'),
+                    ' ${Months.values.elementAt(taskModel.remainder!.month - 1).name}'),
                 const SizedBox(width: 12),
               ],
             ),
-          if (taskModel.dueDate != null)
+          if (taskModel.due != null)
             Wrap(
               children: [
                 const SizedBox(
@@ -57,18 +58,18 @@ Widget? generateSubtitle(TaskModel taskModel) {
                   child: Icon(Icons.event_outlined, size: 16),
                 ),
                 const SizedBox(width: 4),
-                Text(taskModel.dueDate!.day.toString()),
+                Text(taskModel.due!.day.toString()),
                 Text(
-                  ordinal(taskModel.dueDate!.day),
+                  ordinal(taskModel.due!.day),
                   style: const TextStyle(
                       fontFeatures: [FontFeature.superscripts()], fontSize: 10),
                 ),
                 Text(
-                    ' ${Months.values.elementAt(taskModel.dueDate!.month - 1).name}'),
+                    ' ${Months.values.elementAt(taskModel.due!.month - 1).name}'),
                 const SizedBox(width: 12),
               ],
             ),
-          if (taskModel.repeat != null)
+          if (taskModel.repeatTask != null)
             Wrap(
               children: [
                 const SizedBox(
@@ -76,7 +77,7 @@ Widget? generateSubtitle(TaskModel taskModel) {
                   child: Icon(Icons.event_repeat_outlined, size: 16),
                 ),
                 const SizedBox(width: 4),
-                Text(taskModel.repeat!.name),
+                Text(RepeatTask.values.elementAt(taskModel.repeatTask!).name),
                 const SizedBox(width: 12),
               ],
             ),
