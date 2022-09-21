@@ -131,12 +131,31 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             subtitle: generateSubtitle(task),
-                            onTap: () {
+                            onTap: () async {
                               showGeneralDialog(
                                 context: context,
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) {
-                                  return CreateTaskPage(task);
+                                  return FutureBuilder(
+                                    future: context
+                                        .read<CollectionsProvider>()
+                                        .getSubtasks(task.id),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                              ConnectionState.done &&
+                                          snapshot.hasData) {
+                                        return CreateTaskPage(task,
+                                            snapshot.data as List<Subtasks>);
+                                      }
+                                      return const Scaffold(
+                                          body: Center(
+                                        child: SizedBox(
+                                            width: 32,
+                                            height: 32,
+                                            child: CircularProgressIndicator()),
+                                      ));
+                                    },
+                                  );
                                 },
                               );
                             },
@@ -257,7 +276,22 @@ class HomePage extends StatelessWidget {
           showGeneralDialog(
             context: context,
             pageBuilder: (context, animation, secondaryAnimation) =>
-                const CreateTaskPage(null),
+                FutureBuilder(
+              future: context.read<CollectionsProvider>().getUniqueTaskId(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return CreateTaskPage(null, null,
+                      newTaskId: snapshot.data as int);
+                }
+                return const Scaffold(
+                    body: Center(
+                  child: SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: CircularProgressIndicator()),
+                ));
+              },
+            ),
           );
         },
         child: Icon(
@@ -266,7 +300,6 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
-    
     );
   }
 }

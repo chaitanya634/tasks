@@ -9,8 +9,11 @@ import '../data/enums.dart';
 import '../data/algos.dart';
 
 class CreateTaskPage extends StatefulWidget {
-  const CreateTaskPage(this.task, {Key? key}) : super(key: key);
+  const CreateTaskPage(this.task, this.subtasks, {this.newTaskId, Key? key})
+      : super(key: key);
   final Tasks? task;
+  final List<Subtasks>? subtasks;
+  final int? newTaskId;
 
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
@@ -18,6 +21,7 @@ class CreateTaskPage extends StatefulWidget {
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
   late Tasks task;
+  late List<Subtasks> subtasks;
 
   //remainder widget
   Icon remainderIcon =
@@ -42,12 +46,15 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
     //previous task
     if (widget.task != null) {
       task = widget.task!;
+      subtasks = widget.subtasks!;
     }
     //new task
     else {
       task = Tasks()
+        ..id = widget.newTaskId!
         ..groupId = context.read<CollectionsProvider>().activeGroupId
         ..listId = context.read<CollectionsProvider>().activeListId;
+      subtasks = [];
     }
   }
 
@@ -198,6 +205,11 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                 else {
                   context.read<CollectionsProvider>().addTask(task);
                 }
+
+                context
+                    .read<CollectionsProvider>()
+                    .addSubtasks(task.id, subtasks);
+
                 ScaffoldMessenger.of(context).clearSnackBars();
                 Navigator.pop(context);
               }
@@ -253,54 +265,52 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         ),
 
         // Subtask list
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 46, right: 8),
-        //   child: ListView.builder(
-        //     shrinkWrap: true,
-        //     itemCount: taskModel.subtasks!.length,
-        //     itemBuilder: (context, index) {
-        //       return Padding(
-        //         padding: const EdgeInsets.only(top: 8),
-        //         child: TextField(
-        //           controller: TextEditingController(
-        //             text: taskModel.subtasks!.elementAt(index).title,
-        //           ),
-        //           onChanged: (value) {
-        //             taskModel.subtasks!.elementAt(index).title = value;
-        //           },
-        //           decoration: InputDecoration(
-        //               label: const Text('Subtitle'),
-        //               suffixIcon:
-        //                   Row(mainAxisSize: MainAxisSize.min, children: [
-        //                 Checkbox(
-        //                     checkColor: colorScheme.onSecondary,
-        //                     activeColor: colorScheme.secondary,
-        //                     value:
-        //                         taskModel.subtasks!.elementAt(index).isChecked,
-        //                     onChanged: (value) {
-        //                       setState(() {
-        //                         taskModel.subtasks!.elementAt(index).isChecked =
-        //                             value!;
-        //                       });
-        //                     },
-        //                     shape: RoundedRectangleBorder(
-        //                       borderRadius: BorderRadius.circular(5),
-        //                     )),
-        //                 IconButton(
-        //                     icon: const Icon(Icons.close_rounded),
-        //                     onPressed: () {
-        //                       setState(() {
-        //                         taskModel.subtasks!.removeAt(index);
-        //                       });
-        //                     }),
-        //               ]),
-        //               border: OutlineInputBorder(
-        //                   borderRadius: BorderRadius.circular(18))),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // ),
+        Padding(
+          padding: const EdgeInsets.only(left: 46, right: 8),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: subtasks.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: TextField(
+                  controller: TextEditingController(
+                    text: subtasks.elementAt(index).title,
+                  ),
+                  onChanged: (value) {
+                    subtasks.elementAt(index).title = value;
+                  },
+                  decoration: InputDecoration(
+                      label: const Text('Subtitle'),
+                      suffixIcon:
+                          Row(mainAxisSize: MainAxisSize.min, children: [
+                        Checkbox(
+                            checkColor: colorScheme.onSecondary,
+                            activeColor: colorScheme.secondary,
+                            value: subtasks.elementAt(index).isChecked,
+                            onChanged: (value) {
+                              setState(() {
+                                subtasks.elementAt(index).isChecked = value!;
+                              });
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            )),
+                        IconButton(
+                            icon: const Icon(Icons.close_rounded),
+                            onPressed: () {
+                              setState(() {
+                                subtasks.removeAt(index);
+                              });
+                            }),
+                      ]),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18))),
+                ),
+              );
+            },
+          ),
+        ),
 
         //Add Subtask Button
         Align(
@@ -309,13 +319,14 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             padding: const EdgeInsets.all(8.0),
             child: OutlinedButton.icon(
               onPressed: () {
-                var collectionsProvider = context.read<CollectionsProvider>();
-                collectionsProvider.addSubtask(
-                  Subtasks()
-                    ..groupId = collectionsProvider.activeGroupId
-                    ..listId = collectionsProvider.activeListId
-                    ..taskId = task.id,
-                );
+                setState(() {
+                  subtasks.add(
+                    Subtasks()
+                      ..taskId = task.id
+                      ..listId = task.listId
+                      ..groupId = task.groupId,
+                  );
+                });
               },
               icon:
                   const Icon(IconData(0xe811, fontFamily: 'OutlinedFontIcons')),
@@ -324,9 +335,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
           ),
         ),
 
-        const SizedBox(
-          height: 8,
-        ),
+        const SizedBox(height: 8),
 
         const Divider(
           indent: 138,
@@ -550,8 +559,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
         Visibility(
           visible: widget.task == null ? false : true,
           child: const Divider(
-            indent: 138,
-            endIndent: 138,
+            indent: 68,
             height: 1,
           ),
         ),

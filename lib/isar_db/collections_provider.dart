@@ -180,8 +180,39 @@ class CollectionsProvider with ChangeNotifier {
     await isar.writeTxn(() async => await isar.tasks.delete(taskId));
   }
 
+  Future<int> getUniqueTaskId() async {
+    var numTasks = await isar.tasks.count();
+    if (numTasks == 0) {
+      return 1;
+    } else {
+      var tasks = await isar.tasks.where().findAll();
+      return tasks.last.id + 1;
+    }
+  }
+
   //work with subtask
-  void addSubtask(Subtasks subtask) async {
-    await isar.writeTxn(() async => await isar.subtasks.put(subtask));
+  Future<List<Subtasks>> getSubtasks(int taskId) async {
+    return await isar.subtasks
+        .filter()
+        .groupIdEqualTo(activeGroupId)
+        .and()
+        .listIdEqualTo(activeListId)
+        .and()
+        .taskIdEqualTo(taskId)
+        .findAll();
+  }
+
+  void addSubtasks(int taskId, List<Subtasks> subtasks) async {
+    await isar.writeTxn(() async {
+      await isar.subtasks
+          .filter()
+          .groupIdEqualTo(activeGroupId)
+          .and()
+          .listIdEqualTo(activeListId)
+          .and()
+          .taskIdEqualTo(taskId)
+          .deleteAll();
+      await isar.subtasks.putAll(subtasks);
+    });
   }
 }
