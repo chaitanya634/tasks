@@ -59,6 +59,16 @@ class CollectionsProvider with ChangeNotifier {
     }
   }
 
+  void setActiveGroupId(int id) {
+    activeGroupId = id;
+    notifyListeners();
+  }
+
+  void setActiveListId(int id) {
+    activeListId = id;
+    notifyListeners();
+  }
+
   //work with app bar
   void setCurrentDayAppBarTitle() {
     homePageAppBarTitle = Builder(

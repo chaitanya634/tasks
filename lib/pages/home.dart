@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tasks/isar_db/collections.dart';
 import 'package:tasks/isar_db/collections_provider.dart';
 import '../data/algos.dart';
+import '../data/enums.dart';
 import 'create_task.dart';
 
 class HomePage extends StatelessWidget {
@@ -25,12 +26,8 @@ class HomePage extends StatelessWidget {
             pinned: true,
             expandedHeight: 150.0,
             flexibleSpace: FlexibleSpaceBar(
-              title: Builder(
-                builder: (context) {
-                  debugPrint('build home page app bar title');
-                  return context.select<CollectionsProvider, Widget>(
-                      (value) => value.homePageAppBarTitle);
-                },
+              title: context.select<CollectionsProvider, Widget>(
+                (value) => value.homePageAppBarTitle,
               ),
               titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
               expandedTitleScale: 2,
@@ -167,8 +164,7 @@ class HomePage extends StatelessWidget {
                   ),
                 );
               }
-
-              return const SliverToBoxAdapter(child: Text('test'));
+              return const SliverToBoxAdapter(child: SizedBox());
             },
           ),
         ],
@@ -180,94 +176,81 @@ class HomePage extends StatelessWidget {
       //           bottomRight: Radius.circular(12))),
       //   child: DrawerBody(),
       // ),
-      // bottomNavigationBar: BottomAppBar(
-      //   color: colorScheme.secondaryContainer,
-      //   shape: const CircularNotchedRectangle(),
-      //   child: Wrap(
-      //     children: [
-      //       //Menu
-      //       IconButton(
-      //         icon: Icon(
-      //           Icons.menu_rounded,
-      //           color: colorScheme.inverseSurface,
-      //         ),
-      //         onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-      //       ),
+      bottomNavigationBar: BottomAppBar(
+        color: colorScheme.secondaryContainer,
+        shape: const CircularNotchedRectangle(),
+        child: Wrap(
+          children: [
+            //Menu
+            IconButton(
+              icon: Icon(
+                Icons.menu_rounded,
+                color: colorScheme.inverseSurface,
+              ),
+              onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+            ),
 
-      //       //MyDay
-      //       IconButton(
-      //         icon: Icon(
-      //           context.watch<ListsHandler>().activeListName ==
-      //                   DefaultLists.MyDay.name
-      //               ? Icons.today
-      //               : Icons.today_outlined,
-      //           color: context.watch<ListsHandler>().activeListName ==
-      //                   DefaultLists.MyDay.name
-      //               ? colorScheme.primary
-      //               : colorScheme.inverseSurface,
-      //           size: 21,
-      //         ),
-      //         onPressed: () {
-      //           context
-      //               .read<ListsHandler>()
-      //               .setActiveGroup(DefaultListGroup.main.name);
-      //           context
-      //               .read<ListsHandler>()
-      //               .setActiveList(DefaultLists.MyDay.name);
-      //           context.read<ListsHandler>().setCurrentDayTitle();
-      //         },
-      //       ),
+            //MyDay
+            IconButton(
+              icon: Icon(
+                context.watch<CollectionsProvider>().activeListId == 1
+                    ? Icons.today
+                    : Icons.today_outlined,
+                color: context.watch<CollectionsProvider>().activeListId == 1
+                    ? colorScheme.primary
+                    : colorScheme.inverseSurface,
+                size: 21,
+              ),
+              onPressed: () {
+                context.read<CollectionsProvider>().setActiveGroupId(1);
+                context.read<CollectionsProvider>().setActiveListId(1);
+                context.read<CollectionsProvider>().setCurrentDayAppBarTitle();
+              },
+            ),
 
-      //       //Planned
-      //       IconButton(
-      //         icon: Icon(
-      //           Icons.task_alt_rounded,
-      //           color: context.watch<ListsHandler>().activeListName ==
-      //                   DefaultLists.Planned.name
-      //               ? colorScheme.primary
-      //               : colorScheme.inverseSurface,
-      //           size: 21,
-      //         ),
-      //         onPressed: () {
-      //           context
-      //               .read<ListsHandler>()
-      //               .setActiveGroup(DefaultListGroup.main.name);
-      //           context
-      //               .read<ListsHandler>()
-      //               .setCustomTitle(DefaultLists.Planned.name);
-      //           context
-      //               .read<ListsHandler>()
-      //               .setActiveList(DefaultLists.Planned.name);
-      //         },
-      //       ),
+            // Planned
+            IconButton(
+              icon: Icon(
+                Icons.task_alt_rounded,
+                color: context.watch<CollectionsProvider>().activeListId == 2
+                    ? colorScheme.primary
+                    : colorScheme.inverseSurface,
+                size: 21,
+              ),
+              onPressed: () {
+                context.read<CollectionsProvider>().setActiveGroupId(1);
+                context
+                    .read<CollectionsProvider>()
+                    .setCustomAppBarTitle('Planned');
+                context.read<CollectionsProvider>().setActiveListId(2);
+              },
+            ),
 
-      //       //Starred
-      //       IconButton(
-      //         icon: Icon(
-      //           context.watch<ListsHandler>().activeListName ==
-      //                   DefaultLists.Starred.name
-      //               ? Icons.star_rounded
-      //               : Icons.star_outline_rounded,
-      //           color: context.watch<ListsHandler>().activeListName ==
-      //                   DefaultLists.Starred.name
-      //               ? colorScheme.primary
-      //               : colorScheme.inverseSurface,
-      //         ),
-      //         onPressed: () {
-      //           context
-      //               .read<ListsHandler>()
-      //               .setActiveGroup(DefaultListGroup.main.name);
-      //           context
-      //               .read<ListsHandler>()
-      //               .setCustomTitle(DefaultLists.Starred.name);
-      //           context
-      //               .read<ListsHandler>()
-      //               .setActiveList(DefaultLists.Starred.name);
-      //         },
-      //       ),
-      //     ],
-      //   ),
-      // ),
+            //Starred
+            IconButton(
+              icon: Icon(
+                context.watch<CollectionsProvider>().activeListId == 3
+                    ? Icons.star_rounded
+                    : Icons.star_outline_rounded,
+                color: context.watch<CollectionsProvider>().activeListId == 3
+                    ? colorScheme.primary
+                    : colorScheme.inverseSurface,
+              ),
+              onPressed: () {
+                context
+                    .read<CollectionsProvider>()
+                    .setActiveGroupId(1);
+                context
+                    .read<CollectionsProvider>()
+                    .setCustomAppBarTitle('Starred');
+                context
+                    .read<CollectionsProvider>()
+                    .setActiveListId(3);
+              },
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         elevation: 2.5,
         backgroundColor: colorScheme.primaryContainer,
