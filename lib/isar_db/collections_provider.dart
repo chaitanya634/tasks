@@ -55,20 +55,6 @@ class CollectionsProvider with ChangeNotifier {
 
       isar.writeTxn(() async {
         await isar.lists.putAll(defaultLists);
-
-        //test--
-        isar.tasks.put(
-          Tasks()
-            ..groupId = activeGroupId
-            ..listId = activeListId
-            ..title = 'task 1'
-            ..isStarred = true
-            ..isChecked = true
-            ..remainder = DateTime.now()
-            ..due = DateTime.now()
-            ..repeat = RepeatTask.Daily.index
-            ..note = 'test task',
-        );
       });
     }
   }
