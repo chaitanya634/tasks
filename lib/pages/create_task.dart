@@ -45,7 +45,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
     }
     //new task
     else {
-      task = Tasks();
+      task = Tasks()
+        ..groupId = context.read<CollectionsProvider>().activeGroupId
+        ..listId = context.read<CollectionsProvider>().activeListId;
     }
   }
 
@@ -134,7 +136,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
     }
 
     if (task.repeat != null) {
-      repeatTitle = Text('Repeat ${RepeatTask.values.elementAt(task.repeat!)}',
+      repeatTitle = Text(
+          'Repeat ${RepeatTask.values.elementAt(task.repeat!).name}',
           style: TextStyle(color: colorScheme.primary));
       repeatIcon = Icon(Icons.event_repeat_rounded, color: colorScheme.primary);
     }

@@ -25,8 +25,7 @@ class CollectionsProvider with ChangeNotifier {
       var mainGroup = Groups()..name = DefaultListGroup.main.name;
       var officeGroup = Groups()..name = DefaultListGroup.office.name;
       isar.writeTxn(() async {
-        var groupsId = await isar.groups.putAll([mainGroup, officeGroup]);
-        activeGroupId = groupsId.elementAt(0);
+        await isar.groups.putAll([mainGroup, officeGroup]);
       });
     }
 
@@ -55,8 +54,7 @@ class CollectionsProvider with ChangeNotifier {
       ];
 
       isar.writeTxn(() async {
-        var listsId = await isar.lists.putAll(defaultLists);
-        activeListId = listsId.elementAt(0);
+        await isar.lists.putAll(defaultLists);
 
         //test--
         isar.tasks.put(
