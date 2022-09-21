@@ -25,8 +25,7 @@ class CollectionsProvider with ChangeNotifier {
       var mainGroup = Groups()..name = DefaultListGroup.main.name;
       var officeGroup = Groups()..name = DefaultListGroup.office.name;
       isar.writeTxn(() async {
-        var groupsId = await isar.groups.putAll([mainGroup, officeGroup]);
-        activeGroupId = groupsId.elementAt(0);
+        await isar.groups.putAll([mainGroup, officeGroup]);
       });
     }
 
@@ -55,24 +54,19 @@ class CollectionsProvider with ChangeNotifier {
       ];
 
       isar.writeTxn(() async {
-        var listsId = await isar.lists.putAll(defaultLists);
-        activeListId = listsId.elementAt(0);
-
-        //test--
-        isar.tasks.put(
-          Tasks()
-            ..groupId = activeGroupId
-            ..listId = activeListId
-            ..title = 'task 1'
-            ..isStarred = true
-            ..isChecked = true
-            ..remainder = DateTime.now()
-            ..due = DateTime.now()
-            ..repeat = RepeatTask.Daily.index
-            ..note = 'test task',
-        );
+        await isar.lists.putAll(defaultLists);
       });
     }
+  }
+
+  void setActiveGroupId(int id) {
+    activeGroupId = id;
+    notifyListeners();
+  }
+
+  void setActiveListId(int id) {
+    activeListId = id;
+    notifyListeners();
   }
 
   //work with app bar
@@ -148,6 +142,11 @@ class CollectionsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //work with lists
+  Stream<List<Lists>> getLists() {
+    return isar.lists.filter().groupIdEqualTo(activeGroupId).watch();
+  }
+
   //work with tasks
   Stream<List<Tasks>> getTasks() {
     return isar.tasks
@@ -182,8 +181,39 @@ class CollectionsProvider with ChangeNotifier {
     await isar.writeTxn(() async => await isar.tasks.delete(taskId));
   }
 
+  Future<int> getUniqueTaskId() async {
+    var numTasks = await isar.tasks.count();
+    if (numTasks == 0) {
+      return 1;
+    } else {
+      var tasks = await isar.tasks.where().findAll();
+      return tasks.last.id + 1;
+    }
+  }
+
   //work with subtask
-  void addSubtask(Subtasks subtask) async {
-    await isar.writeTxn(() async => await isar.subtasks.put(subtask));
+  Future<List<Subtasks>> getSubtasks(int taskId) async {
+    return await isar.subtasks
+        .filter()
+        .groupIdEqualTo(activeGroupId)
+        .and()
+        .listIdEqualTo(activeListId)
+        .and()
+        .taskIdEqualTo(taskId)
+        .findAll();
+  }
+
+  void addSubtasks(int taskId, List<Subtasks> subtasks) async {
+    await isar.writeTxn(() async {
+      await isar.subtasks
+          .filter()
+          .groupIdEqualTo(activeGroupId)
+          .and()
+          .listIdEqualTo(activeListId)
+          .and()
+          .taskIdEqualTo(taskId)
+          .deleteAll();
+      await isar.subtasks.putAll(subtasks);
+    });
   }
 }
