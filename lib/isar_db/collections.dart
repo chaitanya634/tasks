@@ -8,8 +8,8 @@ class Subtasks {
   late int listId;
   late int taskId;
 
-  late String title;
-  late bool isChecked;
+  bool isChecked = false;
+  String? title;
 }
 
 @Collection()
@@ -18,12 +18,12 @@ class Tasks {
   late int groupId;
   late int listId;
 
-  late String title;
-  late bool isStarred;
-  late bool isChecked;
+  bool isStarred = false;
+  bool isChecked = false;
+  String? title;
   DateTime? remainder;
   DateTime? due;
-  int? repeatTask;
+  int? repeat;
   String? note;
 }
 

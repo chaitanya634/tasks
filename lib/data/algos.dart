@@ -21,7 +21,7 @@ String ordinal(int number) {
 Widget? generateSubtitle(Tasks taskModel) {
   if (taskModel.remainder == null &&
       taskModel.due == null &&
-      taskModel.repeatTask == null)
+      taskModel.repeat == null)
     return null;
   else {
     return SizedBox(
@@ -68,7 +68,7 @@ Widget? generateSubtitle(Tasks taskModel) {
                 const SizedBox(width: 12),
               ],
             ),
-          if (taskModel.repeatTask != null)
+          if (taskModel.repeat != null)
             Wrap(
               children: [
                 const SizedBox(
@@ -76,7 +76,7 @@ Widget? generateSubtitle(Tasks taskModel) {
                   child: Icon(Icons.event_repeat_outlined, size: 16),
                 ),
                 const SizedBox(width: 4),
-                Text(RepeatTask.values.elementAt(taskModel.repeatTask!).name),
+                Text(RepeatTask.values.elementAt(taskModel.repeat!).name),
                 const SizedBox(width: 12),
               ],
             ),

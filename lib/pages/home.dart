@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tasks/isar_db/collections.dart';
 import 'package:tasks/isar_db/collections_provider.dart';
 import '../data/algos.dart';
+import 'create_task.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -92,14 +93,15 @@ class HomePage extends StatelessWidget {
           StreamBuilder(
             stream: context.read<CollectionsProvider>().getTasks(),
             builder: (context, snapshot) {
+              debugPrint('build home page list');
               if (snapshot.connectionState == ConnectionState.active &&
                   snapshot.hasData) {
                 var data = snapshot.data as List<Tasks>;
-                debugPrint(data.toString());
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                     childCount: data.length,
                     (context, index) {
+                      debugPrint('build home page list element');
                       var task = data.elementAt(index);
                       return Column(
                         children: [
@@ -122,7 +124,7 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             title: Text(
-                              task.title,
+                              task.title ?? '',
                               style: TextStyle(
                                 color: colorScheme.secondary,
                                 fontSize: 18,
@@ -130,13 +132,13 @@ class HomePage extends StatelessWidget {
                             ),
                             subtitle: generateSubtitle(task),
                             onTap: () {
-                              // showGeneralDialog(
-                              //   context: context,
-                              //   pageBuilder:
-                              //       (context, animation, secondaryAnimation) {
-                              //     return CreateTaskPage(taskIndex: index);
-                              //   },
-                              // );
+                              showGeneralDialog(
+                                context: context,
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) {
+                                  return CreateTaskPage(task);
+                                },
+                              );
                             },
                           ),
                           const Divider(height: 1),
@@ -247,23 +249,24 @@ class HomePage extends StatelessWidget {
       //     ],
       //   ),
       // ),
-      // floatingActionButton: FloatingActionButton(
-      //   elevation: 2.5,
-      //   backgroundColor: colorScheme.primaryContainer,
-      //   shape: const CircleBorder(),
-      //   onPressed: () {
-      //     showGeneralDialog(
-      //       context: context,
-      //       pageBuilder: (context, animation, secondaryAnimation) =>
-      //           const CreateTaskPage(),
-      //     );
-      //   },
-      //   child: Icon(
-      //     Icons.add_rounded,
-      //     color: colorScheme.onPrimaryContainer,
-      //   ),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+      floatingActionButton: FloatingActionButton(
+        elevation: 2.5,
+        backgroundColor: colorScheme.primaryContainer,
+        shape: const CircleBorder(),
+        onPressed: () {
+          showGeneralDialog(
+            context: context,
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const CreateTaskPage(null),
+          );
+        },
+        child: Icon(
+          Icons.add_rounded,
+          color: colorScheme.onPrimaryContainer,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+    
     );
   }
 }
