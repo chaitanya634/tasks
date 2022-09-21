@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tasks/isar_db/collections.dart';
 import 'package:tasks/isar_db/collections_provider.dart';
 import '../data/algos.dart';
-import '../data/enums.dart';
 import 'create_task.dart';
+import 'drawer.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -169,13 +169,13 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      // drawer: const Drawer(
-      //   shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.only(
-      //           topRight: Radius.circular(12),
-      //           bottomRight: Radius.circular(12))),
-      //   child: DrawerBody(),
-      // ),
+      drawer: const Drawer(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(12),
+                bottomRight: Radius.circular(12))),
+        child: DrawerBody(),
+      ),
       bottomNavigationBar: BottomAppBar(
         color: colorScheme.secondaryContainer,
         shape: const CircularNotchedRectangle(),

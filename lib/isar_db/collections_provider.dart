@@ -142,6 +142,11 @@ class CollectionsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //work with lists
+  Stream<List<Lists>> getLists() {
+    return isar.lists.filter().groupIdEqualTo(activeGroupId).watch();
+  }
+
   //work with tasks
   Stream<List<Tasks>> getTasks() {
     return isar.tasks
