@@ -68,7 +68,7 @@ class CollectionsProvider with ChangeNotifier {
             ..isChecked = true
             ..remainder = DateTime.now()
             ..due = DateTime.now()
-            ..repeatTask = RepeatTask.Daily.index
+            ..repeat = RepeatTask.Daily.index
             ..note = 'test task',
         );
       });
@@ -165,6 +165,25 @@ class CollectionsProvider with ChangeNotifier {
       await isar.tasks.filter().idEqualTo(taskId).deleteFirst();
       await isar.tasks.put(task);
     });
-    notifyListeners();
+  }
+
+  void updateTask(Tasks task) async {
+    await isar.writeTxn(() async {
+      await isar.tasks.filter().idEqualTo(task.id).deleteFirst();
+      await isar.tasks.put(task);
+    });
+  }
+
+  void addTask(Tasks task) async {
+    await isar.writeTxn(() async => await isar.tasks.put(task));
+  }
+
+  void removeTask(int taskId) async {
+    await isar.writeTxn(() async => await isar.tasks.delete(taskId));
+  }
+
+  //work with subtask
+  void addSubtask(Subtasks subtask) async {
+    await isar.writeTxn(() async => await isar.subtasks.put(subtask));
   }
 }
