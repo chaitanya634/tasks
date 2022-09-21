@@ -10,13 +10,11 @@ import 'collections.dart';
 class CollectionsProvider with ChangeNotifier {
   late Isar isar;
   late Widget homePageAppBarTitle;
-  late String activeGroupName;
-  late String activeListName;
+  int activeGroupId = 1;
+  int activeListId = 1;
 
   CollectionsProvider(this.isar) {
     initIsar();
-    activeGroupName = DefaultListGroup.main.name;
-    activeListName = DefaultLists.myDay.name;
     setCurrentDayAppBarTitle();
   }
 
@@ -24,60 +22,55 @@ class CollectionsProvider with ChangeNotifier {
     //create default groups
     int numGroups = await isar.groups.count();
     if (numGroups == 0) {
-      var mainGroup = Group()..name = DefaultListGroup.main.name;
-      var officeGroup = Group()..name = DefaultListGroup.office.name;
+      var mainGroup = Groups()..name = DefaultListGroup.main.name;
+      var officeGroup = Groups()..name = DefaultListGroup.office.name;
       isar.writeTxn(() async {
-        isar.groups.putAll([mainGroup, officeGroup]);
+        var groupsId = await isar.groups.putAll([mainGroup, officeGroup]);
+        activeGroupId = groupsId.elementAt(0);
       });
     }
 
     //create default lists
-    int numLists = await isar.taskLists.count();
+    int numLists = await isar.lists.count();
     if (numLists == 0) {
       var defaultLists = [
-        TaskList()
-          ..groupName = DefaultListGroup.main.name
+        Lists()
+          ..groupId = activeGroupId
           ..name = DefaultLists.myDay.name,
-        TaskList()
-          ..groupName = DefaultListGroup.main.name
+        Lists()
+          ..groupId = activeGroupId
           ..name = DefaultLists.planned.name,
-        TaskList()
-          ..groupName = DefaultListGroup.main.name
+        Lists()
+          ..groupId = activeGroupId
           ..name = DefaultLists.starred.name,
-        TaskList()
-          ..groupName = DefaultListGroup.main.name
+        Lists()
+          ..groupId = activeGroupId
           ..name = DefaultLists.shopping.name,
-        TaskList()
-          ..groupName = DefaultListGroup.main.name
+        Lists()
+          ..groupId = activeGroupId
           ..name = DefaultLists.ideas.name,
-        TaskList()
-          ..groupName = DefaultListGroup.main.name
+        Lists()
+          ..groupId = activeGroupId
           ..name = DefaultLists.plans.name,
       ];
 
       isar.writeTxn(() async {
-        isar.taskLists.putAll(defaultLists);
-
-        var mainGroup = await isar.groups
-            .where()
-            .filter()
-            .nameEqualTo(DefaultListGroup.main.name)
-            .findFirst();
-        await mainGroup!.lists.load();
-        mainGroup.lists.addAll(defaultLists);
-        await mainGroup.lists.save();
+        var listsId = await isar.lists.putAll(defaultLists);
+        activeListId = listsId.elementAt(0);
 
         //test--
-        isar.tasks.put(Task()
-          ..groupName = activeGroupName
-          ..listName = activeListName
-          ..title = 'task 1'
-          ..isStarred = true
-          ..isChecked = true
-          ..remainder = DateTime.now()
-          ..due = DateTime.now()
-          ..repeatTask = RepeatTask.Daily.index
-          ..note = 'test task');
+        isar.tasks.put(
+          Tasks()
+            ..groupId = activeGroupId
+            ..listId = activeListId
+            ..title = 'task 1'
+            ..isStarred = true
+            ..isChecked = true
+            ..remainder = DateTime.now()
+            ..due = DateTime.now()
+            ..repeatTask = RepeatTask.Daily.index
+            ..note = 'test task',
+        );
       });
     }
   }
@@ -156,19 +149,22 @@ class CollectionsProvider with ChangeNotifier {
   }
 
   //work with tasks
-  Stream<List<Task>> getTasks() {
+  Stream<List<Tasks>> getTasks() {
     return isar.tasks
         .filter()
-        .groupNameEqualTo(activeGroupName)
+        .groupIdEqualTo(activeGroupId)
         .and()
-        .listNameEqualTo(activeListName)
+        .listIdEqualTo(activeListId)
         .watch(fireImmediately: true);
   }
 
-  void updateTaskChecked(bool checkValue, String title) async {
-    var task = await isar.tasks.getByTitle(title);
+  void updateTaskChecked(bool checkValue, int taskId) async {
+    var task = await isar.tasks.get(taskId);
     task!.isChecked = checkValue;
-    await isar.writeTxn(() async => await isar.tasks.putByTitle(task));
+    await isar.writeTxn(() async {
+      await isar.tasks.filter().idEqualTo(taskId).deleteFirst();
+      await isar.tasks.put(task);
+    });
     notifyListeners();
   }
 }

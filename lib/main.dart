@@ -14,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Directory dir = await getApplicationSupportDirectory();
   Isar isar = await Isar.open(
-    [SubtaskSchema, TaskSchema, TaskListSchema, GroupSchema],
+    [SubtasksSchema, TasksSchema, ListsSchema, GroupsSchema],
     directory: dir.path,
   );
   runApp(

@@ -2,25 +2,25 @@ import 'package:isar/isar.dart';
 part 'collections.g.dart';
 
 @Collection()
-class Subtask {
+class Subtasks {
   Id id = Isar.autoIncrement;
-  late String taskName;
-  @Index(unique: true)
+  late int groupId;
+  late int listId;
+  late int taskId;
+
   late String title;
   late bool isChecked;
 }
 
 @Collection()
-class Task {
+class Tasks {
   Id id = Isar.autoIncrement;
-  late String groupName;
-  late String listName;
+  late int groupId;
+  late int listId;
 
-  @Index(unique: true)
   late String title;
   late bool isStarred;
   late bool isChecked;
-  var subtasks = IsarLinks<Subtask>();
   DateTime? remainder;
   DateTime? due;
   int? repeatTask;
@@ -28,18 +28,17 @@ class Task {
 }
 
 @Collection()
-class TaskList {
+class Lists {
   Id id = Isar.autoIncrement;
-  late String groupName;
-  @Index(unique: true)
+  late int groupId;
+
   late String name;
-  var tasks = IsarLinks<Task>();
 }
 
 @Collection()
-class Group {
+class Groups {
   Id id = Isar.autoIncrement;
+
   @Index(unique: true)
   late String name;
-  var lists = IsarLinks<TaskList>();
 }

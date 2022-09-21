@@ -18,7 +18,7 @@ String ordinal(int number) {
     return 'th';
 }
 
-Widget? generateSubtitle(Task taskModel) {
+Widget? generateSubtitle(Tasks taskModel) {
   if (taskModel.remainder == null &&
       taskModel.due == null &&
       taskModel.repeatTask == null)

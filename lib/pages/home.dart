@@ -92,8 +92,9 @@ class HomePage extends StatelessWidget {
           StreamBuilder(
             stream: context.read<CollectionsProvider>().getTasks(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.active && snapshot.hasData) {
-                var data = snapshot.data as List<Task>;
+              if (snapshot.connectionState == ConnectionState.active &&
+                  snapshot.hasData) {
+                var data = snapshot.data as List<Tasks>;
                 debugPrint(data.toString());
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -113,10 +114,7 @@ class HomePage extends StatelessWidget {
                                 onChanged: (value) {
                                   context
                                       .read<CollectionsProvider>()
-                                      .updateTaskChecked(value!, task.title);
-                                  // context
-                                  //     .read<ListsHandler>()
-                                  //     .updateTaskChecked(value ?? false, index);
+                                      .updateTaskChecked(value!, task.id);
                                 },
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
