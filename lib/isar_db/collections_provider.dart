@@ -142,9 +142,35 @@ class CollectionsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //work with groups
+  Stream<List<Groups>> getGroups() {
+    return isar.groups.filter().idGreaterThan(1).watch(fireImmediately: true);
+  }
+
+  void removeGroupAt(int groupId) async {
+    await isar.writeTxn(
+        () async => isar.groups.filter().idEqualTo(groupId).deleteAll());
+  }
+
   //work with lists
-  Stream<List<Lists>> getLists() {
-    return isar.lists.filter().groupIdEqualTo(activeGroupId).watch();
+  Stream<List<Lists>> getLists(int groupId) {
+    return isar.lists
+        .filter()
+        .groupIdEqualTo(groupId)
+        .watch(fireImmediately: true);
+  }
+
+  void addList(Lists list) async {
+    await isar.writeTxn(() async => await isar.lists.put(list));
+  }
+
+  void removeListAt(int groupId, int listId) async {
+    isar.writeTxn(() async => await isar.lists
+        .filter()
+        .idEqualTo(listId)
+        .and()
+        .groupIdEqualTo(groupId)
+        .deleteAll());
   }
 
   //work with tasks
