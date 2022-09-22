@@ -41,11 +41,22 @@ class MyApp extends StatelessWidget {
           themeMode: ThemeMode.system,
           home: LayoutBuilder(
             builder: (context, constraints) {
-              if (constraints.maxWidth > 0 && constraints.maxWidth < 600) {
+              debugPrint(constraints.maxWidth.toString());
+              if (constraints.maxHeight < 240) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                  Icon(Icons.height, size: 120,),
+                  Icon(Icons.error_outline_rounded, size: 120,)
+                ]);
+              }
+              if (constraints.maxWidth > 0 && constraints.maxWidth < 382) {
                 return const PhoneLayout();
-              } else if (constraints.maxWidth > 600 &&
+              } else if (constraints.maxWidth > 382 &&
                   constraints.maxWidth < 840) {
-                return const TabletLayout();
+                return TabletLayout();
               } else {
                 return const DesktopLayout();
               }

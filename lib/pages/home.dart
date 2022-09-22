@@ -169,12 +169,15 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      drawer: const Drawer(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(12),
-                bottomRight: Radius.circular(12))),
-        child: DrawerBody(),
+      drawer: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 328),
+        child: const Drawer(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(12),
+                  bottomRight: Radius.circular(12))),
+          child: DrawerBody(),
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: colorScheme.secondaryContainer,
@@ -237,15 +240,11 @@ class HomePage extends StatelessWidget {
                     : colorScheme.inverseSurface,
               ),
               onPressed: () {
-                context
-                    .read<CollectionsProvider>()
-                    .setActiveGroupId(1);
+                context.read<CollectionsProvider>().setActiveGroupId(1);
                 context
                     .read<CollectionsProvider>()
                     .setCustomAppBarTitle('Starred');
-                context
-                    .read<CollectionsProvider>()
-                    .setActiveListId(3);
+                context.read<CollectionsProvider>().setActiveListId(3);
               },
             ),
           ],
