@@ -5,8 +5,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:tasks/isar_db/collections_provider.dart';
+import 'package:tasks/layouts/desktop.dart';
+import 'package:tasks/layouts/phone.dart';
+import 'package:tasks/layouts/tablet.dart';
 import 'isar_db/collections.dart';
-import 'pages/home.dart';
 import 'themes/light.dart';
 import 'themes/dark.dart';
 
@@ -39,15 +41,14 @@ class MyApp extends StatelessWidget {
           themeMode: ThemeMode.system,
           home: LayoutBuilder(
             builder: (context, constraints) {
-              debugPrint(constraints.maxWidth.toString());
-              if (constraints.maxWidth > 800) {
-                return Scaffold(
-                  body: Center(
-                    child: Text(constraints.maxWidth.toString()),
-                  ),
-                );
+              if (constraints.maxWidth > 0 && constraints.maxWidth < 600) {
+                return const PhoneLayout();
+              } else if (constraints.maxWidth > 600 &&
+                  constraints.maxWidth < 840) {
+                return const TabletLayout();
+              } else {
+                return const DesktopLayout();
               }
-              return HomePage();
             },
           ),
         ),
