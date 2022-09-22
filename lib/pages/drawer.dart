@@ -134,6 +134,7 @@ class DrawerBody extends StatelessWidget {
                         title: Text(element.name),
                         onTap: () {
                           showModalBottomSheet(
+                            constraints: const BoxConstraints(maxWidth: 420),
                             shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(16),

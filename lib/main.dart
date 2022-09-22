@@ -37,7 +37,19 @@ class MyApp extends StatelessWidget {
           darkTheme:
               darkDynamic == null ? darkTheme() : dynamicDarkTheme(darkDynamic),
           themeMode: ThemeMode.system,
-          home: HomePage(),
+          home: LayoutBuilder(
+            builder: (context, constraints) {
+              debugPrint(constraints.maxWidth.toString());
+              if (constraints.maxWidth > 800) {
+                return Scaffold(
+                  body: Center(
+                    child: Text(constraints.maxWidth.toString()),
+                  ),
+                );
+              }
+              return HomePage();
+            },
+          ),
         ),
       );
 }
