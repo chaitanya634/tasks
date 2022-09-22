@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/data/enums.dart';
 import 'package:tasks/isar_db/collections.dart';
 import 'package:tasks/isar_db/collections_provider.dart';
 

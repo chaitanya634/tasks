@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasks/data/enums.dart';
 import 'package:tasks/isar_db/collections_provider.dart';
 
 import '../isar_db/collections.dart';
@@ -141,8 +140,7 @@ class DrawerBody extends StatelessWidget {
                               topRight: Radius.circular(16),
                             )),
                             context: context,
-                            builder: (context) =>
-                                TaskGroup(group: element),
+                            builder: (context) => TaskGroup(group: element),
                           );
                         },
                       );
@@ -213,15 +211,17 @@ class DrawerBody extends StatelessWidget {
                             onPressed: () => Navigator.pop(context),
                             child: const Text('Cancel'),
                           ),
-                          // TextButton(
-                          //   child: const Text('Save'),
-                          //   onPressed: () {
-                          //     context
-                          //         .read<ListsHandler>()
-                          //         .addList(0, MapEntry(listName, []));
-                          //     Navigator.pop(context);
-                          //   },
-                          // ),
+                          TextButton(
+                            child: const Text('Save'),
+                            onPressed: () {
+                              context.read<CollectionsProvider>().addList(
+                                    Lists()
+                                      ..groupId = 1
+                                      ..name = listName,
+                                  );
+                              Navigator.pop(context);
+                            },
+                          ),
                         ],
                       );
                     });
@@ -244,7 +244,6 @@ class DrawerBody extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (context) {
-                      // ignore: unused_local_variable
                       late String groupName;
                       return AlertDialog(
                         title: const Text('New Group'),
@@ -259,14 +258,14 @@ class DrawerBody extends StatelessWidget {
                           TextButton(
                               onPressed: () => Navigator.pop(context),
                               child: const Text('Cancel')),
-                          // TextButton(
-                          //     onPressed: () {
-                          //       context
-                          //           .read<ListsHandler>()
-                          //           .addGroup(groupName);
-                          //       Navigator.pop(context);
-                          //     },
-                          //     child: const Text('Save')),
+                          TextButton(
+                              onPressed: () {
+                                context
+                                    .read<CollectionsProvider>()
+                                    .addGroup(Groups()..name = groupName);
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Save')),
                         ],
                       );
                     });

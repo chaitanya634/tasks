@@ -147,6 +147,10 @@ class CollectionsProvider with ChangeNotifier {
     return isar.groups.filter().idGreaterThan(1).watch(fireImmediately: true);
   }
 
+  void addGroup(Groups group) async {
+    await isar.writeTxn(() async => await isar.groups.put(group));
+  }
+
   void removeGroupAt(int groupId) async {
     await isar.writeTxn(
         () async => isar.groups.filter().idEqualTo(groupId).deleteAll());
