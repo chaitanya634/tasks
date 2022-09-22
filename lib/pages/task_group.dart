@@ -40,7 +40,7 @@ class TaskGroup extends StatelessWidget {
                               onPressed: () {
                                 context.read<CollectionsProvider>().addList(
                                       Lists()
-                                        ..groupId = group.id
+                                        ..groupId = group.id!
                                         ..name = listName,
                                     );
                                 Navigator.pop(context);
@@ -63,7 +63,7 @@ class TaskGroup extends StatelessWidget {
         ),
         Expanded(
           child: StreamBuilder<List<Lists>>(
-              stream: context.read<CollectionsProvider>().getLists(group.id),
+              stream: context.read<CollectionsProvider>().getLists(group.id!),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.active &&
                     snapshot.hasData) {
@@ -83,7 +83,7 @@ class TaskGroup extends StatelessWidget {
                                         provider.setActiveGroupId(1);
                                         provider.setActiveListId(1);
                                         provider.setCurrentDayAppBarTitle();
-                                        provider.removeListAt(e.groupId, e.id);
+                                        provider.removeListAt(e.groupId, e.id!);
                                       },
                                       icon: const Icon(
                                         Icons.remove_rounded,
@@ -92,7 +92,7 @@ class TaskGroup extends StatelessWidget {
                                   onTap: () {
                                     var provider = context.read<CollectionsProvider>();
                                     provider.setActiveGroupId(e.groupId);
-                                    provider.setActiveListId(e.id);
+                                    provider.setActiveListId(e.id!);
                                     provider.setCustomAppBarTitle(e.name);
                                     Navigator.pop(context);
                                     Navigator.pop(context);

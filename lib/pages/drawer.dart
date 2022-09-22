@@ -78,14 +78,14 @@ class DrawerBody extends StatelessWidget {
                             provider.setActiveGroupId(1);
                             provider.setActiveListId(1);
                             provider.setCurrentDayAppBarTitle();
-                            provider.removeListAt(element.groupId, element.id);
+                            provider.removeListAt(element.groupId, element.id!);
                           },
                         ),
                         title: Text(element.name),
                         onTap: () {
                           var provider = context.read<CollectionsProvider>();
                           provider.setActiveGroupId(element.groupId);
-                          provider.setActiveListId(element.id);
+                          provider.setActiveListId(element.id!);
                           provider.setCustomAppBarTitle(element.name);
                           Navigator.pop(context);
                         },
@@ -128,7 +128,7 @@ class DrawerBody extends StatelessWidget {
                             provider.setActiveGroupId(1);
                             provider.setActiveListId(1);
                             provider.setCurrentDayAppBarTitle();
-                            provider.removeGroupAt(element.id);
+                            provider.removeGroupAt(element.id!);
                           },
                         ),
                         title: Text(element.name),

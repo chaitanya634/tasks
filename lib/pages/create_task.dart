@@ -208,7 +208,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
 
                 context
                     .read<CollectionsProvider>()
-                    .addSubtasks(task.id, subtasks);
+                    .addSubtasks(task.id!, subtasks);
 
                 ScaffoldMessenger.of(context).clearSnackBars();
                 Navigator.pop(context);
@@ -322,7 +322,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                 setState(() {
                   subtasks.add(
                     Subtasks()
-                      ..taskId = task.id
+                      ..taskId = task.id!
                       ..listId = task.listId
                       ..groupId = task.groupId,
                   );
@@ -551,7 +551,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             title:
                 Text('Delete Task', style: TextStyle(color: colorScheme.error)),
             onTap: () {
-              context.read<CollectionsProvider>().removeTask(task.id);
+              context.read<CollectionsProvider>().removeTask(task.id!);
               Navigator.pop(context);
             },
           ),

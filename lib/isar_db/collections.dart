@@ -3,7 +3,7 @@ part 'collections.g.dart';
 
 @Collection()
 class Subtasks {
-  Id id = Isar.autoIncrement;
+  int? id = Isar.autoIncrement;
   late int groupId;
   late int listId;
   late int taskId;
@@ -14,7 +14,7 @@ class Subtasks {
 
 @Collection()
 class Tasks {
-  Id id = Isar.autoIncrement;
+  int? id = Isar.autoIncrement;
   late int groupId;
   late int listId;
 
@@ -29,7 +29,7 @@ class Tasks {
 
 @Collection()
 class Lists {
-  Id id = Isar.autoIncrement;
+  int? id = Isar.autoIncrement;
   late int groupId;
 
   late String name;
@@ -37,7 +37,7 @@ class Lists {
 
 @Collection()
 class Groups {
-  Id id = Isar.autoIncrement;
+  int? id = Isar.autoIncrement;
 
   @Index(unique: true)
   late String name;
