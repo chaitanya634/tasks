@@ -201,7 +201,8 @@ class _TabletLayoutState extends State<TabletLayout> {
                                       onChanged: (value) {
                                         context
                                             .read<CollectionsProvider>()
-                                            .updateTaskChecked(value!, task.id!);
+                                            .updateTaskChecked(
+                                                value!, task.id!);
                                       },
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(5),
@@ -294,6 +295,7 @@ class _TabletLayoutState extends State<TabletLayout> {
           color: colorScheme.onSecondaryContainer,
         ),
       ),
+    
     );
   }
 }
