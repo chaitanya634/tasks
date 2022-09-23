@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         home: LayoutBuilder(
           builder: (context, constraints) {
-            // debugPrint(constraints.maxWidth.toString());
+            debugPrint(constraints.maxWidth.toString());
             if (constraints.maxHeight < 240) {
               return Row(
                   mainAxisSize: MainAxisSize.min,
@@ -61,9 +61,9 @@ class MyApp extends StatelessWidget {
                     )
                   ]);
             }
-            if (constraints.maxWidth > 0 && constraints.maxWidth < 382) {
+            if (constraints.maxWidth > 0 && constraints.maxWidth < 466) {
               return const PhoneLayout();
-            } else if (constraints.maxWidth > 382 &&
+            } else if (constraints.maxWidth > 465 &&
                 constraints.maxWidth < 840) {
               return const TabletLayout();
             } else {

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-ThemeData dynamicDarkTheme(ColorScheme darkDynamic) => ThemeData(
-      useMaterial3: true,
-      colorScheme: darkDynamic,
-      appBarTheme: const AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-        ),
-      ),
-    );
+// ThemeData dynamicDarkTheme(ColorScheme darkDynamic) => ThemeData(
+//       useMaterial3: true,
+//       colorScheme: darkDynamic,
+//       appBarTheme: const AppBarTheme(
+//         systemOverlayStyle: SystemUiOverlayStyle(
+//           statusBarColor: Colors.transparent,
+//         ),
+//       ),
+//     );
 
 ThemeData darkTheme() => ThemeData(
       useMaterial3: true,
@@ -18,10 +18,10 @@ ThemeData darkTheme() => ThemeData(
           statusBarColor: Colors.transparent,
         ),
       ),
-      colorScheme: const ColorScheme(
+      colorScheme: ColorScheme(
         brightness: Brightness.dark,
         primary: Color(0xFFF9BB6C),
-        primaryContainer: Color(0xFF653E00),
+        primaryContainer: const HSLColor.fromAHSL(1, 37, 1, 0.22).toColor(),
         onPrimary: Color(0xFF472A00),
         onPrimaryContainer: Color(0xFFFFDDB8),
         inversePrimary: Color(0xFF83540D),
@@ -35,7 +35,7 @@ ThemeData darkTheme() => ThemeData(
         onSurfaceVariant: Color(0xFFD1C4B8),
         inverseSurface: Color(0xFFEAE1DB),
         onInverseSurface: Color(0xFF34302C),
-        background: Color(0xFF1F1B17),
+        background: HSLColor.fromAHSL(1, 0, 0, 0.19).toColor(),
         onBackground: Color(0xFFEAE1DB),
         outline: Color(0xFF9A8F84),
         error: Color(0xFFFFB4AB),

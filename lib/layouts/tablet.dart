@@ -34,9 +34,12 @@ class _TabletLayoutState extends State<TabletLayout> {
                   debugPrint('sk: ${scaffoldKey.currentState}');
                   scaffoldKey.currentState?.openDrawer();
                 },
-                icon: Icon(
-                  Icons.menu_open_rounded,
-                  color: colorScheme.secondary,
+                icon: RotatedBox(
+                  quarterTurns: 2,
+                  child: Icon(
+                    Icons.menu_open_rounded,
+                    color: colorScheme.secondary,
+                  ),
                 ),
               ),
             ),

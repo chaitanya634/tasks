@@ -18,13 +18,19 @@ class DesktopLayout extends StatelessWidget {
       body: Row(
         children: [
           //drawer
-          const Expanded(flex: 1, child: DrawerBody()),
+          ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 342),
+              child: const Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: DrawerBody(),
+              )),
 
           //tasks list
           Expanded(
             flex: 2,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
               child: Container(
                 decoration: BoxDecoration(
                   boxShadow: [
@@ -251,29 +257,44 @@ class DesktopLayout extends StatelessWidget {
               groupAlignment: 0,
               backgroundColor: Colors.transparent,
               indicatorColor: colorScheme.primaryContainer,
-              selectedIconTheme: IconThemeData(color: colorScheme.onPrimaryContainer),
+              selectedIconTheme:
+                  IconThemeData(color: colorScheme.onPrimaryContainer),
+              unselectedIconTheme: IconThemeData(color: colorScheme.secondary),
+            
               destinations: [
+                //my day
                 NavigationRailDestination(
-                  icon: Icon(
-                    context.watch<CollectionsProvider>().activeListId == 1
-                        ? Icons.today
-                        : Icons.today_outlined,
-                    size: 21,
+                  icon: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Icon(
+                      context.watch<CollectionsProvider>().activeListId == 1
+                          ? Icons.today
+                          : Icons.today_outlined,
+                    ),
                   ),
                   label: const Text('My Day'),
                 ),
+                //planned
                 const NavigationRailDestination(
-                  icon: Icon(
-                    Icons.task_alt_rounded,
-                    size: 21,
+                  icon: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Icon(
+                      Icons.task_alt_rounded,
+                    ),
                   ),
                   label: Text('Planned'),
                 ),
+
+                //starred
                 NavigationRailDestination(
-                  icon: Icon(
-                    context.watch<CollectionsProvider>().activeListId == 3
-                        ? Icons.star_rounded
-                        : Icons.star_outline_rounded,
+                  icon: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Icon(
+                      context.watch<CollectionsProvider>().activeListId == 3
+                          ? Icons.star_rounded
+                          : Icons.star_outline_rounded,
+                      size: 28,
+                    ),
                   ),
                   label: const Text('Starred'),
                 ),
