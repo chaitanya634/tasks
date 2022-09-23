@@ -14,6 +14,7 @@ import 'layouts/tablet.dart';
 import 'themes/dark.dart';
 import 'themes/light.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Directory? directory = kIsWeb ? null : await getApplicationSupportDirectory();
@@ -28,6 +29,7 @@ void main() async {
     ),
   );
 }
+
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
