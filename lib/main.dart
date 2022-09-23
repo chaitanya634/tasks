@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -34,44 +33,43 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) => DynamicColorBuilder(
-        builder: (lightDynamic, darkDynamic) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: lightDynamic == null
-              ? lightTheme()
-              : dynamicLightTheme(lightDynamic),
-          darkTheme:
-              darkDynamic == null ? darkTheme() : dynamicDarkTheme(darkDynamic),
-          themeMode: ThemeMode.system,
-          home: LayoutBuilder(
-            builder: (context, constraints) {
-              debugPrint(constraints.maxWidth.toString());
-              if (constraints.maxHeight < 240) {
-                return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        Icons.height,
-                        size: 120,
-                      ),
-                      Icon(
-                        Icons.error_outline_rounded,
-                        size: 120,
-                      )
-                    ]);
-              }
-              if (constraints.maxWidth > 0 && constraints.maxWidth < 382) {
-                return const PhoneLayout();
-              } else if (constraints.maxWidth > 382 &&
-                  constraints.maxWidth < 840) {
-                return const TabletLayout();
-              } else {
-                return const DesktopLayout();
-              }
-            },
-          ),
+  Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme(),
+        // lightDynamic == null
+        //     ? lightTheme()
+        //     : dynamicLightTheme(lightDynamic),
+        darkTheme: darkTheme(),
+        // darkDynamic == null ? darkTheme() : dynamicDarkTheme(darkDynamic),
+        themeMode: ThemeMode.system,
+        home: LayoutBuilder(
+          builder: (context, constraints) {
+            // debugPrint(constraints.maxWidth.toString());
+            if (constraints.maxHeight < 240) {
+              return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.height,
+                      size: 120,
+                    ),
+                    Icon(
+                      Icons.error_outline_rounded,
+                      size: 120,
+                    )
+                  ]);
+            }
+            if (constraints.maxWidth > 0 && constraints.maxWidth < 382) {
+              return const PhoneLayout();
+            } else if (constraints.maxWidth > 382 &&
+                constraints.maxWidth < 840) {
+              return const TabletLayout();
+            } else {
+              return const DesktopLayout();
+            }
+          },
         ),
       );
 }

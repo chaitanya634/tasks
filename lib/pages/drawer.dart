@@ -32,16 +32,16 @@ class DrawerBody extends StatelessWidget {
               ),
             ),
             shadowColor: colorScheme.shadow,
-            backgroundColor: colorScheme.secondaryContainer,
+            backgroundColor: Colors.transparent,
             floating: true,
-            pinned: true,
+            pinned: false,
             expandedHeight: 128.0,
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.person_rounded, color: colorScheme.secondary),
-              )
-            ],
+            // actions: [
+            //   IconButton(
+            //     onPressed: () {},
+            //     icon: Icon(Icons.person_rounded, color: colorScheme.secondary),
+            //   )
+            // ],
           ),
 
           SliverToBoxAdapter(
@@ -187,93 +187,92 @@ class DrawerBody extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 12,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton.icon(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      late String listName;
-                      return AlertDialog(
-                        title: const Text('New List'),
-                        content: TextField(
-                            onChanged: (value) => listName = value,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16)),
-                                label: const Text('List Name'))),
-                        actions: [
-                          //cancel
-                          TextButton(
+
+      //bottom app bar
+      bottomNavigationBar: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextButton.icon(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    late String listName;
+                    return AlertDialog(
+                      title: const Text('New List'),
+                      content: TextField(
+                          onChanged: (value) => listName = value,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16)),
+                              label: const Text('List Name'))),
+                      actions: [
+                        //cancel
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          child: const Text('Save'),
+                          onPressed: () {
+                            context.read<CollectionsProvider>().addList(
+                                  Lists()
+                                    ..groupId = 1
+                                    ..name = listName,
+                                );
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  });
+            },
+            icon: Icon(
+              Icons.playlist_add_rounded,
+              color: colorScheme.primary,
+            ),
+            label: Text(
+              'Add list',
+              style: TextStyle(color: colorScheme.primary),
+            ),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.create_new_folder_outlined,
+              color: colorScheme.primary,
+            ),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    late String groupName;
+                    return AlertDialog(
+                      title: const Text('New Group'),
+                      content: TextField(
+                          onChanged: (value) => groupName = value,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16)),
+                              label: const Text('Group Name'))),
+                      actions: [
+                        //cancel
+                        TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text('Cancel'),
-                          ),
-                          TextButton(
-                            child: const Text('Save'),
+                            child: const Text('Cancel')),
+                        TextButton(
                             onPressed: () {
-                              context.read<CollectionsProvider>().addList(
-                                    Lists()
-                                      ..groupId = 1
-                                      ..name = listName,
-                                  );
+                              context
+                                  .read<CollectionsProvider>()
+                                  .addGroup(Groups()..name = groupName);
                               Navigator.pop(context);
                             },
-                          ),
-                        ],
-                      );
-                    });
-              },
-              icon: Icon(
-                Icons.playlist_add_rounded,
-                color: colorScheme.primary,
-              ),
-              label: Text(
-                'Add list',
-                style: TextStyle(color: colorScheme.primary),
-              ),
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.create_new_folder_outlined,
-                color: colorScheme.primary,
-              ),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      late String groupName;
-                      return AlertDialog(
-                        title: const Text('New Group'),
-                        content: TextField(
-                            onChanged: (value) => groupName = value,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16)),
-                                label: const Text('Group Name'))),
-                        actions: [
-                          //cancel
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancel')),
-                          TextButton(
-                              onPressed: () {
-                                context
-                                    .read<CollectionsProvider>()
-                                    .addGroup(Groups()..name = groupName);
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Save')),
-                        ],
-                      );
-                    });
-              },
-            )
-          ],
-        ),
+                            child: const Text('Save')),
+                      ],
+                    );
+                  });
+            },
+          )
+        ],
       ),
     );
   }
