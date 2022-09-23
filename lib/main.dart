@@ -1,72 +1,54 @@
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
-import 'package:tasks/isar_db/collections_provider.dart';
-import 'package:tasks/layouts/desktop.dart';
-import 'package:tasks/layouts/phone.dart';
-import 'package:tasks/layouts/tablet.dart';
+
 import 'isar_db/collections.dart';
-import 'themes/light.dart';
+import 'isar_db/isar_database_provider.dart';
+import 'layouts/desktop.dart';
+import 'layouts/phone.dart';
+import 'layouts/tablet.dart';
 import 'themes/dark.dart';
+import 'themes/light.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Directory? dir;
-  if (!kIsWeb) {
-    dir = await getApplicationSupportDirectory();
-  }
+  Directory? directory = kIsWeb ? null : await getApplicationSupportDirectory();
   Isar isar = await Isar.open(
-    schemas: [SubtasksSchema, TasksSchema, ListsSchema, GroupsSchema],
-    directory: dir?.path,
+    schemas: [SubtaskSchema, TaskSchema, TaskListSchema, GroupSchema],
+    directory: directory?.path,
   );
   runApp(
     ChangeNotifierProvider(
-      create: (context) => CollectionsProvider(isar),
-      child: const MyApp(),
+      create: (context) => IsarDatabase(isar),
+      child: const App(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: lightTheme(),
-        // lightDynamic == null
-        //     ? lightTheme()
-        //     : dynamicLightTheme(lightDynamic),
-        darkTheme: darkTheme(),
-        // darkDynamic == null ? darkTheme() : dynamicDarkTheme(darkDynamic),
+        theme: lightThemeData(context),
+        darkTheme: darkThemeData(context),
         themeMode: ThemeMode.system,
         home: LayoutBuilder(
           builder: (context, constraints) {
-            debugPrint(constraints.maxWidth.toString());
-            if (constraints.maxHeight < 240) {
-              return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.height,
-                      size: 120,
-                    ),
-                    Icon(
-                      Icons.error_outline_rounded,
-                      size: 120,
-                    )
-                  ]);
-            }
-            if (constraints.maxWidth > 0 && constraints.maxWidth < 466) {
+            double viewportWidth = constraints.maxWidth;
+            if (viewportWidth > 0 && viewportWidth < 466) {
+              //0 to 465
               return const PhoneLayout();
-            } else if (constraints.maxWidth > 465 &&
-                constraints.maxWidth < 840) {
+            } else if (viewportWidth > 465 && viewportWidth < 840) {
+              //466 to 839
               return const TabletLayout();
             } else {
+              //840 to infinity
               return const DesktopLayout();
             }
           },
