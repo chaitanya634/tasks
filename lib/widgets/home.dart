@@ -1,7 +1,8 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks/isar_db/collections.dart';
-import 'package:tasks/isar_db/collections_provider.dart';
+import 'package:tasks/isar_db/isar_database_provider.dart';
 import '../data/algos.dart';
 import 'create_task.dart';
 import 'drawer.dart';
@@ -179,6 +180,7 @@ class HomePage extends StatelessWidget {
           child: DrawerBody(),
         ),
       ),
+
       bottomNavigationBar: NavigationBar(
         height: 48,
         surfaceTintColor: colorScheme.surface,
@@ -231,7 +233,9 @@ class HomePage extends StatelessWidget {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: 
+      
+      FloatingActionButton(
         elevation: 2.5,
         backgroundColor: colorScheme.primaryContainer,
         onPressed: () {
@@ -264,3 +268,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+*/

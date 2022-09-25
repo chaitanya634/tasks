@@ -35,12 +35,12 @@ enum RepeatTask {
 }
 
 enum DefaultLists {
-  myDay,
-  planned,
-  starred,
-  shopping,
-  ideas,
-  plans,
+  MyDay,
+  Planned,
+  Starred,
+  Shopping,
+  Ideas,
+  Plans,
 }
 
-enum DefaultListGroup { main, office }
+enum DefaultGroups { Main, Office }

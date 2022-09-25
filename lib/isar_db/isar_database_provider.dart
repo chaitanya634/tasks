@@ -3,58 +3,77 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 
+import 'collections.dart';
 import '../data/algos.dart';
 import '../data/enums.dart';
-import 'collections.dart';
 
-class CollectionsProvider with ChangeNotifier {
+class IsarDatabase with ChangeNotifier {
   late Isar isar;
   late Widget homePageAppBarTitle;
-  int activeGroupId = 1;
-  int activeListId = 1;
+  int activeGroupId = DefaultGroups.Main.index;
+  int activeListId = DefaultLists.MyDay.index;
 
-  CollectionsProvider(this.isar) {
+  IsarDatabase(this.isar) {
     initIsar();
     setCurrentDayAppBarTitle();
   }
 
   void initIsar() async {
-    //create default groups
-    int numGroups = await isar.groupss.count();
+    // await isar.writeTxn((isar) => isar.clear());
+
+    // create default groups
+    int numGroups = await isar.groups.count();
     if (numGroups == 0) {
-      var mainGroup = Groups()..name = DefaultListGroup.main.name;
-      var officeGroup = Groups()..name = DefaultListGroup.office.name;
-      isar.writeTxn((isard) async {
-        await isar.groupss.putAll([mainGroup, officeGroup]);
+      isar.writeTxn((isar) async {
+        await isar.groups.putAll([
+          Group(
+            id: DefaultGroups.Main.index,
+            name: DefaultGroups.Main.name,
+          ),
+          Group(
+            id: DefaultGroups.Office.index,
+            name: DefaultGroups.Office.name,
+          ),
+        ]);
       });
     }
 
     //create default lists
-    int numLists = await isar.listss.count();
+    int numLists = await isar.taskLists.count();
     if (numLists == 0) {
-      var defaultLists = [
-        Lists()
-          ..groupId = activeGroupId
-          ..name = DefaultLists.myDay.name,
-        Lists()
-          ..groupId = activeGroupId
-          ..name = DefaultLists.planned.name,
-        Lists()
-          ..groupId = activeGroupId
-          ..name = DefaultLists.starred.name,
-        Lists()
-          ..groupId = activeGroupId
-          ..name = DefaultLists.shopping.name,
-        Lists()
-          ..groupId = activeGroupId
-          ..name = DefaultLists.ideas.name,
-        Lists()
-          ..groupId = activeGroupId
-          ..name = DefaultLists.plans.name,
-      ];
-
       isar.writeTxn((isar) async {
-        await isar.listss.putAll(defaultLists);
+        await isar.taskLists.putAll([
+          TaskList(
+            groupId: DefaultGroups.Main.index,
+            name: DefaultLists.MyDay.name,
+            id: DefaultLists.MyDay.index,
+          ),
+          TaskList(
+            groupId: DefaultGroups.Main.index,
+            name: DefaultLists.Planned.name,
+            id: DefaultLists.Planned.index,
+          ),
+          TaskList(
+            groupId: DefaultGroups.Main.index,
+            name: DefaultLists.Starred.name,
+            id: DefaultLists.Starred.index,
+          ),
+          TaskList(
+            groupId: DefaultGroups.Main.index,
+            name: DefaultLists.Shopping.name,
+            id: DefaultLists.Shopping.index,
+          ),
+          TaskList(
+            groupId: DefaultGroups.Main.index,
+            name: DefaultLists.Ideas.name,
+            id: DefaultLists.Ideas.index,
+          ),
+          TaskList(
+            groupId: DefaultGroups.Main.index,
+            name: DefaultLists.Plans.name,
+            id: DefaultLists.Plans.index,
+          ),
+        ]);
       });
     }
   }
@@ -143,33 +162,34 @@ class CollectionsProvider with ChangeNotifier {
   }
 
   //work with groups
-  Stream<List<Groups>> getGroups() {
-    return isar.groupss.filter().idGreaterThan(1).watch(initialReturn: true);
+  Stream<List<Group>> getGroups() {
+    return isar.groups.filter().idGreaterThan(0).watch(initialReturn: true);
   }
 
-  void addGroup(Groups group) async {
-    await isar.writeTxn((isar) async => await isar.groupss.put(group));
+  void addGroup(Group group) async {
+    await isar.writeTxn((isar) async => await isar.groups.put(group));
   }
 
   void removeGroupAt(int groupId) async {
     await isar.writeTxn(
-        (isar) async => isar.groupss.filter().idEqualTo(groupId).deleteAll());
+      (isar) async => isar.groups.filter().idEqualTo(groupId).deleteAll(),
+    );
   }
 
   //work with lists
-  Stream<List<Lists>> getLists(int groupId) {
-    return isar.listss
+  Stream<List<TaskList>> getLists(int groupId) {
+    return isar.taskLists
         .filter()
         .groupIdEqualTo(groupId)
         .watch(initialReturn: true);
   }
 
-  void addList(Lists list) async {
-    await isar.writeTxn((isar) async => await isar.listss.put(list));
+  void addList(TaskList list) async {
+    await isar.writeTxn((isar) async => await isar.taskLists.put(list));
   }
 
   void removeListAt(int groupId, int listId) async {
-    isar.writeTxn((isar) async => await isar.listss
+    isar.writeTxn((isar) async => await isar.taskLists
         .filter()
         .idEqualTo(listId)
         .and()
@@ -178,8 +198,8 @@ class CollectionsProvider with ChangeNotifier {
   }
 
   //work with tasks
-  Stream<List<Tasks>> getTasks() {
-    return isar.taskss
+  Stream<List<Task>> getTasks() {
+    return isar.tasks
         .filter()
         .groupIdEqualTo(activeGroupId)
         .and()
@@ -188,42 +208,42 @@ class CollectionsProvider with ChangeNotifier {
   }
 
   void updateTaskChecked(bool checkValue, int taskId) async {
-    var task = await isar.taskss.get(taskId);
+    var task = await isar.tasks.get(taskId);
     task!.isChecked = checkValue;
     await isar.writeTxn((isar) async {
-      await isar.taskss.filter().idEqualTo(taskId).deleteFirst();
-      await isar.taskss.put(task);
+      await isar.tasks.filter().idEqualTo(taskId).deleteFirst();
+      await isar.tasks.put(task);
     });
   }
 
-  void updateTask(Tasks task) async {
+  void updateTask(Task task) async {
     await isar.writeTxn((isar) async {
-      await isar.taskss.filter().idEqualTo(task.id!).deleteFirst();
-      await isar.taskss.put(task);
+      await isar.tasks.filter().idEqualTo(task.id!).deleteFirst();
+      await isar.tasks.put(task);
     });
   }
 
-  void addTask(Tasks task) async {
-    await isar.writeTxn((isar) async => await isar.taskss.put(task));
+  void addTask(Task task) async {
+    await isar.writeTxn((isar) async => await isar.tasks.put(task));
   }
 
   void removeTask(int taskId) async {
-    await isar.writeTxn((isar) async => await isar.taskss.delete(taskId));
+    await isar.writeTxn((isar) async => await isar.tasks.delete(taskId));
   }
 
   Future<int> getUniqueTaskId() async {
-    var numTasks = await isar.taskss.count();
+    var numTasks = await isar.tasks.count();
     if (numTasks == 0) {
       return 1;
     } else {
-      var tasks = await isar.taskss.where().findAll();
+      var tasks = await isar.tasks.where().findAll();
       return tasks.last.id! + 1;
     }
   }
 
   //work with subtask
-  Future<List<Subtasks>> getSubtasks(int taskId) async {
-    return await isar.subtaskss
+  Future<List<Subtask>> getSubtasks(int taskId) async {
+    return await isar.subtasks
         .filter()
         .groupIdEqualTo(activeGroupId)
         .and()
@@ -233,9 +253,9 @@ class CollectionsProvider with ChangeNotifier {
         .findAll();
   }
 
-  void addSubtasks(int taskId, List<Subtasks> subtasks) async {
+  void addSubtasks(int taskId, List<Subtask> subtasks) async {
     await isar.writeTxn((isar) async {
-      await isar.subtaskss
+      await isar.subtasks
           .filter()
           .groupIdEqualTo(activeGroupId)
           .and()
@@ -243,7 +263,7 @@ class CollectionsProvider with ChangeNotifier {
           .and()
           .taskIdEqualTo(taskId)
           .deleteAll();
-      await isar.subtaskss.putAll(subtasks);
+      await isar.subtasks.putAll(subtasks);
     });
   }
 }

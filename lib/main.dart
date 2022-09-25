@@ -14,7 +14,6 @@ import 'layouts/tablet.dart';
 import 'themes/dark.dart';
 import 'themes/light.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Directory? directory = kIsWeb ? null : await getApplicationSupportDirectory();
@@ -30,28 +29,29 @@ void main() async {
   );
 }
 
-
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: lightThemeData(context),
-        darkTheme: darkThemeData(context),
+        theme: lightThemeData(),
+        darkTheme: darkThemeData(),
         themeMode: ThemeMode.system,
         home: LayoutBuilder(
           builder: (context, constraints) {
+            var scaffoldKey = GlobalKey<ScaffoldState>();
+            var colorScheme = Theme.of(context).colorScheme;
             double viewportWidth = constraints.maxWidth;
             if (viewportWidth > 0 && viewportWidth < 466) {
               //0 to 465
-              return const PhoneLayout();
+              return PhoneLayout(colorScheme, scaffoldKey);
             } else if (viewportWidth > 465 && viewportWidth < 840) {
               //466 to 839
-              return const TabletLayout();
+              return TabletLayout(colorScheme, scaffoldKey);
             } else {
               //840 to infinity
-              return const DesktopLayout();
+              return DesktopLayout(colorScheme);
             }
           },
         ),

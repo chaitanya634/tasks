@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 part of 'collections.dart';
 
 // **************************************************************************
@@ -10,14 +8,14 @@ part of 'collections.dart';
 
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
-extension GetSubtasksCollection on Isar {
-  IsarCollection<Subtasks> get subtaskss => getCollection();
+extension GetSubtaskCollection on Isar {
+  IsarCollection<Subtask> get subtasks => getCollection();
 }
 
-const SubtasksSchema = CollectionSchema(
-  name: 'Subtasks',
+const SubtaskSchema = CollectionSchema(
+  name: 'Subtask',
   schema:
-      '{"name":"Subtasks","idName":"id","properties":[{"name":"groupId","type":"Long"},{"name":"isChecked","type":"Bool"},{"name":"listId","type":"Long"},{"name":"taskId","type":"Long"},{"name":"title","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Subtask","idName":"id","properties":[{"name":"groupId","type":"Long"},{"name":"isChecked","type":"Bool"},{"name":"listId","type":"Long"},{"name":"taskId","type":"Long"},{"name":"title","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'groupId': 0,
@@ -31,20 +29,20 @@ const SubtasksSchema = CollectionSchema(
   indexValueTypes: {},
   linkIds: {},
   backlinkLinkNames: {},
-  getId: _subtasksGetId,
-  setId: _subtasksSetId,
-  getLinks: _subtasksGetLinks,
-  attachLinks: _subtasksAttachLinks,
-  serializeNative: _subtasksSerializeNative,
-  deserializeNative: _subtasksDeserializeNative,
-  deserializePropNative: _subtasksDeserializePropNative,
-  serializeWeb: _subtasksSerializeWeb,
-  deserializeWeb: _subtasksDeserializeWeb,
-  deserializePropWeb: _subtasksDeserializePropWeb,
+  getId: _subtaskGetId,
+  setId: _subtaskSetId,
+  getLinks: _subtaskGetLinks,
+  attachLinks: _subtaskAttachLinks,
+  serializeNative: _subtaskSerializeNative,
+  deserializeNative: _subtaskDeserializeNative,
+  deserializePropNative: _subtaskDeserializePropNative,
+  serializeWeb: _subtaskSerializeWeb,
+  deserializeWeb: _subtaskDeserializeWeb,
+  deserializePropWeb: _subtaskDeserializePropWeb,
   version: 3,
 );
 
-int? _subtasksGetId(Subtasks object) {
+int? _subtaskGetId(Subtask object) {
   if (object.id == Isar.autoIncrement) {
     return null;
   } else {
@@ -52,18 +50,18 @@ int? _subtasksGetId(Subtasks object) {
   }
 }
 
-void _subtasksSetId(Subtasks object, int id) {
+void _subtaskSetId(Subtask object, int id) {
   object.id = id;
 }
 
-List<IsarLinkBase> _subtasksGetLinks(Subtasks object) {
+List<IsarLinkBase> _subtaskGetLinks(Subtask object) {
   return [];
 }
 
-void _subtasksSerializeNative(
-    IsarCollection<Subtasks> collection,
+void _subtaskSerializeNative(
+    IsarCollection<Subtask> collection,
     IsarRawObject rawObj,
-    Subtasks object,
+    Subtask object,
     int staticSize,
     List<int> offsets,
     AdapterAlloc alloc) {
@@ -95,19 +93,20 @@ void _subtasksSerializeNative(
   writer.writeBytes(offsets[4], _title);
 }
 
-Subtasks _subtasksDeserializeNative(IsarCollection<Subtasks> collection, int id,
+Subtask _subtaskDeserializeNative(IsarCollection<Subtask> collection, int id,
     IsarBinaryReader reader, List<int> offsets) {
-  final object = Subtasks();
-  object.groupId = reader.readLong(offsets[0]);
+  final object = Subtask(
+    groupId: reader.readLong(offsets[0]),
+    isChecked: reader.readBool(offsets[1]),
+    listId: reader.readLong(offsets[2]),
+    taskId: reader.readLong(offsets[3]),
+    title: reader.readStringOrNull(offsets[4]),
+  );
   object.id = id;
-  object.isChecked = reader.readBool(offsets[1]);
-  object.listId = reader.readLong(offsets[2]);
-  object.taskId = reader.readLong(offsets[3]);
-  object.title = reader.readStringOrNull(offsets[4]);
   return object;
 }
 
-P _subtasksDeserializePropNative<P>(
+P _subtaskDeserializePropNative<P>(
     int id, IsarBinaryReader reader, int propertyIndex, int offset) {
   switch (propertyIndex) {
     case -1:
@@ -127,8 +126,8 @@ P _subtasksDeserializePropNative<P>(
   }
 }
 
-dynamic _subtasksSerializeWeb(
-    IsarCollection<Subtasks> collection, Subtasks object) {
+dynamic _subtaskSerializeWeb(
+    IsarCollection<Subtask> collection, Subtask object) {
   final jsObj = IsarNative.newJsObject();
   IsarNative.jsObjectSet(jsObj, 'groupId', object.groupId);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
@@ -139,22 +138,21 @@ dynamic _subtasksSerializeWeb(
   return jsObj;
 }
 
-Subtasks _subtasksDeserializeWeb(
-    IsarCollection<Subtasks> collection, dynamic jsObj) {
-  final object = Subtasks();
-  object.groupId =
-      IsarNative.jsObjectGet(jsObj, 'groupId') ?? double.negativeInfinity;
+Subtask _subtaskDeserializeWeb(
+    IsarCollection<Subtask> collection, dynamic jsObj) {
+  final object = Subtask(
+    groupId:
+        IsarNative.jsObjectGet(jsObj, 'groupId') ?? double.negativeInfinity,
+    isChecked: IsarNative.jsObjectGet(jsObj, 'isChecked') ?? false,
+    listId: IsarNative.jsObjectGet(jsObj, 'listId') ?? double.negativeInfinity,
+    taskId: IsarNative.jsObjectGet(jsObj, 'taskId') ?? double.negativeInfinity,
+    title: IsarNative.jsObjectGet(jsObj, 'title'),
+  );
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
-  object.isChecked = IsarNative.jsObjectGet(jsObj, 'isChecked') ?? false;
-  object.listId =
-      IsarNative.jsObjectGet(jsObj, 'listId') ?? double.negativeInfinity;
-  object.taskId =
-      IsarNative.jsObjectGet(jsObj, 'taskId') ?? double.negativeInfinity;
-  object.title = IsarNative.jsObjectGet(jsObj, 'title');
   return object;
 }
 
-P _subtasksDeserializePropWeb<P>(Object jsObj, String propertyName) {
+P _subtaskDeserializePropWeb<P>(Object jsObj, String propertyName) {
   switch (propertyName) {
     case 'groupId':
       return (IsarNative.jsObjectGet(jsObj, 'groupId') ??
@@ -176,16 +174,16 @@ P _subtasksDeserializePropWeb<P>(Object jsObj, String propertyName) {
   }
 }
 
-void _subtasksAttachLinks(IsarCollection col, int id, Subtasks object) {}
+void _subtaskAttachLinks(IsarCollection col, int id, Subtask object) {}
 
-extension SubtasksQueryWhereSort on QueryBuilder<Subtasks, Subtasks, QWhere> {
-  QueryBuilder<Subtasks, Subtasks, QAfterWhere> anyId() {
+extension SubtaskQueryWhereSort on QueryBuilder<Subtask, Subtask, QWhere> {
+  QueryBuilder<Subtask, Subtask, QAfterWhere> anyId() {
     return addWhereClauseInternal(const IdWhereClause.any());
   }
 }
 
-extension SubtasksQueryWhere on QueryBuilder<Subtasks, Subtasks, QWhereClause> {
-  QueryBuilder<Subtasks, Subtasks, QAfterWhereClause> idEqualTo(int id) {
+extension SubtaskQueryWhere on QueryBuilder<Subtask, Subtask, QWhereClause> {
+  QueryBuilder<Subtask, Subtask, QAfterWhereClause> idEqualTo(int id) {
     return addWhereClauseInternal(IdWhereClause.between(
       lower: id,
       includeLower: true,
@@ -194,7 +192,7 @@ extension SubtasksQueryWhere on QueryBuilder<Subtasks, Subtasks, QWhereClause> {
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterWhereClause> idNotEqualTo(int id) {
+  QueryBuilder<Subtask, Subtask, QAfterWhereClause> idNotEqualTo(int id) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(
         IdWhereClause.lessThan(upper: id, includeUpper: false),
@@ -210,21 +208,21 @@ extension SubtasksQueryWhere on QueryBuilder<Subtasks, Subtasks, QWhereClause> {
     }
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterWhereClause> idGreaterThan(int id,
+  QueryBuilder<Subtask, Subtask, QAfterWhereClause> idGreaterThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.greaterThan(lower: id, includeLower: include),
     );
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterWhereClause> idLessThan(int id,
+  QueryBuilder<Subtask, Subtask, QAfterWhereClause> idLessThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.lessThan(upper: id, includeUpper: include),
     );
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterWhereClause> idBetween(
+  QueryBuilder<Subtask, Subtask, QAfterWhereClause> idBetween(
     int lowerId,
     int upperId, {
     bool includeLower = true,
@@ -239,9 +237,9 @@ extension SubtasksQueryWhere on QueryBuilder<Subtasks, Subtasks, QWhereClause> {
   }
 }
 
-extension SubtasksQueryFilter
-    on QueryBuilder<Subtasks, Subtasks, QFilterCondition> {
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> groupIdEqualTo(
+extension SubtaskQueryFilter
+    on QueryBuilder<Subtask, Subtask, QFilterCondition> {
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> groupIdEqualTo(
       int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
@@ -250,7 +248,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> groupIdGreaterThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> groupIdGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -262,7 +260,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> groupIdLessThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> groupIdLessThan(
     int value, {
     bool include = false,
   }) {
@@ -274,7 +272,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> groupIdBetween(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> groupIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -289,7 +287,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> idIsNull() {
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> idIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'id',
@@ -297,7 +295,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> idEqualTo(int value) {
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> idEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'id',
@@ -305,7 +303,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> idGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -317,7 +315,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> idLessThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> idLessThan(
     int value, {
     bool include = false,
   }) {
@@ -329,7 +327,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> idBetween(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> idBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -344,7 +342,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> isCheckedEqualTo(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> isCheckedEqualTo(
       bool value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
@@ -353,7 +351,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> listIdEqualTo(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> listIdEqualTo(
       int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
@@ -362,7 +360,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> listIdGreaterThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> listIdGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -374,7 +372,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> listIdLessThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> listIdLessThan(
     int value, {
     bool include = false,
   }) {
@@ -386,7 +384,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> listIdBetween(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> listIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -401,7 +399,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> taskIdEqualTo(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> taskIdEqualTo(
       int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
@@ -410,7 +408,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> taskIdGreaterThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> taskIdGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -422,7 +420,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> taskIdLessThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> taskIdLessThan(
     int value, {
     bool include = false,
   }) {
@@ -434,7 +432,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> taskIdBetween(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> taskIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -449,7 +447,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> titleIsNull() {
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> titleIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'title',
@@ -457,7 +455,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> titleEqualTo(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> titleEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -469,7 +467,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> titleGreaterThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> titleGreaterThan(
     String? value, {
     bool caseSensitive = true,
     bool include = false,
@@ -483,7 +481,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> titleLessThan(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> titleLessThan(
     String? value, {
     bool caseSensitive = true,
     bool include = false,
@@ -497,7 +495,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> titleBetween(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> titleBetween(
     String? lower,
     String? upper, {
     bool caseSensitive = true,
@@ -514,7 +512,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> titleStartsWith(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> titleStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -526,7 +524,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> titleEndsWith(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> titleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -538,7 +536,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> titleContains(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> titleContains(
       String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
@@ -549,7 +547,7 @@ extension SubtasksQueryFilter
     ));
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterFilterCondition> titleMatches(
+  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> titleMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
@@ -561,176 +559,175 @@ extension SubtasksQueryFilter
   }
 }
 
-extension SubtasksQueryLinks
-    on QueryBuilder<Subtasks, Subtasks, QFilterCondition> {}
+extension SubtaskQueryLinks
+    on QueryBuilder<Subtask, Subtask, QFilterCondition> {}
 
-extension SubtasksQueryWhereSortBy
-    on QueryBuilder<Subtasks, Subtasks, QSortBy> {
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByGroupId() {
+extension SubtaskQueryWhereSortBy on QueryBuilder<Subtask, Subtask, QSortBy> {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByGroupId() {
     return addSortByInternal('groupId', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByGroupIdDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByGroupIdDesc() {
     return addSortByInternal('groupId', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortById() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByIdDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByIsChecked() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByIsChecked() {
     return addSortByInternal('isChecked', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByIsCheckedDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByIsCheckedDesc() {
     return addSortByInternal('isChecked', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByListId() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByListId() {
     return addSortByInternal('listId', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByListIdDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByListIdDesc() {
     return addSortByInternal('listId', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByTaskId() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByTaskId() {
     return addSortByInternal('taskId', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByTaskIdDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByTaskIdDesc() {
     return addSortByInternal('taskId', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByTitle() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByTitle() {
     return addSortByInternal('title', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> sortByTitleDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> sortByTitleDesc() {
     return addSortByInternal('title', Sort.desc);
   }
 }
 
-extension SubtasksQueryWhereSortThenBy
-    on QueryBuilder<Subtasks, Subtasks, QSortThenBy> {
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByGroupId() {
+extension SubtaskQueryWhereSortThenBy
+    on QueryBuilder<Subtask, Subtask, QSortThenBy> {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByGroupId() {
     return addSortByInternal('groupId', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByGroupIdDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByGroupIdDesc() {
     return addSortByInternal('groupId', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenById() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByIsChecked() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByIsChecked() {
     return addSortByInternal('isChecked', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByIsCheckedDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByIsCheckedDesc() {
     return addSortByInternal('isChecked', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByListId() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByListId() {
     return addSortByInternal('listId', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByListIdDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByListIdDesc() {
     return addSortByInternal('listId', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByTaskId() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByTaskId() {
     return addSortByInternal('taskId', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByTaskIdDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByTaskIdDesc() {
     return addSortByInternal('taskId', Sort.desc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByTitle() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByTitle() {
     return addSortByInternal('title', Sort.asc);
   }
 
-  QueryBuilder<Subtasks, Subtasks, QAfterSortBy> thenByTitleDesc() {
+  QueryBuilder<Subtask, Subtask, QAfterSortBy> thenByTitleDesc() {
     return addSortByInternal('title', Sort.desc);
   }
 }
 
-extension SubtasksQueryWhereDistinct
-    on QueryBuilder<Subtasks, Subtasks, QDistinct> {
-  QueryBuilder<Subtasks, Subtasks, QDistinct> distinctByGroupId() {
+extension SubtaskQueryWhereDistinct
+    on QueryBuilder<Subtask, Subtask, QDistinct> {
+  QueryBuilder<Subtask, Subtask, QDistinct> distinctByGroupId() {
     return addDistinctByInternal('groupId');
   }
 
-  QueryBuilder<Subtasks, Subtasks, QDistinct> distinctById() {
+  QueryBuilder<Subtask, Subtask, QDistinct> distinctById() {
     return addDistinctByInternal('id');
   }
 
-  QueryBuilder<Subtasks, Subtasks, QDistinct> distinctByIsChecked() {
+  QueryBuilder<Subtask, Subtask, QDistinct> distinctByIsChecked() {
     return addDistinctByInternal('isChecked');
   }
 
-  QueryBuilder<Subtasks, Subtasks, QDistinct> distinctByListId() {
+  QueryBuilder<Subtask, Subtask, QDistinct> distinctByListId() {
     return addDistinctByInternal('listId');
   }
 
-  QueryBuilder<Subtasks, Subtasks, QDistinct> distinctByTaskId() {
+  QueryBuilder<Subtask, Subtask, QDistinct> distinctByTaskId() {
     return addDistinctByInternal('taskId');
   }
 
-  QueryBuilder<Subtasks, Subtasks, QDistinct> distinctByTitle(
+  QueryBuilder<Subtask, Subtask, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('title', caseSensitive: caseSensitive);
   }
 }
 
-extension SubtasksQueryProperty
-    on QueryBuilder<Subtasks, Subtasks, QQueryProperty> {
-  QueryBuilder<Subtasks, int, QQueryOperations> groupIdProperty() {
+extension SubtaskQueryProperty
+    on QueryBuilder<Subtask, Subtask, QQueryProperty> {
+  QueryBuilder<Subtask, int, QQueryOperations> groupIdProperty() {
     return addPropertyNameInternal('groupId');
   }
 
-  QueryBuilder<Subtasks, int?, QQueryOperations> idProperty() {
+  QueryBuilder<Subtask, int?, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
 
-  QueryBuilder<Subtasks, bool, QQueryOperations> isCheckedProperty() {
+  QueryBuilder<Subtask, bool, QQueryOperations> isCheckedProperty() {
     return addPropertyNameInternal('isChecked');
   }
 
-  QueryBuilder<Subtasks, int, QQueryOperations> listIdProperty() {
+  QueryBuilder<Subtask, int, QQueryOperations> listIdProperty() {
     return addPropertyNameInternal('listId');
   }
 
-  QueryBuilder<Subtasks, int, QQueryOperations> taskIdProperty() {
+  QueryBuilder<Subtask, int, QQueryOperations> taskIdProperty() {
     return addPropertyNameInternal('taskId');
   }
 
-  QueryBuilder<Subtasks, String?, QQueryOperations> titleProperty() {
+  QueryBuilder<Subtask, String?, QQueryOperations> titleProperty() {
     return addPropertyNameInternal('title');
   }
 }
 
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
-extension GetTasksCollection on Isar {
-  IsarCollection<Tasks> get taskss => getCollection();
+extension GetTaskCollection on Isar {
+  IsarCollection<Task> get tasks => getCollection();
 }
 
-const TasksSchema = CollectionSchema(
-  name: 'Tasks',
+const TaskSchema = CollectionSchema(
+  name: 'Task',
   schema:
-      '{"name":"Tasks","idName":"id","properties":[{"name":"due","type":"Long"},{"name":"groupId","type":"Long"},{"name":"isChecked","type":"Bool"},{"name":"isStarred","type":"Bool"},{"name":"listId","type":"Long"},{"name":"note","type":"String"},{"name":"remainder","type":"Long"},{"name":"repeat","type":"Long"},{"name":"title","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Task","idName":"id","properties":[{"name":"due","type":"Long"},{"name":"groupId","type":"Long"},{"name":"isChecked","type":"Bool"},{"name":"isStarred","type":"Bool"},{"name":"listId","type":"Long"},{"name":"note","type":"String"},{"name":"remainder","type":"Long"},{"name":"repeat","type":"Long"},{"name":"title","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'due': 0,
@@ -748,20 +745,20 @@ const TasksSchema = CollectionSchema(
   indexValueTypes: {},
   linkIds: {},
   backlinkLinkNames: {},
-  getId: _tasksGetId,
-  setId: _tasksSetId,
-  getLinks: _tasksGetLinks,
-  attachLinks: _tasksAttachLinks,
-  serializeNative: _tasksSerializeNative,
-  deserializeNative: _tasksDeserializeNative,
-  deserializePropNative: _tasksDeserializePropNative,
-  serializeWeb: _tasksSerializeWeb,
-  deserializeWeb: _tasksDeserializeWeb,
-  deserializePropWeb: _tasksDeserializePropWeb,
+  getId: _taskGetId,
+  setId: _taskSetId,
+  getLinks: _taskGetLinks,
+  attachLinks: _taskAttachLinks,
+  serializeNative: _taskSerializeNative,
+  deserializeNative: _taskDeserializeNative,
+  deserializePropNative: _taskDeserializePropNative,
+  serializeWeb: _taskSerializeWeb,
+  deserializeWeb: _taskDeserializeWeb,
+  deserializePropWeb: _taskDeserializePropWeb,
   version: 3,
 );
 
-int? _tasksGetId(Tasks object) {
+int? _taskGetId(Task object) {
   if (object.id == Isar.autoIncrement) {
     return null;
   } else {
@@ -769,21 +766,16 @@ int? _tasksGetId(Tasks object) {
   }
 }
 
-void _tasksSetId(Tasks object, int id) {
+void _taskSetId(Task object, int id) {
   object.id = id;
 }
 
-List<IsarLinkBase> _tasksGetLinks(Tasks object) {
+List<IsarLinkBase> _taskGetLinks(Task object) {
   return [];
 }
 
-void _tasksSerializeNative(
-    IsarCollection<Tasks> collection,
-    IsarRawObject rawObj,
-    Tasks object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
+void _taskSerializeNative(IsarCollection<Task> collection, IsarRawObject rawObj,
+    Task object, int staticSize, List<int> offsets, AdapterAlloc alloc) {
   var dynamicSize = 0;
   final value0 = object.due;
   final _due = value0;
@@ -828,23 +820,24 @@ void _tasksSerializeNative(
   writer.writeBytes(offsets[8], _title);
 }
 
-Tasks _tasksDeserializeNative(IsarCollection<Tasks> collection, int id,
+Task _taskDeserializeNative(IsarCollection<Task> collection, int id,
     IsarBinaryReader reader, List<int> offsets) {
-  final object = Tasks();
-  object.due = reader.readDateTimeOrNull(offsets[0]);
-  object.groupId = reader.readLong(offsets[1]);
+  final object = Task(
+    due: reader.readDateTimeOrNull(offsets[0]),
+    groupId: reader.readLong(offsets[1]),
+    isChecked: reader.readBool(offsets[2]),
+    isStarred: reader.readBool(offsets[3]),
+    listId: reader.readLong(offsets[4]),
+    note: reader.readStringOrNull(offsets[5]),
+    remainder: reader.readDateTimeOrNull(offsets[6]),
+    repeat: reader.readLongOrNull(offsets[7]),
+    title: reader.readStringOrNull(offsets[8]),
+  );
   object.id = id;
-  object.isChecked = reader.readBool(offsets[2]);
-  object.isStarred = reader.readBool(offsets[3]);
-  object.listId = reader.readLong(offsets[4]);
-  object.note = reader.readStringOrNull(offsets[5]);
-  object.remainder = reader.readDateTimeOrNull(offsets[6]);
-  object.repeat = reader.readLongOrNull(offsets[7]);
-  object.title = reader.readStringOrNull(offsets[8]);
   return object;
 }
 
-P _tasksDeserializePropNative<P>(
+P _taskDeserializePropNative<P>(
     int id, IsarBinaryReader reader, int propertyIndex, int offset) {
   switch (propertyIndex) {
     case -1:
@@ -872,7 +865,7 @@ P _tasksDeserializePropNative<P>(
   }
 }
 
-dynamic _tasksSerializeWeb(IsarCollection<Tasks> collection, Tasks object) {
+dynamic _taskSerializeWeb(IsarCollection<Task> collection, Task object) {
   final jsObj = IsarNative.newJsObject();
   IsarNative.jsObjectSet(
       jsObj, 'due', object.due?.toUtc().millisecondsSinceEpoch);
@@ -889,34 +882,34 @@ dynamic _tasksSerializeWeb(IsarCollection<Tasks> collection, Tasks object) {
   return jsObj;
 }
 
-Tasks _tasksDeserializeWeb(IsarCollection<Tasks> collection, dynamic jsObj) {
-  final object = Tasks();
-  object.due = IsarNative.jsObjectGet(jsObj, 'due') != null
-      ? DateTime.fromMillisecondsSinceEpoch(
-              IsarNative.jsObjectGet(jsObj, 'due'),
-              isUtc: true)
-          .toLocal()
-      : null;
-  object.groupId =
-      IsarNative.jsObjectGet(jsObj, 'groupId') ?? double.negativeInfinity;
+Task _taskDeserializeWeb(IsarCollection<Task> collection, dynamic jsObj) {
+  final object = Task(
+    due: IsarNative.jsObjectGet(jsObj, 'due') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'due'),
+                isUtc: true)
+            .toLocal()
+        : null,
+    groupId:
+        IsarNative.jsObjectGet(jsObj, 'groupId') ?? double.negativeInfinity,
+    isChecked: IsarNative.jsObjectGet(jsObj, 'isChecked') ?? false,
+    isStarred: IsarNative.jsObjectGet(jsObj, 'isStarred') ?? false,
+    listId: IsarNative.jsObjectGet(jsObj, 'listId') ?? double.negativeInfinity,
+    note: IsarNative.jsObjectGet(jsObj, 'note'),
+    remainder: IsarNative.jsObjectGet(jsObj, 'remainder') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'remainder'),
+                isUtc: true)
+            .toLocal()
+        : null,
+    repeat: IsarNative.jsObjectGet(jsObj, 'repeat'),
+    title: IsarNative.jsObjectGet(jsObj, 'title'),
+  );
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
-  object.isChecked = IsarNative.jsObjectGet(jsObj, 'isChecked') ?? false;
-  object.isStarred = IsarNative.jsObjectGet(jsObj, 'isStarred') ?? false;
-  object.listId =
-      IsarNative.jsObjectGet(jsObj, 'listId') ?? double.negativeInfinity;
-  object.note = IsarNative.jsObjectGet(jsObj, 'note');
-  object.remainder = IsarNative.jsObjectGet(jsObj, 'remainder') != null
-      ? DateTime.fromMillisecondsSinceEpoch(
-              IsarNative.jsObjectGet(jsObj, 'remainder'),
-              isUtc: true)
-          .toLocal()
-      : null;
-  object.repeat = IsarNative.jsObjectGet(jsObj, 'repeat');
-  object.title = IsarNative.jsObjectGet(jsObj, 'title');
   return object;
 }
 
-P _tasksDeserializePropWeb<P>(Object jsObj, String propertyName) {
+P _taskDeserializePropWeb<P>(Object jsObj, String propertyName) {
   switch (propertyName) {
     case 'due':
       return (IsarNative.jsObjectGet(jsObj, 'due') != null
@@ -955,16 +948,16 @@ P _tasksDeserializePropWeb<P>(Object jsObj, String propertyName) {
   }
 }
 
-void _tasksAttachLinks(IsarCollection col, int id, Tasks object) {}
+void _taskAttachLinks(IsarCollection col, int id, Task object) {}
 
-extension TasksQueryWhereSort on QueryBuilder<Tasks, Tasks, QWhere> {
-  QueryBuilder<Tasks, Tasks, QAfterWhere> anyId() {
+extension TaskQueryWhereSort on QueryBuilder<Task, Task, QWhere> {
+  QueryBuilder<Task, Task, QAfterWhere> anyId() {
     return addWhereClauseInternal(const IdWhereClause.any());
   }
 }
 
-extension TasksQueryWhere on QueryBuilder<Tasks, Tasks, QWhereClause> {
-  QueryBuilder<Tasks, Tasks, QAfterWhereClause> idEqualTo(int id) {
+extension TaskQueryWhere on QueryBuilder<Task, Task, QWhereClause> {
+  QueryBuilder<Task, Task, QAfterWhereClause> idEqualTo(int id) {
     return addWhereClauseInternal(IdWhereClause.between(
       lower: id,
       includeLower: true,
@@ -973,7 +966,7 @@ extension TasksQueryWhere on QueryBuilder<Tasks, Tasks, QWhereClause> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterWhereClause> idNotEqualTo(int id) {
+  QueryBuilder<Task, Task, QAfterWhereClause> idNotEqualTo(int id) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(
         IdWhereClause.lessThan(upper: id, includeUpper: false),
@@ -989,21 +982,21 @@ extension TasksQueryWhere on QueryBuilder<Tasks, Tasks, QWhereClause> {
     }
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterWhereClause> idGreaterThan(int id,
+  QueryBuilder<Task, Task, QAfterWhereClause> idGreaterThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.greaterThan(lower: id, includeLower: include),
     );
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterWhereClause> idLessThan(int id,
+  QueryBuilder<Task, Task, QAfterWhereClause> idLessThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.lessThan(upper: id, includeUpper: include),
     );
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterWhereClause> idBetween(
+  QueryBuilder<Task, Task, QAfterWhereClause> idBetween(
     int lowerId,
     int upperId, {
     bool includeLower = true,
@@ -1018,8 +1011,8 @@ extension TasksQueryWhere on QueryBuilder<Tasks, Tasks, QWhereClause> {
   }
 }
 
-extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> dueIsNull() {
+extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
+  QueryBuilder<Task, Task, QAfterFilterCondition> dueIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'due',
@@ -1027,8 +1020,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> dueEqualTo(
-      DateTime? value) {
+  QueryBuilder<Task, Task, QAfterFilterCondition> dueEqualTo(DateTime? value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'due',
@@ -1036,7 +1028,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> dueGreaterThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> dueGreaterThan(
     DateTime? value, {
     bool include = false,
   }) {
@@ -1048,7 +1040,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> dueLessThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> dueLessThan(
     DateTime? value, {
     bool include = false,
   }) {
@@ -1060,7 +1052,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> dueBetween(
+  QueryBuilder<Task, Task, QAfterFilterCondition> dueBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
@@ -1075,7 +1067,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> groupIdEqualTo(int value) {
+  QueryBuilder<Task, Task, QAfterFilterCondition> groupIdEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'groupId',
@@ -1083,7 +1075,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> groupIdGreaterThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> groupIdGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -1095,7 +1087,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> groupIdLessThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> groupIdLessThan(
     int value, {
     bool include = false,
   }) {
@@ -1107,7 +1099,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> groupIdBetween(
+  QueryBuilder<Task, Task, QAfterFilterCondition> groupIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1122,7 +1114,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> idIsNull() {
+  QueryBuilder<Task, Task, QAfterFilterCondition> idIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'id',
@@ -1130,7 +1122,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> idEqualTo(int value) {
+  QueryBuilder<Task, Task, QAfterFilterCondition> idEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'id',
@@ -1138,7 +1130,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> idGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -1150,7 +1142,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> idLessThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> idLessThan(
     int value, {
     bool include = false,
   }) {
@@ -1162,7 +1154,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> idBetween(
+  QueryBuilder<Task, Task, QAfterFilterCondition> idBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1177,8 +1169,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> isCheckedEqualTo(
-      bool value) {
+  QueryBuilder<Task, Task, QAfterFilterCondition> isCheckedEqualTo(bool value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'isChecked',
@@ -1186,8 +1177,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> isStarredEqualTo(
-      bool value) {
+  QueryBuilder<Task, Task, QAfterFilterCondition> isStarredEqualTo(bool value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'isStarred',
@@ -1195,7 +1185,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> listIdEqualTo(int value) {
+  QueryBuilder<Task, Task, QAfterFilterCondition> listIdEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'listId',
@@ -1203,7 +1193,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> listIdGreaterThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> listIdGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -1215,7 +1205,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> listIdLessThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> listIdLessThan(
     int value, {
     bool include = false,
   }) {
@@ -1227,7 +1217,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> listIdBetween(
+  QueryBuilder<Task, Task, QAfterFilterCondition> listIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1242,7 +1232,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> noteIsNull() {
+  QueryBuilder<Task, Task, QAfterFilterCondition> noteIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'note',
@@ -1250,7 +1240,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> noteEqualTo(
+  QueryBuilder<Task, Task, QAfterFilterCondition> noteEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1262,7 +1252,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> noteGreaterThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> noteGreaterThan(
     String? value, {
     bool caseSensitive = true,
     bool include = false,
@@ -1276,7 +1266,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> noteLessThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> noteLessThan(
     String? value, {
     bool caseSensitive = true,
     bool include = false,
@@ -1290,7 +1280,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> noteBetween(
+  QueryBuilder<Task, Task, QAfterFilterCondition> noteBetween(
     String? lower,
     String? upper, {
     bool caseSensitive = true,
@@ -1307,7 +1297,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> noteStartsWith(
+  QueryBuilder<Task, Task, QAfterFilterCondition> noteStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1319,7 +1309,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> noteEndsWith(
+  QueryBuilder<Task, Task, QAfterFilterCondition> noteEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1331,7 +1321,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> noteContains(String value,
+  QueryBuilder<Task, Task, QAfterFilterCondition> noteContains(String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.contains,
@@ -1341,7 +1331,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> noteMatches(String pattern,
+  QueryBuilder<Task, Task, QAfterFilterCondition> noteMatches(String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
@@ -1351,7 +1341,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> remainderIsNull() {
+  QueryBuilder<Task, Task, QAfterFilterCondition> remainderIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'remainder',
@@ -1359,7 +1349,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> remainderEqualTo(
+  QueryBuilder<Task, Task, QAfterFilterCondition> remainderEqualTo(
       DateTime? value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
@@ -1368,7 +1358,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> remainderGreaterThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> remainderGreaterThan(
     DateTime? value, {
     bool include = false,
   }) {
@@ -1380,7 +1370,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> remainderLessThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> remainderLessThan(
     DateTime? value, {
     bool include = false,
   }) {
@@ -1392,7 +1382,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> remainderBetween(
+  QueryBuilder<Task, Task, QAfterFilterCondition> remainderBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
@@ -1407,7 +1397,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> repeatIsNull() {
+  QueryBuilder<Task, Task, QAfterFilterCondition> repeatIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'repeat',
@@ -1415,7 +1405,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> repeatEqualTo(int? value) {
+  QueryBuilder<Task, Task, QAfterFilterCondition> repeatEqualTo(int? value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'repeat',
@@ -1423,7 +1413,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> repeatGreaterThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> repeatGreaterThan(
     int? value, {
     bool include = false,
   }) {
@@ -1435,7 +1425,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> repeatLessThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> repeatLessThan(
     int? value, {
     bool include = false,
   }) {
@@ -1447,7 +1437,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> repeatBetween(
+  QueryBuilder<Task, Task, QAfterFilterCondition> repeatBetween(
     int? lower,
     int? upper, {
     bool includeLower = true,
@@ -1462,7 +1452,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> titleIsNull() {
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'title',
@@ -1470,7 +1460,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> titleEqualTo(
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1482,7 +1472,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> titleGreaterThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleGreaterThan(
     String? value, {
     bool caseSensitive = true,
     bool include = false,
@@ -1496,7 +1486,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> titleLessThan(
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleLessThan(
     String? value, {
     bool caseSensitive = true,
     bool include = false,
@@ -1510,7 +1500,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> titleBetween(
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleBetween(
     String? lower,
     String? upper, {
     bool caseSensitive = true,
@@ -1527,7 +1517,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> titleStartsWith(
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1539,7 +1529,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> titleEndsWith(
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1551,7 +1541,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> titleContains(String value,
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleContains(String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.contains,
@@ -1561,7 +1551,7 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterFilterCondition> titleMatches(String pattern,
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleMatches(String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
@@ -1572,268 +1562,268 @@ extension TasksQueryFilter on QueryBuilder<Tasks, Tasks, QFilterCondition> {
   }
 }
 
-extension TasksQueryLinks on QueryBuilder<Tasks, Tasks, QFilterCondition> {}
+extension TaskQueryLinks on QueryBuilder<Task, Task, QFilterCondition> {}
 
-extension TasksQueryWhereSortBy on QueryBuilder<Tasks, Tasks, QSortBy> {
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByDue() {
+extension TaskQueryWhereSortBy on QueryBuilder<Task, Task, QSortBy> {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByDue() {
     return addSortByInternal('due', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByDueDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByDueDesc() {
     return addSortByInternal('due', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByGroupId() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByGroupId() {
     return addSortByInternal('groupId', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByGroupIdDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByGroupIdDesc() {
     return addSortByInternal('groupId', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortById() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByIdDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByIsChecked() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByIsChecked() {
     return addSortByInternal('isChecked', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByIsCheckedDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByIsCheckedDesc() {
     return addSortByInternal('isChecked', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByIsStarred() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByIsStarred() {
     return addSortByInternal('isStarred', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByIsStarredDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByIsStarredDesc() {
     return addSortByInternal('isStarred', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByListId() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByListId() {
     return addSortByInternal('listId', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByListIdDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByListIdDesc() {
     return addSortByInternal('listId', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByNote() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByNote() {
     return addSortByInternal('note', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByNoteDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByNoteDesc() {
     return addSortByInternal('note', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByRemainder() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByRemainder() {
     return addSortByInternal('remainder', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByRemainderDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByRemainderDesc() {
     return addSortByInternal('remainder', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByRepeat() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByRepeat() {
     return addSortByInternal('repeat', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByRepeatDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByRepeatDesc() {
     return addSortByInternal('repeat', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByTitle() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByTitle() {
     return addSortByInternal('title', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> sortByTitleDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> sortByTitleDesc() {
     return addSortByInternal('title', Sort.desc);
   }
 }
 
-extension TasksQueryWhereSortThenBy on QueryBuilder<Tasks, Tasks, QSortThenBy> {
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByDue() {
+extension TaskQueryWhereSortThenBy on QueryBuilder<Task, Task, QSortThenBy> {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByDue() {
     return addSortByInternal('due', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByDueDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByDueDesc() {
     return addSortByInternal('due', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByGroupId() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByGroupId() {
     return addSortByInternal('groupId', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByGroupIdDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByGroupIdDesc() {
     return addSortByInternal('groupId', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenById() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByIsChecked() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByIsChecked() {
     return addSortByInternal('isChecked', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByIsCheckedDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByIsCheckedDesc() {
     return addSortByInternal('isChecked', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByIsStarred() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByIsStarred() {
     return addSortByInternal('isStarred', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByIsStarredDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByIsStarredDesc() {
     return addSortByInternal('isStarred', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByListId() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByListId() {
     return addSortByInternal('listId', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByListIdDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByListIdDesc() {
     return addSortByInternal('listId', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByNote() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByNote() {
     return addSortByInternal('note', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByNoteDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByNoteDesc() {
     return addSortByInternal('note', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByRemainder() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByRemainder() {
     return addSortByInternal('remainder', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByRemainderDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByRemainderDesc() {
     return addSortByInternal('remainder', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByRepeat() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByRepeat() {
     return addSortByInternal('repeat', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByRepeatDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByRepeatDesc() {
     return addSortByInternal('repeat', Sort.desc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByTitle() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByTitle() {
     return addSortByInternal('title', Sort.asc);
   }
 
-  QueryBuilder<Tasks, Tasks, QAfterSortBy> thenByTitleDesc() {
+  QueryBuilder<Task, Task, QAfterSortBy> thenByTitleDesc() {
     return addSortByInternal('title', Sort.desc);
   }
 }
 
-extension TasksQueryWhereDistinct on QueryBuilder<Tasks, Tasks, QDistinct> {
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctByDue() {
+extension TaskQueryWhereDistinct on QueryBuilder<Task, Task, QDistinct> {
+  QueryBuilder<Task, Task, QDistinct> distinctByDue() {
     return addDistinctByInternal('due');
   }
 
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctByGroupId() {
+  QueryBuilder<Task, Task, QDistinct> distinctByGroupId() {
     return addDistinctByInternal('groupId');
   }
 
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctById() {
+  QueryBuilder<Task, Task, QDistinct> distinctById() {
     return addDistinctByInternal('id');
   }
 
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctByIsChecked() {
+  QueryBuilder<Task, Task, QDistinct> distinctByIsChecked() {
     return addDistinctByInternal('isChecked');
   }
 
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctByIsStarred() {
+  QueryBuilder<Task, Task, QDistinct> distinctByIsStarred() {
     return addDistinctByInternal('isStarred');
   }
 
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctByListId() {
+  QueryBuilder<Task, Task, QDistinct> distinctByListId() {
     return addDistinctByInternal('listId');
   }
 
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctByNote(
+  QueryBuilder<Task, Task, QDistinct> distinctByNote(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('note', caseSensitive: caseSensitive);
   }
 
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctByRemainder() {
+  QueryBuilder<Task, Task, QDistinct> distinctByRemainder() {
     return addDistinctByInternal('remainder');
   }
 
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctByRepeat() {
+  QueryBuilder<Task, Task, QDistinct> distinctByRepeat() {
     return addDistinctByInternal('repeat');
   }
 
-  QueryBuilder<Tasks, Tasks, QDistinct> distinctByTitle(
+  QueryBuilder<Task, Task, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('title', caseSensitive: caseSensitive);
   }
 }
 
-extension TasksQueryProperty on QueryBuilder<Tasks, Tasks, QQueryProperty> {
-  QueryBuilder<Tasks, DateTime?, QQueryOperations> dueProperty() {
+extension TaskQueryProperty on QueryBuilder<Task, Task, QQueryProperty> {
+  QueryBuilder<Task, DateTime?, QQueryOperations> dueProperty() {
     return addPropertyNameInternal('due');
   }
 
-  QueryBuilder<Tasks, int, QQueryOperations> groupIdProperty() {
+  QueryBuilder<Task, int, QQueryOperations> groupIdProperty() {
     return addPropertyNameInternal('groupId');
   }
 
-  QueryBuilder<Tasks, int?, QQueryOperations> idProperty() {
+  QueryBuilder<Task, int?, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
 
-  QueryBuilder<Tasks, bool, QQueryOperations> isCheckedProperty() {
+  QueryBuilder<Task, bool, QQueryOperations> isCheckedProperty() {
     return addPropertyNameInternal('isChecked');
   }
 
-  QueryBuilder<Tasks, bool, QQueryOperations> isStarredProperty() {
+  QueryBuilder<Task, bool, QQueryOperations> isStarredProperty() {
     return addPropertyNameInternal('isStarred');
   }
 
-  QueryBuilder<Tasks, int, QQueryOperations> listIdProperty() {
+  QueryBuilder<Task, int, QQueryOperations> listIdProperty() {
     return addPropertyNameInternal('listId');
   }
 
-  QueryBuilder<Tasks, String?, QQueryOperations> noteProperty() {
+  QueryBuilder<Task, String?, QQueryOperations> noteProperty() {
     return addPropertyNameInternal('note');
   }
 
-  QueryBuilder<Tasks, DateTime?, QQueryOperations> remainderProperty() {
+  QueryBuilder<Task, DateTime?, QQueryOperations> remainderProperty() {
     return addPropertyNameInternal('remainder');
   }
 
-  QueryBuilder<Tasks, int?, QQueryOperations> repeatProperty() {
+  QueryBuilder<Task, int?, QQueryOperations> repeatProperty() {
     return addPropertyNameInternal('repeat');
   }
 
-  QueryBuilder<Tasks, String?, QQueryOperations> titleProperty() {
+  QueryBuilder<Task, String?, QQueryOperations> titleProperty() {
     return addPropertyNameInternal('title');
   }
 }
 
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
-extension GetListsCollection on Isar {
-  IsarCollection<Lists> get listss => getCollection();
+extension GetTaskListCollection on Isar {
+  IsarCollection<TaskList> get taskLists => getCollection();
 }
 
-const ListsSchema = CollectionSchema(
-  name: 'Lists',
+const TaskListSchema = CollectionSchema(
+  name: 'TaskList',
   schema:
-      '{"name":"Lists","idName":"id","properties":[{"name":"groupId","type":"Long"},{"name":"name","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"TaskList","idName":"id","properties":[{"name":"groupId","type":"Long"},{"name":"name","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {'groupId': 0, 'name': 1},
   listProperties: {},
@@ -1841,20 +1831,20 @@ const ListsSchema = CollectionSchema(
   indexValueTypes: {},
   linkIds: {},
   backlinkLinkNames: {},
-  getId: _listsGetId,
-  setId: _listsSetId,
-  getLinks: _listsGetLinks,
-  attachLinks: _listsAttachLinks,
-  serializeNative: _listsSerializeNative,
-  deserializeNative: _listsDeserializeNative,
-  deserializePropNative: _listsDeserializePropNative,
-  serializeWeb: _listsSerializeWeb,
-  deserializeWeb: _listsDeserializeWeb,
-  deserializePropWeb: _listsDeserializePropWeb,
+  getId: _taskListGetId,
+  setId: _taskListSetId,
+  getLinks: _taskListGetLinks,
+  attachLinks: _taskListAttachLinks,
+  serializeNative: _taskListSerializeNative,
+  deserializeNative: _taskListDeserializeNative,
+  deserializePropNative: _taskListDeserializePropNative,
+  serializeWeb: _taskListSerializeWeb,
+  deserializeWeb: _taskListDeserializeWeb,
+  deserializePropWeb: _taskListDeserializePropWeb,
   version: 3,
 );
 
-int? _listsGetId(Lists object) {
+int? _taskListGetId(TaskList object) {
   if (object.id == Isar.autoIncrement) {
     return null;
   } else {
@@ -1862,18 +1852,18 @@ int? _listsGetId(Lists object) {
   }
 }
 
-void _listsSetId(Lists object, int id) {
+void _taskListSetId(TaskList object, int id) {
   object.id = id;
 }
 
-List<IsarLinkBase> _listsGetLinks(Lists object) {
+List<IsarLinkBase> _taskListGetLinks(TaskList object) {
   return [];
 }
 
-void _listsSerializeNative(
-    IsarCollection<Lists> collection,
+void _taskListSerializeNative(
+    IsarCollection<TaskList> collection,
     IsarRawObject rawObj,
-    Lists object,
+    TaskList object,
     int staticSize,
     List<int> offsets,
     AdapterAlloc alloc) {
@@ -1893,16 +1883,17 @@ void _listsSerializeNative(
   writer.writeBytes(offsets[1], _name);
 }
 
-Lists _listsDeserializeNative(IsarCollection<Lists> collection, int id,
+TaskList _taskListDeserializeNative(IsarCollection<TaskList> collection, int id,
     IsarBinaryReader reader, List<int> offsets) {
-  final object = Lists();
-  object.groupId = reader.readLong(offsets[0]);
-  object.id = id;
-  object.name = reader.readString(offsets[1]);
+  final object = TaskList(
+    groupId: reader.readLong(offsets[0]),
+    id: id,
+    name: reader.readString(offsets[1]),
+  );
   return object;
 }
 
-P _listsDeserializePropNative<P>(
+P _taskListDeserializePropNative<P>(
     int id, IsarBinaryReader reader, int propertyIndex, int offset) {
   switch (propertyIndex) {
     case -1:
@@ -1916,7 +1907,8 @@ P _listsDeserializePropNative<P>(
   }
 }
 
-dynamic _listsSerializeWeb(IsarCollection<Lists> collection, Lists object) {
+dynamic _taskListSerializeWeb(
+    IsarCollection<TaskList> collection, TaskList object) {
   final jsObj = IsarNative.newJsObject();
   IsarNative.jsObjectSet(jsObj, 'groupId', object.groupId);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
@@ -1924,16 +1916,18 @@ dynamic _listsSerializeWeb(IsarCollection<Lists> collection, Lists object) {
   return jsObj;
 }
 
-Lists _listsDeserializeWeb(IsarCollection<Lists> collection, dynamic jsObj) {
-  final object = Lists();
-  object.groupId =
-      IsarNative.jsObjectGet(jsObj, 'groupId') ?? double.negativeInfinity;
-  object.id = IsarNative.jsObjectGet(jsObj, 'id');
-  object.name = IsarNative.jsObjectGet(jsObj, 'name') ?? '';
+TaskList _taskListDeserializeWeb(
+    IsarCollection<TaskList> collection, dynamic jsObj) {
+  final object = TaskList(
+    groupId:
+        IsarNative.jsObjectGet(jsObj, 'groupId') ?? double.negativeInfinity,
+    id: IsarNative.jsObjectGet(jsObj, 'id'),
+    name: IsarNative.jsObjectGet(jsObj, 'name') ?? '',
+  );
   return object;
 }
 
-P _listsDeserializePropWeb<P>(Object jsObj, String propertyName) {
+P _taskListDeserializePropWeb<P>(Object jsObj, String propertyName) {
   switch (propertyName) {
     case 'groupId':
       return (IsarNative.jsObjectGet(jsObj, 'groupId') ??
@@ -1947,16 +1941,16 @@ P _listsDeserializePropWeb<P>(Object jsObj, String propertyName) {
   }
 }
 
-void _listsAttachLinks(IsarCollection col, int id, Lists object) {}
+void _taskListAttachLinks(IsarCollection col, int id, TaskList object) {}
 
-extension ListsQueryWhereSort on QueryBuilder<Lists, Lists, QWhere> {
-  QueryBuilder<Lists, Lists, QAfterWhere> anyId() {
+extension TaskListQueryWhereSort on QueryBuilder<TaskList, TaskList, QWhere> {
+  QueryBuilder<TaskList, TaskList, QAfterWhere> anyId() {
     return addWhereClauseInternal(const IdWhereClause.any());
   }
 }
 
-extension ListsQueryWhere on QueryBuilder<Lists, Lists, QWhereClause> {
-  QueryBuilder<Lists, Lists, QAfterWhereClause> idEqualTo(int id) {
+extension TaskListQueryWhere on QueryBuilder<TaskList, TaskList, QWhereClause> {
+  QueryBuilder<TaskList, TaskList, QAfterWhereClause> idEqualTo(int id) {
     return addWhereClauseInternal(IdWhereClause.between(
       lower: id,
       includeLower: true,
@@ -1965,7 +1959,7 @@ extension ListsQueryWhere on QueryBuilder<Lists, Lists, QWhereClause> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterWhereClause> idNotEqualTo(int id) {
+  QueryBuilder<TaskList, TaskList, QAfterWhereClause> idNotEqualTo(int id) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(
         IdWhereClause.lessThan(upper: id, includeUpper: false),
@@ -1981,21 +1975,21 @@ extension ListsQueryWhere on QueryBuilder<Lists, Lists, QWhereClause> {
     }
   }
 
-  QueryBuilder<Lists, Lists, QAfterWhereClause> idGreaterThan(int id,
+  QueryBuilder<TaskList, TaskList, QAfterWhereClause> idGreaterThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.greaterThan(lower: id, includeLower: include),
     );
   }
 
-  QueryBuilder<Lists, Lists, QAfterWhereClause> idLessThan(int id,
+  QueryBuilder<TaskList, TaskList, QAfterWhereClause> idLessThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.lessThan(upper: id, includeUpper: include),
     );
   }
 
-  QueryBuilder<Lists, Lists, QAfterWhereClause> idBetween(
+  QueryBuilder<TaskList, TaskList, QAfterWhereClause> idBetween(
     int lowerId,
     int upperId, {
     bool includeLower = true,
@@ -2010,8 +2004,10 @@ extension ListsQueryWhere on QueryBuilder<Lists, Lists, QWhereClause> {
   }
 }
 
-extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> groupIdEqualTo(int value) {
+extension TaskListQueryFilter
+    on QueryBuilder<TaskList, TaskList, QFilterCondition> {
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> groupIdEqualTo(
+      int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'groupId',
@@ -2019,7 +2015,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> groupIdGreaterThan(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> groupIdGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -2031,7 +2027,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> groupIdLessThan(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> groupIdLessThan(
     int value, {
     bool include = false,
   }) {
@@ -2043,7 +2039,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> groupIdBetween(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> groupIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -2058,7 +2054,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> idIsNull() {
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> idIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'id',
@@ -2066,7 +2062,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> idEqualTo(int value) {
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> idEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'id',
@@ -2074,7 +2070,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> idGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -2086,7 +2082,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> idLessThan(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> idLessThan(
     int value, {
     bool include = false,
   }) {
@@ -2098,7 +2094,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> idBetween(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> idBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -2113,7 +2109,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> nameEqualTo(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2125,7 +2121,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> nameGreaterThan(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> nameGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -2139,7 +2135,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> nameLessThan(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> nameLessThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -2153,7 +2149,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> nameBetween(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> nameBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
@@ -2170,7 +2166,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> nameStartsWith(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> nameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2182,7 +2178,7 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> nameEndsWith(
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> nameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2194,7 +2190,8 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> nameContains(String value,
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> nameContains(
+      String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.contains,
@@ -2204,7 +2201,8 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Lists, Lists, QAfterFilterCondition> nameMatches(String pattern,
+  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> nameMatches(
+      String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
@@ -2215,99 +2213,104 @@ extension ListsQueryFilter on QueryBuilder<Lists, Lists, QFilterCondition> {
   }
 }
 
-extension ListsQueryLinks on QueryBuilder<Lists, Lists, QFilterCondition> {}
+extension TaskListQueryLinks
+    on QueryBuilder<TaskList, TaskList, QFilterCondition> {}
 
-extension ListsQueryWhereSortBy on QueryBuilder<Lists, Lists, QSortBy> {
-  QueryBuilder<Lists, Lists, QAfterSortBy> sortByGroupId() {
+extension TaskListQueryWhereSortBy
+    on QueryBuilder<TaskList, TaskList, QSortBy> {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> sortByGroupId() {
     return addSortByInternal('groupId', Sort.asc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> sortByGroupIdDesc() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> sortByGroupIdDesc() {
     return addSortByInternal('groupId', Sort.desc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> sortById() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> sortById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> sortByIdDesc() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> sortByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> sortByName() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> sortByName() {
     return addSortByInternal('name', Sort.asc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> sortByNameDesc() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> sortByNameDesc() {
     return addSortByInternal('name', Sort.desc);
   }
 }
 
-extension ListsQueryWhereSortThenBy on QueryBuilder<Lists, Lists, QSortThenBy> {
-  QueryBuilder<Lists, Lists, QAfterSortBy> thenByGroupId() {
+extension TaskListQueryWhereSortThenBy
+    on QueryBuilder<TaskList, TaskList, QSortThenBy> {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> thenByGroupId() {
     return addSortByInternal('groupId', Sort.asc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> thenByGroupIdDesc() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> thenByGroupIdDesc() {
     return addSortByInternal('groupId', Sort.desc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> thenById() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> thenById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> thenByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> thenByName() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> thenByName() {
     return addSortByInternal('name', Sort.asc);
   }
 
-  QueryBuilder<Lists, Lists, QAfterSortBy> thenByNameDesc() {
+  QueryBuilder<TaskList, TaskList, QAfterSortBy> thenByNameDesc() {
     return addSortByInternal('name', Sort.desc);
   }
 }
 
-extension ListsQueryWhereDistinct on QueryBuilder<Lists, Lists, QDistinct> {
-  QueryBuilder<Lists, Lists, QDistinct> distinctByGroupId() {
+extension TaskListQueryWhereDistinct
+    on QueryBuilder<TaskList, TaskList, QDistinct> {
+  QueryBuilder<TaskList, TaskList, QDistinct> distinctByGroupId() {
     return addDistinctByInternal('groupId');
   }
 
-  QueryBuilder<Lists, Lists, QDistinct> distinctById() {
+  QueryBuilder<TaskList, TaskList, QDistinct> distinctById() {
     return addDistinctByInternal('id');
   }
 
-  QueryBuilder<Lists, Lists, QDistinct> distinctByName(
+  QueryBuilder<TaskList, TaskList, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('name', caseSensitive: caseSensitive);
   }
 }
 
-extension ListsQueryProperty on QueryBuilder<Lists, Lists, QQueryProperty> {
-  QueryBuilder<Lists, int, QQueryOperations> groupIdProperty() {
+extension TaskListQueryProperty
+    on QueryBuilder<TaskList, TaskList, QQueryProperty> {
+  QueryBuilder<TaskList, int, QQueryOperations> groupIdProperty() {
     return addPropertyNameInternal('groupId');
   }
 
-  QueryBuilder<Lists, int?, QQueryOperations> idProperty() {
+  QueryBuilder<TaskList, int?, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
 
-  QueryBuilder<Lists, String, QQueryOperations> nameProperty() {
+  QueryBuilder<TaskList, String, QQueryOperations> nameProperty() {
     return addPropertyNameInternal('name');
   }
 }
 
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
-extension GetGroupsCollection on Isar {
-  IsarCollection<Groups> get groupss => getCollection();
+extension GetGroupCollection on Isar {
+  IsarCollection<Group> get groups => getCollection();
 }
 
-const GroupsSchema = CollectionSchema(
-  name: 'Groups',
+const GroupSchema = CollectionSchema(
+  name: 'Group',
   schema:
-      '{"name":"Groups","idName":"id","properties":[{"name":"name","type":"String"}],"indexes":[{"name":"name","unique":true,"properties":[{"name":"name","type":"Hash","caseSensitive":true}]}],"links":[]}',
+      '{"name":"Group","idName":"id","properties":[{"name":"name","type":"String"}],"indexes":[{"name":"name","unique":true,"properties":[{"name":"name","type":"Hash","caseSensitive":true}]}],"links":[]}',
   idName: 'id',
   propertyIds: {'name': 0},
   listProperties: {},
@@ -2319,20 +2322,20 @@ const GroupsSchema = CollectionSchema(
   },
   linkIds: {},
   backlinkLinkNames: {},
-  getId: _groupsGetId,
-  setId: _groupsSetId,
-  getLinks: _groupsGetLinks,
-  attachLinks: _groupsAttachLinks,
-  serializeNative: _groupsSerializeNative,
-  deserializeNative: _groupsDeserializeNative,
-  deserializePropNative: _groupsDeserializePropNative,
-  serializeWeb: _groupsSerializeWeb,
-  deserializeWeb: _groupsDeserializeWeb,
-  deserializePropWeb: _groupsDeserializePropWeb,
+  getId: _groupGetId,
+  setId: _groupSetId,
+  getLinks: _groupGetLinks,
+  attachLinks: _groupAttachLinks,
+  serializeNative: _groupSerializeNative,
+  deserializeNative: _groupDeserializeNative,
+  deserializePropNative: _groupDeserializePropNative,
+  serializeWeb: _groupSerializeWeb,
+  deserializeWeb: _groupDeserializeWeb,
+  deserializePropWeb: _groupDeserializePropWeb,
   version: 3,
 );
 
-int? _groupsGetId(Groups object) {
+int? _groupGetId(Group object) {
   if (object.id == Isar.autoIncrement) {
     return null;
   } else {
@@ -2340,18 +2343,18 @@ int? _groupsGetId(Groups object) {
   }
 }
 
-void _groupsSetId(Groups object, int id) {
+void _groupSetId(Group object, int id) {
   object.id = id;
 }
 
-List<IsarLinkBase> _groupsGetLinks(Groups object) {
+List<IsarLinkBase> _groupGetLinks(Group object) {
   return [];
 }
 
-void _groupsSerializeNative(
-    IsarCollection<Groups> collection,
+void _groupSerializeNative(
+    IsarCollection<Group> collection,
     IsarRawObject rawObj,
-    Groups object,
+    Group object,
     int staticSize,
     List<int> offsets,
     AdapterAlloc alloc) {
@@ -2368,15 +2371,16 @@ void _groupsSerializeNative(
   writer.writeBytes(offsets[0], _name);
 }
 
-Groups _groupsDeserializeNative(IsarCollection<Groups> collection, int id,
+Group _groupDeserializeNative(IsarCollection<Group> collection, int id,
     IsarBinaryReader reader, List<int> offsets) {
-  final object = Groups();
-  object.id = id;
-  object.name = reader.readString(offsets[0]);
+  final object = Group(
+    id: id,
+    name: reader.readString(offsets[0]),
+  );
   return object;
 }
 
-P _groupsDeserializePropNative<P>(
+P _groupDeserializePropNative<P>(
     int id, IsarBinaryReader reader, int propertyIndex, int offset) {
   switch (propertyIndex) {
     case -1:
@@ -2388,21 +2392,22 @@ P _groupsDeserializePropNative<P>(
   }
 }
 
-dynamic _groupsSerializeWeb(IsarCollection<Groups> collection, Groups object) {
+dynamic _groupSerializeWeb(IsarCollection<Group> collection, Group object) {
   final jsObj = IsarNative.newJsObject();
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
   IsarNative.jsObjectSet(jsObj, 'name', object.name);
   return jsObj;
 }
 
-Groups _groupsDeserializeWeb(IsarCollection<Groups> collection, dynamic jsObj) {
-  final object = Groups();
-  object.id = IsarNative.jsObjectGet(jsObj, 'id');
-  object.name = IsarNative.jsObjectGet(jsObj, 'name') ?? '';
+Group _groupDeserializeWeb(IsarCollection<Group> collection, dynamic jsObj) {
+  final object = Group(
+    id: IsarNative.jsObjectGet(jsObj, 'id'),
+    name: IsarNative.jsObjectGet(jsObj, 'name') ?? '',
+  );
   return object;
 }
 
-P _groupsDeserializePropWeb<P>(Object jsObj, String propertyName) {
+P _groupDeserializePropWeb<P>(Object jsObj, String propertyName) {
   switch (propertyName) {
     case 'id':
       return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
@@ -2413,14 +2418,14 @@ P _groupsDeserializePropWeb<P>(Object jsObj, String propertyName) {
   }
 }
 
-void _groupsAttachLinks(IsarCollection col, int id, Groups object) {}
+void _groupAttachLinks(IsarCollection col, int id, Group object) {}
 
-extension GroupsByIndex on IsarCollection<Groups> {
-  Future<Groups?> getByName(String name) {
+extension GroupByIndex on IsarCollection<Group> {
+  Future<Group?> getByName(String name) {
     return getByIndex('name', [name]);
   }
 
-  Groups? getByNameSync(String name) {
+  Group? getByNameSync(String name) {
     return getByIndexSync('name', [name]);
   }
 
@@ -2432,12 +2437,12 @@ extension GroupsByIndex on IsarCollection<Groups> {
     return deleteByIndexSync('name', [name]);
   }
 
-  Future<List<Groups?>> getAllByName(List<String> nameValues) {
+  Future<List<Group?>> getAllByName(List<String> nameValues) {
     final values = nameValues.map((e) => [e]).toList();
     return getAllByIndex('name', values);
   }
 
-  List<Groups?> getAllByNameSync(List<String> nameValues) {
+  List<Group?> getAllByNameSync(List<String> nameValues) {
     final values = nameValues.map((e) => [e]).toList();
     return getAllByIndexSync('name', values);
   }
@@ -2453,19 +2458,19 @@ extension GroupsByIndex on IsarCollection<Groups> {
   }
 }
 
-extension GroupsQueryWhereSort on QueryBuilder<Groups, Groups, QWhere> {
-  QueryBuilder<Groups, Groups, QAfterWhere> anyId() {
+extension GroupQueryWhereSort on QueryBuilder<Group, Group, QWhere> {
+  QueryBuilder<Group, Group, QAfterWhere> anyId() {
     return addWhereClauseInternal(const IdWhereClause.any());
   }
 
-  QueryBuilder<Groups, Groups, QAfterWhere> anyName() {
+  QueryBuilder<Group, Group, QAfterWhere> anyName() {
     return addWhereClauseInternal(
         const IndexWhereClause.any(indexName: 'name'));
   }
 }
 
-extension GroupsQueryWhere on QueryBuilder<Groups, Groups, QWhereClause> {
-  QueryBuilder<Groups, Groups, QAfterWhereClause> idEqualTo(int id) {
+extension GroupQueryWhere on QueryBuilder<Group, Group, QWhereClause> {
+  QueryBuilder<Group, Group, QAfterWhereClause> idEqualTo(int id) {
     return addWhereClauseInternal(IdWhereClause.between(
       lower: id,
       includeLower: true,
@@ -2474,7 +2479,7 @@ extension GroupsQueryWhere on QueryBuilder<Groups, Groups, QWhereClause> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterWhereClause> idNotEqualTo(int id) {
+  QueryBuilder<Group, Group, QAfterWhereClause> idNotEqualTo(int id) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(
         IdWhereClause.lessThan(upper: id, includeUpper: false),
@@ -2490,21 +2495,21 @@ extension GroupsQueryWhere on QueryBuilder<Groups, Groups, QWhereClause> {
     }
   }
 
-  QueryBuilder<Groups, Groups, QAfterWhereClause> idGreaterThan(int id,
+  QueryBuilder<Group, Group, QAfterWhereClause> idGreaterThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.greaterThan(lower: id, includeLower: include),
     );
   }
 
-  QueryBuilder<Groups, Groups, QAfterWhereClause> idLessThan(int id,
+  QueryBuilder<Group, Group, QAfterWhereClause> idLessThan(int id,
       {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.lessThan(upper: id, includeUpper: include),
     );
   }
 
-  QueryBuilder<Groups, Groups, QAfterWhereClause> idBetween(
+  QueryBuilder<Group, Group, QAfterWhereClause> idBetween(
     int lowerId,
     int upperId, {
     bool includeLower = true,
@@ -2518,14 +2523,14 @@ extension GroupsQueryWhere on QueryBuilder<Groups, Groups, QWhereClause> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterWhereClause> nameEqualTo(String name) {
+  QueryBuilder<Group, Group, QAfterWhereClause> nameEqualTo(String name) {
     return addWhereClauseInternal(IndexWhereClause.equalTo(
       indexName: 'name',
       value: [name],
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterWhereClause> nameNotEqualTo(String name) {
+  QueryBuilder<Group, Group, QAfterWhereClause> nameNotEqualTo(String name) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'name',
@@ -2550,8 +2555,8 @@ extension GroupsQueryWhere on QueryBuilder<Groups, Groups, QWhereClause> {
   }
 }
 
-extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> idIsNull() {
+extension GroupQueryFilter on QueryBuilder<Group, Group, QFilterCondition> {
+  QueryBuilder<Group, Group, QAfterFilterCondition> idIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
       property: 'id',
@@ -2559,7 +2564,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> idEqualTo(int value) {
+  QueryBuilder<Group, Group, QAfterFilterCondition> idEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'id',
@@ -2567,7 +2572,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<Group, Group, QAfterFilterCondition> idGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -2579,7 +2584,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> idLessThan(
+  QueryBuilder<Group, Group, QAfterFilterCondition> idLessThan(
     int value, {
     bool include = false,
   }) {
@@ -2591,7 +2596,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> idBetween(
+  QueryBuilder<Group, Group, QAfterFilterCondition> idBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -2606,7 +2611,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> nameEqualTo(
+  QueryBuilder<Group, Group, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2618,7 +2623,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> nameGreaterThan(
+  QueryBuilder<Group, Group, QAfterFilterCondition> nameGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -2632,7 +2637,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> nameLessThan(
+  QueryBuilder<Group, Group, QAfterFilterCondition> nameLessThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
@@ -2646,7 +2651,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> nameBetween(
+  QueryBuilder<Group, Group, QAfterFilterCondition> nameBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
@@ -2663,7 +2668,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> nameStartsWith(
+  QueryBuilder<Group, Group, QAfterFilterCondition> nameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2675,7 +2680,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> nameEndsWith(
+  QueryBuilder<Group, Group, QAfterFilterCondition> nameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2687,7 +2692,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> nameContains(String value,
+  QueryBuilder<Group, Group, QAfterFilterCondition> nameContains(String value,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.contains,
@@ -2697,8 +2702,7 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Groups, Groups, QAfterFilterCondition> nameMatches(
-      String pattern,
+  QueryBuilder<Group, Group, QAfterFilterCondition> nameMatches(String pattern,
       {bool caseSensitive = true}) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
@@ -2709,62 +2713,61 @@ extension GroupsQueryFilter on QueryBuilder<Groups, Groups, QFilterCondition> {
   }
 }
 
-extension GroupsQueryLinks on QueryBuilder<Groups, Groups, QFilterCondition> {}
+extension GroupQueryLinks on QueryBuilder<Group, Group, QFilterCondition> {}
 
-extension GroupsQueryWhereSortBy on QueryBuilder<Groups, Groups, QSortBy> {
-  QueryBuilder<Groups, Groups, QAfterSortBy> sortById() {
+extension GroupQueryWhereSortBy on QueryBuilder<Group, Group, QSortBy> {
+  QueryBuilder<Group, Group, QAfterSortBy> sortById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<Groups, Groups, QAfterSortBy> sortByIdDesc() {
+  QueryBuilder<Group, Group, QAfterSortBy> sortByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<Groups, Groups, QAfterSortBy> sortByName() {
+  QueryBuilder<Group, Group, QAfterSortBy> sortByName() {
     return addSortByInternal('name', Sort.asc);
   }
 
-  QueryBuilder<Groups, Groups, QAfterSortBy> sortByNameDesc() {
+  QueryBuilder<Group, Group, QAfterSortBy> sortByNameDesc() {
     return addSortByInternal('name', Sort.desc);
   }
 }
 
-extension GroupsQueryWhereSortThenBy
-    on QueryBuilder<Groups, Groups, QSortThenBy> {
-  QueryBuilder<Groups, Groups, QAfterSortBy> thenById() {
+extension GroupQueryWhereSortThenBy on QueryBuilder<Group, Group, QSortThenBy> {
+  QueryBuilder<Group, Group, QAfterSortBy> thenById() {
     return addSortByInternal('id', Sort.asc);
   }
 
-  QueryBuilder<Groups, Groups, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<Group, Group, QAfterSortBy> thenByIdDesc() {
     return addSortByInternal('id', Sort.desc);
   }
 
-  QueryBuilder<Groups, Groups, QAfterSortBy> thenByName() {
+  QueryBuilder<Group, Group, QAfterSortBy> thenByName() {
     return addSortByInternal('name', Sort.asc);
   }
 
-  QueryBuilder<Groups, Groups, QAfterSortBy> thenByNameDesc() {
+  QueryBuilder<Group, Group, QAfterSortBy> thenByNameDesc() {
     return addSortByInternal('name', Sort.desc);
   }
 }
 
-extension GroupsQueryWhereDistinct on QueryBuilder<Groups, Groups, QDistinct> {
-  QueryBuilder<Groups, Groups, QDistinct> distinctById() {
+extension GroupQueryWhereDistinct on QueryBuilder<Group, Group, QDistinct> {
+  QueryBuilder<Group, Group, QDistinct> distinctById() {
     return addDistinctByInternal('id');
   }
 
-  QueryBuilder<Groups, Groups, QDistinct> distinctByName(
+  QueryBuilder<Group, Group, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('name', caseSensitive: caseSensitive);
   }
 }
 
-extension GroupsQueryProperty on QueryBuilder<Groups, Groups, QQueryProperty> {
-  QueryBuilder<Groups, int?, QQueryOperations> idProperty() {
+extension GroupQueryProperty on QueryBuilder<Group, Group, QQueryProperty> {
+  QueryBuilder<Group, int?, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
 
-  QueryBuilder<Groups, String, QQueryOperations> nameProperty() {
+  QueryBuilder<Group, String, QQueryOperations> nameProperty() {
     return addPropertyNameInternal('name');
   }
 }

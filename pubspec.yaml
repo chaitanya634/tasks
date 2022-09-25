@@ -82,12 +82,9 @@ flutter:
   
   # font icons
   fonts:
-   - family: OutlinedFontIcons
+   - family: NavigationIcons
      fonts:
-      - asset: lib/assets/icons/outlined_font.ttf
-   - family: DeleteFontIcon
-     fonts:
-      - asset: lib/assets/icons/delete_font.ttf
+      - asset: lib/assets/icons/navigation.ttf
   
   # fonts
    - family: GreatVibes

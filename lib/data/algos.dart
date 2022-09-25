@@ -1,5 +1,3 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -8,22 +6,28 @@ import '../isar_db/collections.dart';
 import 'enums.dart';
 
 String ordinal(int number) {
-  if (number == 1 || number == 21 || number == 31)
-    return 'st';
-  else if (number == 2 || number == 22)
-    return 'nd';
-  else if (number == 3 || number == 23)
-    return 'rd';
-  else
-    return 'th';
+  switch (number) {
+    case 1:
+    case 21:
+    case 31:
+      return 'st';
+    case 2:
+    case 22:
+      return 'nd';
+    case 3:
+    case 23:
+      return 'rd';
+    default:
+      return 'th';
+  }
 }
 
-Widget? generateSubtitle(Tasks taskModel) {
+Widget? generateSubtitle(Task taskModel) {
   if (taskModel.remainder == null &&
       taskModel.due == null &&
-      taskModel.repeat == null)
+      taskModel.repeat == null) {
     return null;
-  else {
+  } else {
     return SizedBox(
       height: 18,
       child: ListView(
