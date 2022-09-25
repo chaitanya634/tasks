@@ -162,13 +162,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  dynamic_color:
-    dependency: "direct main"
-    description:
-      name: dynamic_color
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.4.0"
   fake_async:
     dependency: transitive
     description:
@@ -592,4 +585,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.17.6 <3.0.0"
-  flutter: ">=2.13.0-0.2.pre"
+  flutter: ">=2.8.1"

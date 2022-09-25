@@ -1,7 +1,8 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks/isar_db/collections.dart';
-import 'package:tasks/isar_db/collections_provider.dart';
+import 'package:tasks/isar_db/isar_database_provider.dart';
 import '../data/algos.dart';
 import 'create_task.dart';
 import 'drawer.dart';
@@ -11,7 +12,6 @@ class HomePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    debugPrint('build home page');
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       key: _scaffoldKey,
@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
         slivers: [
           //app bar
           SliverAppBar(
+            backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             shadowColor: colorScheme.shadow,
             floating: true,
@@ -179,81 +180,64 @@ class HomePage extends StatelessWidget {
           child: DrawerBody(),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: colorScheme.secondaryContainer,
-        shape: const CircularNotchedRectangle(),
-        child: Wrap(
-          children: [
-            //Menu
-            IconButton(
-              icon: Icon(
-                Icons.menu_rounded,
-                color: colorScheme.inverseSurface,
-              ),
-              onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-            ),
 
-            //MyDay
-            IconButton(
-              icon: Icon(
-                context.watch<CollectionsProvider>().activeListId == 1
-                    ? Icons.today
-                    : Icons.today_outlined,
-                color: context.watch<CollectionsProvider>().activeListId == 1
-                    ? colorScheme.primary
-                    : colorScheme.inverseSurface,
-                size: 21,
-              ),
-              onPressed: () {
-                context.read<CollectionsProvider>().setActiveGroupId(1);
-                context.read<CollectionsProvider>().setActiveListId(1);
-                context.read<CollectionsProvider>().setCurrentDayAppBarTitle();
-              },
+      bottomNavigationBar: NavigationBar(
+        height: 48,
+        surfaceTintColor: colorScheme.surface,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        destinations: const [
+          NavigationDestination(
+            icon: RotatedBox(
+              quarterTurns: 2,
+              child: Icon(Icons.menu_open_rounded, size: 24),
             ),
-
-            // Planned
-            IconButton(
-              icon: Icon(
-                Icons.task_alt_rounded,
-                color: context.watch<CollectionsProvider>().activeListId == 2
-                    ? colorScheme.primary
-                    : colorScheme.inverseSurface,
-                size: 21,
-              ),
-              onPressed: () {
-                context.read<CollectionsProvider>().setActiveGroupId(1);
-                context
-                    .read<CollectionsProvider>()
-                    .setCustomAppBarTitle('Planned');
-                context.read<CollectionsProvider>().setActiveListId(2);
-              },
-            ),
-
-            //Starred
-            IconButton(
-              icon: Icon(
-                context.watch<CollectionsProvider>().activeListId == 3
-                    ? Icons.star_rounded
-                    : Icons.star_outline_rounded,
-                color: context.watch<CollectionsProvider>().activeListId == 3
-                    ? colorScheme.primary
-                    : colorScheme.inverseSurface,
-              ),
-              onPressed: () {
-                context.read<CollectionsProvider>().setActiveGroupId(1);
-                context
-                    .read<CollectionsProvider>()
-                    .setCustomAppBarTitle('Starred');
-                context.read<CollectionsProvider>().setActiveListId(3);
-              },
-            ),
-          ],
-        ),
+            label: 'Menu',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.today),
+            icon: Icon(Icons.today_outlined, size: 22),
+            label: 'My Day',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.task_alt_rounded, size: 22),
+            label: 'Planned',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.star_rounded, size: 26),
+            icon: Icon(Icons.star_outline_rounded, size: 26),
+            label: 'Starred',
+          ),
+        ],
+        onDestinationSelected: (value) {
+          var readProvider = context.read<CollectionsProvider>();
+          switch (value) {
+            case 0:
+              _scaffoldKey.currentState?.openDrawer();
+              break;
+            case 1:
+              readProvider.setActiveGroupId(1);
+              readProvider.setActiveListId(1);
+              readProvider.setCurrentDayAppBarTitle();
+              break;
+            case 2:
+              readProvider.setActiveGroupId(1);
+              readProvider.setActiveListId(2);
+              readProvider.setCustomAppBarTitle('Planned');
+              break;
+            case 3:
+              readProvider.setActiveGroupId(1);
+              readProvider.setActiveListId(3);
+              readProvider.setCustomAppBarTitle('Starred');
+              break;
+            default:
+          }
+        },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: 
+      
+      FloatingActionButton(
         elevation: 2.5,
         backgroundColor: colorScheme.primaryContainer,
-        shape: const CircleBorder(),
         onPressed: () {
           showGeneralDialog(
             context: context,
@@ -281,7 +265,7 @@ class HomePage extends StatelessWidget {
           color: colorScheme.onPrimaryContainer,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
     );
   }
 }
+*/
