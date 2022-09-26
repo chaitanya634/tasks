@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../isar_db/collections.dart';
+import 'isar_database/collections.dart';
 import 'enums.dart';
 
 String ordinal(int number) {

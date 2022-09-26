@@ -4,6 +4,7 @@ part 'collections.g.dart';
 @Collection()
 class Subtask {
   Subtask({
+    required this.id,
     required this.groupId,
     required this.listId,
     required this.taskId,
@@ -11,10 +12,10 @@ class Subtask {
     this.title,
   });
 
-  int? id = Isar.autoIncrement;
-  late int groupId;
-  late int listId;
-  late int taskId;
+  int id;
+  int groupId;
+  int listId;
+  int taskId;
 
   bool isChecked;
   String? title;
@@ -23,24 +24,25 @@ class Subtask {
 @Collection()
 class Task {
   Task({
+    required this.id,
     required this.groupId,
     required this.listId,
+    required this.title,
     this.isStarred = false,
     this.isChecked = false,
-    this.title,
     this.remainder,
     this.due,
     this.repeat,
     this.note,
   });
 
-  int? id = Isar.autoIncrement;
-  late int groupId;
-  late int listId;
+  int id;
+  int groupId;
+  int listId;
 
-  bool isStarred = false;
-  bool isChecked = false;
-  String? title;
+  String title;
+  bool isStarred;
+  bool isChecked;
   DateTime? remainder;
   DateTime? due;
   int? repeat;
@@ -50,23 +52,23 @@ class Task {
 @Collection()
 class TaskList {
   TaskList({
+    required this.id,
     required this.groupId,
     required this.name,
-    this.id,
   });
 
-  int? id = Isar.autoIncrement;
+  int id;
+  int groupId;
 
-  late int groupId;
-  late String name;
+  String name;
 }
 
 @Collection()
 class Group {
-  Group({required this.name, this.id});
+  Group({required this.id, required this.name});
 
-  int? id = Isar.autoIncrement;
+  int id;
 
   @Index(unique: true)
-  late String name;
+  String name;
 }
