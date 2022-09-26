@@ -4,22 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 
 import 'collections.dart';
-import '../data/algos.dart';
-import '../data/enums.dart';
+import '../functions.dart';
+import '../enums.dart';
 
-class IsarDatabase with ChangeNotifier {
+class DatabaseProvider with ChangeNotifier {
   late Isar isar;
   late Widget homePageAppBarTitle;
   int activeGroupId = DefaultGroups.Main.index;
   int activeListId = DefaultLists.MyDay.index;
 
-  IsarDatabase(this.isar) {
+  DatabaseProvider(this.isar) {
     initIsar();
     setCurrentDayAppBarTitle();
   }
 
   void initIsar() async {
-    // await isar.writeTxn((isar) => isar.clear());
+    //delete all data from database
+    // await isar.writeTxn((isar) => isar.clear()); //TODO: comment this statement
 
     // create default groups
     int numGroups = await isar.groups.count();
@@ -161,109 +162,59 @@ class IsarDatabase with ChangeNotifier {
     notifyListeners();
   }
 
-  //work with groups
-  Stream<List<Group>> getGroups() {
-    return isar.groups.filter().idGreaterThan(0).watch(initialReturn: true);
-  }
+  Future<List<TaskList>> fetchTaskListCollection() =>
+      isar.taskLists.where().findAll();
 
-  void addGroup(Group group) async {
-    await isar.writeTxn((isar) async => await isar.groups.put(group));
-  }
+  Future<List<Group>> fetchGroupCollection() => isar.groups.where().findAll();
 
-  void removeGroupAt(int groupId) async {
-    await isar.writeTxn(
-      (isar) async => isar.groups.filter().idEqualTo(groupId).deleteAll(),
-    );
-  }
+  //temporary data
+  //required to avoid read write delay
+  late List<TaskList> tempTaskListCollection;
+  late List<Group> tempGroupCollection;
 
-  //work with lists
-  Stream<List<TaskList>> getLists(int groupId) {
-    return isar.taskLists
-        .filter()
-        .groupIdEqualTo(groupId)
-        .watch(initialReturn: true);
-  }
-
-  void addList(TaskList list) async {
-    await isar.writeTxn((isar) async => await isar.taskLists.put(list));
-  }
-
-  void removeListAt(int groupId, int listId) async {
-    isar.writeTxn((isar) async => await isar.taskLists
-        .filter()
-        .idEqualTo(listId)
-        .and()
-        .groupIdEqualTo(groupId)
-        .deleteAll());
-  }
-
-  //work with tasks
-  Stream<List<Task>> getTasks() {
-    return isar.tasks
-        .filter()
-        .groupIdEqualTo(activeGroupId)
-        .and()
-        .listIdEqualTo(activeListId)
-        .watch(initialReturn: true);
-  }
-
-  void updateTaskChecked(bool checkValue, int taskId) async {
-    var task = await isar.tasks.get(taskId);
-    task!.isChecked = checkValue;
+  void replaceGroupsCollection() async {
     await isar.writeTxn((isar) async {
-      await isar.tasks.filter().idEqualTo(taskId).deleteFirst();
-      await isar.tasks.put(task);
+      await isar.groups.clear();
+      await isar.groups.putAll(tempGroupCollection);
     });
   }
 
-  void updateTask(Task task) async {
+  void replaceTaskListCollection() async {
     await isar.writeTxn((isar) async {
-      await isar.tasks.filter().idEqualTo(task.id!).deleteFirst();
-      await isar.tasks.put(task);
+      await isar.taskLists.clear();
+      await isar.taskLists.putAll(tempTaskListCollection);
     });
   }
 
-  void addTask(Task task) async {
-    await isar.writeTxn((isar) async => await isar.tasks.put(task));
+  void initTempTaskListCollection(List<TaskList> taskListCollection) =>
+      tempTaskListCollection = taskListCollection;
+
+  void initTempGroupCollection(List<Group> groupCollection) =>
+      tempGroupCollection = groupCollection;
+
+  int tempTaskListId() => tempTaskListCollection.last.id + 1;
+
+  int tempGroupId() => tempGroupCollection.last.id + 1;
+
+  bool addTempGroup(Group group) {
+    tempGroupCollection.add(group);
+    notifyListeners();
+    return tempGroupCollection.contains(group);
   }
 
-  void removeTask(int taskId) async {
-    await isar.writeTxn((isar) async => await isar.tasks.delete(taskId));
+  bool addTempTaskList(TaskList taskList) {
+    tempTaskListCollection.add(taskList);
+    notifyListeners();
+    return tempTaskListCollection.contains(taskList);
   }
 
-  Future<int> getUniqueTaskId() async {
-    var numTasks = await isar.tasks.count();
-    if (numTasks == 0) {
-      return 1;
-    } else {
-      var tasks = await isar.tasks.where().findAll();
-      return tasks.last.id! + 1;
-    }
+  void deleteTempTaskList(TaskList taskList) {
+    tempTaskListCollection.remove(taskList);
+    notifyListeners();
   }
 
-  //work with subtask
-  Future<List<Subtask>> getSubtasks(int taskId) async {
-    return await isar.subtasks
-        .filter()
-        .groupIdEqualTo(activeGroupId)
-        .and()
-        .listIdEqualTo(activeListId)
-        .and()
-        .taskIdEqualTo(taskId)
-        .findAll();
-  }
-
-  void addSubtasks(int taskId, List<Subtask> subtasks) async {
-    await isar.writeTxn((isar) async {
-      await isar.subtasks
-          .filter()
-          .groupIdEqualTo(activeGroupId)
-          .and()
-          .listIdEqualTo(activeListId)
-          .and()
-          .taskIdEqualTo(taskId)
-          .deleteAll();
-      await isar.subtasks.putAll(subtasks);
-    });
+  void deleteTempGroup(Group group) {
+    tempGroupCollection.remove(group);
+    notifyListeners();
   }
 }

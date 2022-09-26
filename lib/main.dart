@@ -6,8 +6,8 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'isar_db/collections.dart';
-import 'isar_db/isar_database_provider.dart';
+import 'isar_database/collections.dart';
+import 'isar_database/database_provider.dart';
 import 'layouts/desktop.dart';
 import 'layouts/phone.dart';
 import 'layouts/tablet.dart';
@@ -16,17 +16,16 @@ import 'themes/light.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Directory? directory = kIsWeb ? null : await getApplicationSupportDirectory();
-  Isar isar = await Isar.open(
+  Directory? applicationSupportDirectory =
+      kIsWeb ? null : await getApplicationSupportDirectory();
+  Isar isarDatabase = await Isar.open(
     schemas: [SubtaskSchema, TaskSchema, TaskListSchema, GroupSchema],
-    directory: directory?.path,
+    directory: applicationSupportDirectory?.path,
   );
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => IsarDatabase(isar),
-      child: const App(),
-    ),
-  );
+  runApp(ChangeNotifierProvider(
+    create: (context) => DatabaseProvider(isarDatabase),
+    child: const App(),
+  ));
 }
 
 class App extends StatelessWidget {
@@ -42,7 +41,7 @@ class App extends StatelessWidget {
           builder: (context, constraints) {
             var scaffoldKey = GlobalKey<ScaffoldState>();
             var colorScheme = Theme.of(context).colorScheme;
-            double viewportWidth = constraints.maxWidth;
+            var viewportWidth = constraints.maxWidth;
             if (viewportWidth > 0 && viewportWidth < 466) {
               //0 to 465
               return PhoneLayout(colorScheme, scaffoldKey);

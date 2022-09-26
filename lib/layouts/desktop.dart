@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks/widgets/drawer.dart';
 
-import '../data/algos.dart';
-import '../isar_db/collections.dart';
-import '../isar_db/isar_database_provider.dart';
+import '../functions.dart';
 import '../widgets/create_task.dart';
 
 class DesktopLayout extends StatelessWidget {

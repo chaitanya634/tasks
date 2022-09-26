@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 part of 'collections.dart';
 
 // **************************************************************************
@@ -97,12 +99,12 @@ Subtask _subtaskDeserializeNative(IsarCollection<Subtask> collection, int id,
     IsarBinaryReader reader, List<int> offsets) {
   final object = Subtask(
     groupId: reader.readLong(offsets[0]),
+    id: id,
     isChecked: reader.readBool(offsets[1]),
     listId: reader.readLong(offsets[2]),
     taskId: reader.readLong(offsets[3]),
     title: reader.readStringOrNull(offsets[4]),
   );
-  object.id = id;
   return object;
 }
 
@@ -143,12 +145,12 @@ Subtask _subtaskDeserializeWeb(
   final object = Subtask(
     groupId:
         IsarNative.jsObjectGet(jsObj, 'groupId') ?? double.negativeInfinity,
+    id: IsarNative.jsObjectGet(jsObj, 'id') ?? double.negativeInfinity,
     isChecked: IsarNative.jsObjectGet(jsObj, 'isChecked') ?? false,
     listId: IsarNative.jsObjectGet(jsObj, 'listId') ?? double.negativeInfinity,
     taskId: IsarNative.jsObjectGet(jsObj, 'taskId') ?? double.negativeInfinity,
     title: IsarNative.jsObjectGet(jsObj, 'title'),
   );
-  object.id = IsarNative.jsObjectGet(jsObj, 'id');
   return object;
 }
 
@@ -158,7 +160,8 @@ P _subtaskDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'groupId') ??
           double.negativeInfinity) as P;
     case 'id':
-      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+      return (IsarNative.jsObjectGet(jsObj, 'id') ?? double.negativeInfinity)
+          as P;
     case 'isChecked':
       return (IsarNative.jsObjectGet(jsObj, 'isChecked') ?? false) as P;
     case 'listId':
@@ -284,14 +287,6 @@ extension SubtaskQueryFilter
       includeLower: includeLower,
       upper: upper,
       includeUpper: includeUpper,
-    ));
-  }
-
-  QueryBuilder<Subtask, Subtask, QAfterFilterCondition> idIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'id',
-      value: null,
     ));
   }
 
@@ -697,7 +692,7 @@ extension SubtaskQueryProperty
     return addPropertyNameInternal('groupId');
   }
 
-  QueryBuilder<Subtask, int?, QQueryOperations> idProperty() {
+  QueryBuilder<Subtask, int, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
 
@@ -798,11 +793,8 @@ void _taskSerializeNative(IsarCollection<Task> collection, IsarRawObject rawObj,
   final value7 = object.repeat;
   final _repeat = value7;
   final value8 = object.title;
-  IsarUint8List? _title;
-  if (value8 != null) {
-    _title = IsarBinaryWriter.utf8Encoder.convert(value8);
-  }
-  dynamicSize += (_title?.length ?? 0) as int;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value8);
+  dynamicSize += (_title.length) as int;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
@@ -825,15 +817,15 @@ Task _taskDeserializeNative(IsarCollection<Task> collection, int id,
   final object = Task(
     due: reader.readDateTimeOrNull(offsets[0]),
     groupId: reader.readLong(offsets[1]),
+    id: id,
     isChecked: reader.readBool(offsets[2]),
     isStarred: reader.readBool(offsets[3]),
     listId: reader.readLong(offsets[4]),
     note: reader.readStringOrNull(offsets[5]),
     remainder: reader.readDateTimeOrNull(offsets[6]),
     repeat: reader.readLongOrNull(offsets[7]),
-    title: reader.readStringOrNull(offsets[8]),
+    title: reader.readString(offsets[8]),
   );
-  object.id = id;
   return object;
 }
 
@@ -859,7 +851,7 @@ P _taskDeserializePropNative<P>(
     case 7:
       return (reader.readLongOrNull(offset)) as P;
     case 8:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
   }
@@ -892,6 +884,7 @@ Task _taskDeserializeWeb(IsarCollection<Task> collection, dynamic jsObj) {
         : null,
     groupId:
         IsarNative.jsObjectGet(jsObj, 'groupId') ?? double.negativeInfinity,
+    id: IsarNative.jsObjectGet(jsObj, 'id') ?? double.negativeInfinity,
     isChecked: IsarNative.jsObjectGet(jsObj, 'isChecked') ?? false,
     isStarred: IsarNative.jsObjectGet(jsObj, 'isStarred') ?? false,
     listId: IsarNative.jsObjectGet(jsObj, 'listId') ?? double.negativeInfinity,
@@ -903,9 +896,8 @@ Task _taskDeserializeWeb(IsarCollection<Task> collection, dynamic jsObj) {
             .toLocal()
         : null,
     repeat: IsarNative.jsObjectGet(jsObj, 'repeat'),
-    title: IsarNative.jsObjectGet(jsObj, 'title'),
+    title: IsarNative.jsObjectGet(jsObj, 'title') ?? '',
   );
-  object.id = IsarNative.jsObjectGet(jsObj, 'id');
   return object;
 }
 
@@ -922,7 +914,8 @@ P _taskDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'groupId') ??
           double.negativeInfinity) as P;
     case 'id':
-      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+      return (IsarNative.jsObjectGet(jsObj, 'id') ?? double.negativeInfinity)
+          as P;
     case 'isChecked':
       return (IsarNative.jsObjectGet(jsObj, 'isChecked') ?? false) as P;
     case 'isStarred':
@@ -942,7 +935,7 @@ P _taskDeserializePropWeb<P>(Object jsObj, String propertyName) {
     case 'repeat':
       return (IsarNative.jsObjectGet(jsObj, 'repeat')) as P;
     case 'title':
-      return (IsarNative.jsObjectGet(jsObj, 'title')) as P;
+      return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
     default:
       throw 'Illegal propertyName';
   }
@@ -1111,14 +1104,6 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
       includeLower: includeLower,
       upper: upper,
       includeUpper: includeUpper,
-    ));
-  }
-
-  QueryBuilder<Task, Task, QAfterFilterCondition> idIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'id',
-      value: null,
     ));
   }
 
@@ -1452,16 +1437,8 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
     ));
   }
 
-  QueryBuilder<Task, Task, QAfterFilterCondition> titleIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'title',
-      value: null,
-    ));
-  }
-
   QueryBuilder<Task, Task, QAfterFilterCondition> titleEqualTo(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -1473,7 +1450,7 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
   }
 
   QueryBuilder<Task, Task, QAfterFilterCondition> titleGreaterThan(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
@@ -1487,7 +1464,7 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
   }
 
   QueryBuilder<Task, Task, QAfterFilterCondition> titleLessThan(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
@@ -1501,8 +1478,8 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
   }
 
   QueryBuilder<Task, Task, QAfterFilterCondition> titleBetween(
-    String? lower,
-    String? upper, {
+    String lower,
+    String upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
@@ -1781,7 +1758,7 @@ extension TaskQueryProperty on QueryBuilder<Task, Task, QQueryProperty> {
     return addPropertyNameInternal('groupId');
   }
 
-  QueryBuilder<Task, int?, QQueryOperations> idProperty() {
+  QueryBuilder<Task, int, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
 
@@ -1809,7 +1786,7 @@ extension TaskQueryProperty on QueryBuilder<Task, Task, QQueryProperty> {
     return addPropertyNameInternal('repeat');
   }
 
-  QueryBuilder<Task, String?, QQueryOperations> titleProperty() {
+  QueryBuilder<Task, String, QQueryOperations> titleProperty() {
     return addPropertyNameInternal('title');
   }
 }
@@ -1921,7 +1898,7 @@ TaskList _taskListDeserializeWeb(
   final object = TaskList(
     groupId:
         IsarNative.jsObjectGet(jsObj, 'groupId') ?? double.negativeInfinity,
-    id: IsarNative.jsObjectGet(jsObj, 'id'),
+    id: IsarNative.jsObjectGet(jsObj, 'id') ?? double.negativeInfinity,
     name: IsarNative.jsObjectGet(jsObj, 'name') ?? '',
   );
   return object;
@@ -1933,7 +1910,8 @@ P _taskListDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'groupId') ??
           double.negativeInfinity) as P;
     case 'id':
-      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+      return (IsarNative.jsObjectGet(jsObj, 'id') ?? double.negativeInfinity)
+          as P;
     case 'name':
       return (IsarNative.jsObjectGet(jsObj, 'name') ?? '') as P;
     default:
@@ -2051,14 +2029,6 @@ extension TaskListQueryFilter
       includeLower: includeLower,
       upper: upper,
       includeUpper: includeUpper,
-    ));
-  }
-
-  QueryBuilder<TaskList, TaskList, QAfterFilterCondition> idIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'id',
-      value: null,
     ));
   }
 
@@ -2292,7 +2262,7 @@ extension TaskListQueryProperty
     return addPropertyNameInternal('groupId');
   }
 
-  QueryBuilder<TaskList, int?, QQueryOperations> idProperty() {
+  QueryBuilder<TaskList, int, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
 
@@ -2401,7 +2371,7 @@ dynamic _groupSerializeWeb(IsarCollection<Group> collection, Group object) {
 
 Group _groupDeserializeWeb(IsarCollection<Group> collection, dynamic jsObj) {
   final object = Group(
-    id: IsarNative.jsObjectGet(jsObj, 'id'),
+    id: IsarNative.jsObjectGet(jsObj, 'id') ?? double.negativeInfinity,
     name: IsarNative.jsObjectGet(jsObj, 'name') ?? '',
   );
   return object;
@@ -2410,7 +2380,8 @@ Group _groupDeserializeWeb(IsarCollection<Group> collection, dynamic jsObj) {
 P _groupDeserializePropWeb<P>(Object jsObj, String propertyName) {
   switch (propertyName) {
     case 'id':
-      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+      return (IsarNative.jsObjectGet(jsObj, 'id') ?? double.negativeInfinity)
+          as P;
     case 'name':
       return (IsarNative.jsObjectGet(jsObj, 'name') ?? '') as P;
     default:
@@ -2556,14 +2527,6 @@ extension GroupQueryWhere on QueryBuilder<Group, Group, QWhereClause> {
 }
 
 extension GroupQueryFilter on QueryBuilder<Group, Group, QFilterCondition> {
-  QueryBuilder<Group, Group, QAfterFilterCondition> idIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'id',
-      value: null,
-    ));
-  }
-
   QueryBuilder<Group, Group, QAfterFilterCondition> idEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
@@ -2763,7 +2726,7 @@ extension GroupQueryWhereDistinct on QueryBuilder<Group, Group, QDistinct> {
 }
 
 extension GroupQueryProperty on QueryBuilder<Group, Group, QQueryProperty> {
-  QueryBuilder<Group, int?, QQueryOperations> idProperty() {
+  QueryBuilder<Group, int, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
 

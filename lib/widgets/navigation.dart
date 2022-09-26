@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../data/enums.dart';
-import '../isar_db/isar_database_provider.dart';
+import '../enums.dart';
+import '../isar_database/database_provider.dart';
 
 class NavigationElement {
   const NavigationElement({
@@ -45,7 +45,7 @@ void onNavigationElementSelected(
   int elementIndex,
   GlobalKey<ScaffoldState> scaffoldKey,
 ) {
-  var readProvider = context.read<IsarDatabase>();
+  var readProvider = context.read<DatabaseProvider>();
   switch (elementIndex) {
     case 0:
       scaffoldKey.currentState?.openDrawer();

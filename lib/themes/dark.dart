@@ -33,8 +33,8 @@ ThemeData darkThemeData() => ThemeData(
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: const HSLColor.fromAHSL(1, 250, 0.2, 0.17).toColor(),
-        foregroundColor: const HSLColor.fromAHSL(1, 180, 1, 0.36).toColor(),
+        backgroundColor: const HSLColor.fromAHSL(1, 250, 0.2, 0.24).toColor(),
+        foregroundColor: const HSLColor.fromAHSL(1, 180, 1, 0.45).toColor(),
       ),
       colorScheme: ColorScheme.dark(
         background: const HSLColor.fromAHSL(1, 209, 0.28, 0.08).toColor(),
