@@ -793,8 +793,11 @@ void _taskSerializeNative(IsarCollection<Task> collection, IsarRawObject rawObj,
   final value7 = object.repeat;
   final _repeat = value7;
   final value8 = object.title;
-  final _title = IsarBinaryWriter.utf8Encoder.convert(value8);
-  dynamicSize += (_title.length) as int;
+  IsarUint8List? _title;
+  if (value8 != null) {
+    _title = IsarBinaryWriter.utf8Encoder.convert(value8);
+  }
+  dynamicSize += (_title?.length ?? 0) as int;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
@@ -824,7 +827,7 @@ Task _taskDeserializeNative(IsarCollection<Task> collection, int id,
     note: reader.readStringOrNull(offsets[5]),
     remainder: reader.readDateTimeOrNull(offsets[6]),
     repeat: reader.readLongOrNull(offsets[7]),
-    title: reader.readString(offsets[8]),
+    title: reader.readStringOrNull(offsets[8]),
   );
   return object;
 }
@@ -851,7 +854,7 @@ P _taskDeserializePropNative<P>(
     case 7:
       return (reader.readLongOrNull(offset)) as P;
     case 8:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
   }
@@ -896,7 +899,7 @@ Task _taskDeserializeWeb(IsarCollection<Task> collection, dynamic jsObj) {
             .toLocal()
         : null,
     repeat: IsarNative.jsObjectGet(jsObj, 'repeat'),
-    title: IsarNative.jsObjectGet(jsObj, 'title') ?? '',
+    title: IsarNative.jsObjectGet(jsObj, 'title'),
   );
   return object;
 }
@@ -935,7 +938,7 @@ P _taskDeserializePropWeb<P>(Object jsObj, String propertyName) {
     case 'repeat':
       return (IsarNative.jsObjectGet(jsObj, 'repeat')) as P;
     case 'title':
-      return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
+      return (IsarNative.jsObjectGet(jsObj, 'title')) as P;
     default:
       throw 'Illegal propertyName';
   }
@@ -1437,8 +1440,16 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
     ));
   }
 
+  QueryBuilder<Task, Task, QAfterFilterCondition> titleIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'title',
+      value: null,
+    ));
+  }
+
   QueryBuilder<Task, Task, QAfterFilterCondition> titleEqualTo(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -1450,7 +1461,7 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
   }
 
   QueryBuilder<Task, Task, QAfterFilterCondition> titleGreaterThan(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
@@ -1464,7 +1475,7 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
   }
 
   QueryBuilder<Task, Task, QAfterFilterCondition> titleLessThan(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
@@ -1478,8 +1489,8 @@ extension TaskQueryFilter on QueryBuilder<Task, Task, QFilterCondition> {
   }
 
   QueryBuilder<Task, Task, QAfterFilterCondition> titleBetween(
-    String lower,
-    String upper, {
+    String? lower,
+    String? upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
@@ -1786,7 +1797,7 @@ extension TaskQueryProperty on QueryBuilder<Task, Task, QQueryProperty> {
     return addPropertyNameInternal('repeat');
   }
 
-  QueryBuilder<Task, String, QQueryOperations> titleProperty() {
+  QueryBuilder<Task, String?, QQueryOperations> titleProperty() {
     return addPropertyNameInternal('title');
   }
 }

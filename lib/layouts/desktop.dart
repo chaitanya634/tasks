@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tasks/widgets/drawer.dart';
-
-import '../functions.dart';
-import '../widgets/create_task.dart';
 
 class DesktopLayout extends StatelessWidget {
   const DesktopLayout(this.colorScheme, {super.key});

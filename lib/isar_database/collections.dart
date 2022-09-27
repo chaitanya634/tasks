@@ -27,7 +27,7 @@ class Task {
     required this.id,
     required this.groupId,
     required this.listId,
-    required this.title,
+    this.title,
     this.isStarred = false,
     this.isChecked = false,
     this.remainder,
@@ -40,7 +40,7 @@ class Task {
   int groupId;
   int listId;
 
-  String title;
+  String? title;
   bool isStarred;
   bool isChecked;
   DateTime? remainder;

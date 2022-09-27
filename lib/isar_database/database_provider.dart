@@ -20,7 +20,7 @@ class DatabaseProvider with ChangeNotifier {
 
   void initIsar() async {
     //delete all data from database
-    // await isar.writeTxn((isar) => isar.clear()); //TODO: comment this statement
+    // await isar.writeTxn((isar) => isar.clear());
 
     // create default groups
     int numGroups = await isar.groups.count();
@@ -162,16 +162,6 @@ class DatabaseProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<TaskList>> fetchTaskListCollection() =>
-      isar.taskLists.where().findAll();
-
-  Future<List<Group>> fetchGroupCollection() => isar.groups.where().findAll();
-
-  //temporary data
-  //required to avoid read write delay
-  late List<TaskList> tempTaskListCollection;
-  late List<Group> tempGroupCollection;
-
   void replaceGroupsCollection() async {
     await isar.writeTxn((isar) async {
       await isar.groups.clear();
@@ -186,16 +176,49 @@ class DatabaseProvider with ChangeNotifier {
     });
   }
 
-  void initTempTaskListCollection(List<TaskList> taskListCollection) =>
-      tempTaskListCollection = taskListCollection;
+  //fetch collection
+  Future<List<Group>> fetchGroupCollection() => isar.groups.where().findAll();
 
+  Future<List<TaskList>> fetchTaskListCollection() =>
+      isar.taskLists.where().findAll();
+
+  Future<List<Task>> fetchTaskCollection() => isar.tasks.where().findAll();
+
+  Future<List<Subtask>> fetchSubtaskCollection() =>
+      isar.subtasks.where().findAll();
+
+  //temporary data
+  //required to avoid read write delay
+  late List<Group> tempGroupCollection;
+  late List<TaskList> tempTaskListCollection;
+  late List<Task> tempTaskCollection;
+  late List<Subtask> tempSubtaskCollection;
+
+  //instantiate
   void initTempGroupCollection(List<Group> groupCollection) =>
       tempGroupCollection = groupCollection;
 
-  int tempTaskListId() => tempTaskListCollection.last.id + 1;
+  void initTempTaskListCollection(List<TaskList> taskListCollection) =>
+      tempTaskListCollection = taskListCollection;
 
+  void initTempTaskCollection(List<Task> taskCollection) =>
+      tempTaskCollection = taskCollection;
+
+  void initTempSubtaskCollection(List<Subtask> subtaskCollection) =>
+      tempSubtaskCollection = subtaskCollection;
+
+  //generate id
   int tempGroupId() => tempGroupCollection.last.id + 1;
 
+  int tempTaskListId() => tempTaskListCollection.last.id + 1;
+
+  int tempTaskId() =>
+      tempTaskCollection.isEmpty ? 0 : tempTaskCollection.last.id + 1;
+
+  int tempSubtaskId() =>
+      tempSubtaskCollection.isEmpty ? 0 : tempSubtaskCollection.last.id + 1;
+
+  //add element
   bool addTempGroup(Group group) {
     tempGroupCollection.add(group);
     notifyListeners();
@@ -208,6 +231,19 @@ class DatabaseProvider with ChangeNotifier {
     return tempTaskListCollection.contains(taskList);
   }
 
+  bool addTempTask(Task task) {
+    tempTaskCollection.add(task);
+    notifyListeners();
+    return tempTaskCollection.contains(task);
+  }
+
+  bool addTempSubtask(Subtask subtask) {
+    tempSubtaskCollection.add(subtask);
+    notifyListeners();
+    return tempSubtaskCollection.contains(subtask);
+  }
+
+  //delete element
   void deleteTempTaskList(TaskList taskList) {
     tempTaskListCollection.remove(taskList);
     notifyListeners();
