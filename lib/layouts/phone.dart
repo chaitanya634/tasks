@@ -1,9 +1,10 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/enums.dart';
 import 'package:tasks/isar_database/collections.dart';
 import 'package:tasks/isar_database/database_provider.dart';
 import 'package:tasks/widgets/display_task.dart';
-import 'package:tasks/widgets/loading.dart';
 
 import '../functions.dart';
 import '../widgets/drawer.dart';
@@ -17,118 +18,95 @@ class PhoneLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var readProvider = context.read<DatabaseProvider>();
-    var watchProvider = context.watch<DatabaseProvider>();
-    return FutureBuilder<List<Task>>(
-      future: readProvider.fetchTaskCollection(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData) {
-          readProvider.initTempTaskCollection(snapshot.data!);
-          return Scaffold(
-            key: scaffoldKey,
-            backgroundColor: colorScheme.background,
-            body: CustomScrollView(
-              slivers: [
-                //app bar
-                SliverAppBar(
-                  backgroundColor: Colors.transparent,
-                  automaticallyImplyLeading: false,
-                  shadowColor: colorScheme.shadow,
-                  floating: true,
-                  pinned: true,
-                  expandedHeight: 150.0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: context.select<DatabaseProvider, Widget>(
-                      (value) => value.homePageAppBarTitle,
-                    ),
-                    titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
-                    expandedTitleScale: 2,
+    debugPrint('build: scaffold');
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      key: scaffoldKey,
+      backgroundColor: colorScheme.background,
+      body: Builder(
+        builder: (context) {
+          debugPrint('build: scaffold body');
+          var watchProvider = context.watch<DatabaseProvider>();
+          return CustomScrollView(
+            slivers: [
+              //app bar
+              SliverAppBar(
+                backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: false,
+                shadowColor: colorScheme.shadow,
+                floating: true,
+                pinned: true,
+                expandedHeight: 150.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: context.select<DatabaseProvider, Widget>(
+                    (value) {
+                      debugPrint('build: appbar title');
+                      return value.homePageAppBarTitle;
+                    },
                   ),
-                  // actions: [
-                  //   PopupMenuButton(
-                  //     icon: const Icon(
-                  //         IconData(0xe813, fontFamily: 'OutlinedFontIcons')),
-                  //     itemBuilder: (context) => <PopupMenuEntry>[
-                  //       const PopupMenuItem(
-                  //           child: ListTile(
-                  //         title: Text('Creation'),
-                  //       )),
-                  //       const PopupMenuItem(
-                  //           child: ListTile(
-                  //         title: Text('Due date'),
-                  //       )),
-                  //       const PopupMenuItem(
-                  //           child: ListTile(
-                  //         title: Text('Starred'),
-                  //       )),
-                  //     ],
-                  //   ),
-                  //   IconButton(
-                  //     onPressed: () {},
-                  //     icon: const Icon(
-                  //       IconData(0xe814, fontFamily: 'OutlinedFontIcons'),
-                  //     ),
-                  //   ),
-                  //   PopupMenuButton(
-                  //     icon: const Icon(
-                  //         IconData(0xe815, fontFamily: 'OutlinedFontIcons')),
-                  //     itemBuilder: (context) => <PopupMenuEntry>[
-                  //       const PopupMenuItem(
-                  //           child: ListTile(
-                  //         title: Text('Reorder tasks'),
-                  //       )),
-                  //       const PopupMenuItem(
-                  //           child: ListTile(
-                  //         title: Text('Hide completed'),
-                  //       )),
-                  //       const PopupMenuItem(
-                  //           child: ListTile(
-                  //         title: Text('Print list'),
-                  //       )),
-                  //       const PopupMenuItem(
-                  //           child: ListTile(
-                  //         title: Text('Change theme'),
-                  //       )),
-                  //       const PopupMenuItem(
-                  //           child: ListTile(
-                  //         title: Text('Clear list'),
-                  //       )),
-                  //     ],
-                  //   )
-                  // ],
+                  titlePadding: const EdgeInsets.only(left: 16, bottom: 10),
+                  expandedTitleScale: 2,
                 ),
+              ),
 
-                //tasks list
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    childCount: watchProvider.tempTaskCollection
-                        .where((element) =>
-                            element.groupId == watchProvider.activeGroupId &&
-                            element.listId == watchProvider.activeListId)
-                        .length,
-                    (context, index) {
-                      var task = watchProvider.tempTaskCollection
-                          .where((element) =>
-                              element.groupId == watchProvider.activeGroupId &&
-                              element.listId == watchProvider.activeListId)
-                          .elementAt(index);
-                      return Column(
-                        children: [
-                          StatefulBuilder(
-                            builder: (context, setState) {
-                              return ListTile(
+              //tasks list
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: watchProvider.tempDatabase.entries
+                      .singleWhere(
+                          (element) => element.key == Collections.Tasks)
+                      .value
+                      .where((element) {
+                    var task = element as Task;
+                    return task.groupId == watchProvider.activeGroupId &&
+                        task.listId == watchProvider.activeListId;
+                  }).length,
+                  (context, index) {
+                    var task = watchProvider.tempDatabase.entries
+                        .singleWhere(
+                            (element) => element.key == Collections.Tasks)
+                        .value
+                        .where((element) {
+                      var task = element as Task;
+                      return task.groupId == watchProvider.activeGroupId &&
+                          task.listId == watchProvider.activeListId;
+                    }).elementAt(index) as Task;
+                    return Column(
+                      children: [
+                        StatefulBuilder(
+                          builder: (context, setState) {
+                            return OpenContainer(
+                              closedColor: colorScheme.background,
+                              openColor: colorScheme.background,
+                              transitionDuration:
+                                  const Duration(milliseconds: 600),
+                              openBuilder: (context, action) =>
+                                  DisplayTask(colorScheme, task: task),
+                              closedBuilder: (context, action) => ListTile(
                                 minVerticalPadding: 18,
                                 trailing: SizedBox(
                                   height: double.infinity,
                                   child: Checkbox(
-                                    checkColor: colorScheme.onPrimary,
-                                    activeColor: colorScheme.primary,
+                                    checkColor: colorScheme.onSecondary,
+                                    fillColor:
+                                        MaterialStateProperty.resolveWith(
+                                      (states) {
+                                        if (states.any((element) =>
+                                            element ==
+                                            MaterialState.selected)) {
+                                          return colorScheme.secondary;
+                                        }
+                                        return colorScheme.onBackground;
+                                      },
+                                    ),
                                     value: task.isChecked,
                                     onChanged: (value) {
                                       setState(() {
                                         task.isChecked = value!;
                                       });
+                                      context
+                                          .read<DatabaseProvider>()
+                                          .updateTaskChecked(value!, task);
                                     },
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5),
@@ -142,116 +120,63 @@ class PhoneLayout extends StatelessWidget {
                                     fontSize: 18,
                                   ),
                                 ),
-                                subtitle: generateSubtitle(task),
-                                onTap: () async {
-                                  // showGeneralDialog(
-                                  //   context: context,
-                                  //   pageBuilder: (context, animation,
-                                  //       secondaryAnimation) {
-                                  //     return FutureBuilder(
-                                  //       future: context
-                                  //           .read<CollectionsProvider>()
-                                  //           .getSubtasks(task.id!),
-                                  //       builder: (context, snapshot) {
-                                  //         if (snapshot.connectionState ==
-                                  //                 ConnectionState.done &&
-                                  //             snapshot.hasData) {
-                                  //           return CreateTaskPage(
-                                  //               task,
-                                  //               snapshot.data
-                                  //                   as List<Subtasks>);
-                                  //         }
-                                  //         return const Scaffold(
-                                  //             body: Center(
-                                  //           child: SizedBox(
-                                  //               width: 32,
-                                  //               height: 32,
-                                  //               child:
-                                  //                   CircularProgressIndicator()),
-                                  //         ));
-                                  //       },
-                                  //     );
-                                  //   },
-                                  // );
-                                
-                                },
-                              );
-                            },
-                          ),
-                          const Divider(height: 1),
-                        ],
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
-            drawer: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 328),
-              child: Drawer(child: DrawerBody(colorScheme)),
-            ),
-            onDrawerChanged: (isOpened) {
-              //on drawer closed
-              if (!isOpened) {
-                context.read<DatabaseProvider>()
-                  ..replaceTaskListCollection()
-                  ..replaceGroupsCollection();
-              }
-            },
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                showGeneralDialog(
-                  context: context,
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    return FutureBuilder(
-                      builder: (context, snapshot) {
-                        return const DisplayTask();
-                      },
+                                subtitle: generateSubtitle(task, colorScheme),
+                                onTap: action,
+                              ),
+                            );
+                          },
+                        ),
+                        const Divider(height: 1),
+                      ],
                     );
                   },
-                );
-              },
-              child:
-                  const Icon(IconData(0xe800, fontFamily: 'NavigationIcons')),
-            ),
-            bottomNavigationBar: NavigationBar(
-              destinations: navigationElements
-                  .map(
-                    (navigationElement) => NavigationDestination(
-                      label: navigationElement.label,
-                      icon: navigationElement.icon,
-                      selectedIcon: navigationElement.selectedIcon,
-                    ),
-                  )
-                  .toList(),
-              onDestinationSelected: (destinationIndex) =>
-                  onNavigationElementSelected(
-                context,
-                destinationIndex,
-                scaffoldKey,
-              ),
-              selectedIndex: context.select<DatabaseProvider, int>((isar) {
-                int listId = isar.activeListId;
-                return listId > 2 ? 0 : listId + 1;
-              }),
-            ),
+                ),
+              )
+            ],
           );
-        }
-
-        return Scaffold(
-          backgroundColor: colorScheme.background,
-          body: Center(
-            child: Text(
-              'Tasks',
-              style: TextStyle(
-                fontFamily: 'GreatVibes',
-                fontSize: 72,
-                color: colorScheme.primary,
-              ),
-            ),
+        },
+      ),
+      floatingActionButton: OpenContainer(
+        transitionDuration: const Duration(milliseconds: 750),
+        openColor: colorScheme.background,
+        openBuilder: (context, action) => DisplayTask(colorScheme),
+        closedBuilder: (context, action) => FloatingActionButton(
+          onPressed: action,
+          child: const Icon(IconData(0xe800, fontFamily: 'NavigationIcons')),
+        ),
+        closedColor:
+            Theme.of(context).floatingActionButtonTheme.backgroundColor!,
+        closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(16),
           ),
-        );
-      },
+        ),
+      ),
+      drawer: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 328),
+        child: Drawer(child: DrawerBody(colorScheme)),
+      ),
+      bottomNavigationBar: NavigationBar(
+        destinations: navigationElements
+            .map(
+              (navigationElement) => NavigationDestination(
+                label: navigationElement.label,
+                icon: navigationElement.icon,
+                selectedIcon: navigationElement.selectedIcon,
+              ),
+            )
+            .toList(),
+        onDestinationSelected: (destinationIndex) =>
+            onNavigationElementSelected(
+          context,
+          destinationIndex,
+          scaffoldKey,
+        ),
+        selectedIndex: context.select<DatabaseProvider, int>((isar) {
+          int listId = isar.activeListId;
+          return listId > 2 ? 0 : listId + 1;
+        }),
+      ),
     );
   }
 }

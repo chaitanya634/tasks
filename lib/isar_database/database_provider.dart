@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:isar/isar.dart';
 
 import 'collections.dart';
@@ -8,73 +9,92 @@ import '../functions.dart';
 import '../enums.dart';
 
 class DatabaseProvider with ChangeNotifier {
-  late Isar isar;
+  DatabaseProvider(this.localDatabase, this.tempDatabase) {
+    initIsar();
+    setCurrentDayAppBarTitle();
+    FlutterNativeSplash.remove();
+  }
+
+  Isar localDatabase;
+  Map<Collections, List<Object>> tempDatabase;
+
   late Widget homePageAppBarTitle;
   int activeGroupId = DefaultGroups.Main.index;
   int activeListId = DefaultLists.MyDay.index;
 
-  DatabaseProvider(this.isar) {
-    initIsar();
-    setCurrentDayAppBarTitle();
-  }
-
   void initIsar() async {
-    //delete all data from database
-    // await isar.writeTxn((isar) => isar.clear());
-
-    // create default groups
-    int numGroups = await isar.groups.count();
+    //whether to create default groups
+    int numGroups = tempDatabase.entries
+        .where((element) => element.key == Collections.Groups)
+        .first
+        .value
+        .length;
     if (numGroups == 0) {
-      isar.writeTxn((isar) async {
-        await isar.groups.putAll([
-          Group(
-            id: DefaultGroups.Main.index,
-            name: DefaultGroups.Main.name,
-          ),
-          Group(
-            id: DefaultGroups.Office.index,
-            name: DefaultGroups.Office.name,
-          ),
-        ]);
-      });
+      var defaultGroups = [
+        Group(
+          id: DefaultGroups.Main.index,
+          name: DefaultGroups.Main.name,
+        ),
+        Group(
+          id: DefaultGroups.Office.index,
+          name: DefaultGroups.Office.name,
+        ),
+      ];
+      tempDatabase.entries
+          .where((element) => element.key == Collections.Groups)
+          .first
+          .value
+          .addAll(defaultGroups);
+      await localDatabase
+          .writeTxn((isar) async => await isar.groups.putAll(defaultGroups));
     }
 
-    //create default lists
-    int numLists = await isar.taskLists.count();
+    //whether to create default lists
+    int numLists = tempDatabase.entries
+        .where((element) => element.key == Collections.TaskLists)
+        .first
+        .value
+        .length;
     if (numLists == 0) {
-      isar.writeTxn((isar) async {
-        await isar.taskLists.putAll([
-          TaskList(
-            groupId: DefaultGroups.Main.index,
-            name: DefaultLists.MyDay.name,
-            id: DefaultLists.MyDay.index,
-          ),
-          TaskList(
-            groupId: DefaultGroups.Main.index,
-            name: DefaultLists.Planned.name,
-            id: DefaultLists.Planned.index,
-          ),
-          TaskList(
-            groupId: DefaultGroups.Main.index,
-            name: DefaultLists.Starred.name,
-            id: DefaultLists.Starred.index,
-          ),
-          TaskList(
-            groupId: DefaultGroups.Main.index,
-            name: DefaultLists.Shopping.name,
-            id: DefaultLists.Shopping.index,
-          ),
-          TaskList(
-            groupId: DefaultGroups.Main.index,
-            name: DefaultLists.Ideas.name,
-            id: DefaultLists.Ideas.index,
-          ),
-          TaskList(
-            groupId: DefaultGroups.Main.index,
-            name: DefaultLists.Plans.name,
-            id: DefaultLists.Plans.index,
-          ),
-        ]);
+      var defaultLists = [
+        TaskList(
+          groupId: DefaultGroups.Main.index,
+          name: DefaultLists.MyDay.name,
+          id: DefaultLists.MyDay.index,
+        ),
+        TaskList(
+          groupId: DefaultGroups.Main.index,
+          name: DefaultLists.Planned.name,
+          id: DefaultLists.Planned.index,
+        ),
+        TaskList(
+          groupId: DefaultGroups.Main.index,
+          name: DefaultLists.Starred.name,
+          id: DefaultLists.Starred.index,
+        ),
+        TaskList(
+          groupId: DefaultGroups.Main.index,
+          name: DefaultLists.Shopping.name,
+          id: DefaultLists.Shopping.index,
+        ),
+        TaskList(
+          groupId: DefaultGroups.Main.index,
+          name: DefaultLists.Ideas.name,
+          id: DefaultLists.Ideas.index,
+        ),
+        TaskList(
+          groupId: DefaultGroups.Main.index,
+          name: DefaultLists.Plans.name,
+          id: DefaultLists.Plans.index,
+        ),
+      ];
+      tempDatabase.entries
+          .where((element) => element.key == Collections.TaskLists)
+          .first
+          .value
+          .addAll(defaultLists);
+      await localDatabase.writeTxn((isar) async {
+        await isar.taskLists.putAll(defaultLists);
       });
     }
   }
@@ -162,95 +182,109 @@ class DatabaseProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void replaceGroupsCollection() async {
-    await isar.writeTxn((isar) async {
-      await isar.groups.clear();
-      await isar.groups.putAll(tempGroupCollection);
+  //database methods
+  Future<void> addTask(Task task, List<Subtask> subtasks) async {
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.Tasks)
+        .value
+        .add(task);
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.Subtasks)
+        .value
+        .addAll(subtasks);
+    await localDatabase.writeTxn((isar) async {
+      await isar.tasks.put(task);
+      await isar.subtasks.putAll(subtasks);
+    });
+    notifyListeners();
+  }
+
+  Future<void> updateTask(Task task, List<Subtask> subtasks) async {
+    //task
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.Tasks)
+        .value
+        .removeWhere((element) {
+      element = element as Task;
+      return element.id == task.id;
+    });
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.Tasks)
+        .value
+        .add(task);
+
+    await localDatabase.writeTxn((isar) async {
+      await isar.tasks.delete(task.id);
+      await isar.tasks.put(task);
+    });
+
+    for (Subtask subtask in subtasks) {
+      //subtasks
+      tempDatabase.entries
+          .singleWhere((element) => element.key == Collections.Subtasks)
+          .value
+          .removeWhere((element) {
+        element = element as Subtask;
+        return element.id == subtask.id;
+      });
+    }
+
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.Subtasks)
+        .value
+        .addAll(subtasks);
+
+    await localDatabase.writeTxn((isar) async {
+      await isar.subtasks.deleteAll(subtasks.map((e) => e.id).toList());
+      await isar.subtasks.putAll(subtasks);
+    });
+
+    notifyListeners();
+  }
+
+  void deleteTask(Task task) {
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.Tasks)
+        .value
+        .remove(task);
+    notifyListeners();
+    localDatabase.writeTxn((isar) async => await isar.tasks.delete(task.id));
+  }
+
+  void updateTaskChecked(bool value, Task oldTask) {
+    Task task = tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.Tasks)
+        .value
+        .singleWhere((element) {
+      element = element as Task;
+      return element.groupId == oldTask.groupId &&
+          element.listId == oldTask.listId &&
+          element.id == oldTask.id;
+    }) as Task;
+    task.isChecked = value;
+    localDatabase.writeTxn((isar) async {
+      await isar.tasks.delete(task.id);
+      await isar.tasks.put(task);
     });
   }
 
-  void replaceTaskListCollection() async {
-    await isar.writeTxn((isar) async {
-      await isar.taskLists.clear();
-      await isar.taskLists.putAll(tempTaskListCollection);
-    });
+  Future<void> addList(int listId, int groupId, String listName) async {
+    var taskList = TaskList(id: listId, groupId: groupId, name: listName);
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.TaskLists)
+        .value
+        .add(taskList);
+    notifyListeners();
+    await localDatabase
+        .writeTxn((isar) async => await isar.taskLists.put(taskList));
   }
 
-  //fetch collection
-  Future<List<Group>> fetchGroupCollection() => isar.groups.where().findAll();
-
-  Future<List<TaskList>> fetchTaskListCollection() =>
-      isar.taskLists.where().findAll();
-
-  Future<List<Task>> fetchTaskCollection() => isar.tasks.where().findAll();
-
-  Future<List<Subtask>> fetchSubtaskCollection() =>
-      isar.subtasks.where().findAll();
-
-  //temporary data
-  //required to avoid read write delay
-  late List<Group> tempGroupCollection;
-  late List<TaskList> tempTaskListCollection;
-  late List<Task> tempTaskCollection;
-  late List<Subtask> tempSubtaskCollection;
-
-  //instantiate
-  void initTempGroupCollection(List<Group> groupCollection) =>
-      tempGroupCollection = groupCollection;
-
-  void initTempTaskListCollection(List<TaskList> taskListCollection) =>
-      tempTaskListCollection = taskListCollection;
-
-  void initTempTaskCollection(List<Task> taskCollection) =>
-      tempTaskCollection = taskCollection;
-
-  void initTempSubtaskCollection(List<Subtask> subtaskCollection) =>
-      tempSubtaskCollection = subtaskCollection;
-
-  //generate id
-  int tempGroupId() => tempGroupCollection.last.id + 1;
-
-  int tempTaskListId() => tempTaskListCollection.last.id + 1;
-
-  int tempTaskId() =>
-      tempTaskCollection.isEmpty ? 0 : tempTaskCollection.last.id + 1;
-
-  int tempSubtaskId() =>
-      tempSubtaskCollection.isEmpty ? 0 : tempSubtaskCollection.last.id + 1;
-
-  //add element
-  bool addTempGroup(Group group) {
-    tempGroupCollection.add(group);
+  Future<void> removeList(TaskList taskList) async {
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.TaskLists)
+        .value
+        .remove(taskList);
     notifyListeners();
-    return tempGroupCollection.contains(group);
-  }
-
-  bool addTempTaskList(TaskList taskList) {
-    tempTaskListCollection.add(taskList);
-    notifyListeners();
-    return tempTaskListCollection.contains(taskList);
-  }
-
-  bool addTempTask(Task task) {
-    tempTaskCollection.add(task);
-    notifyListeners();
-    return tempTaskCollection.contains(task);
-  }
-
-  bool addTempSubtask(Subtask subtask) {
-    tempSubtaskCollection.add(subtask);
-    notifyListeners();
-    return tempSubtaskCollection.contains(subtask);
-  }
-
-  //delete element
-  void deleteTempTaskList(TaskList taskList) {
-    tempTaskListCollection.remove(taskList);
-    notifyListeners();
-  }
-
-  void deleteTempGroup(Group group) {
-    tempGroupCollection.remove(group);
-    notifyListeners();
+    await localDatabase.taskLists.delete(taskList.id);
   }
 }

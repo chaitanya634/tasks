@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/functions.dart';
 import 'package:tasks/isar_database/database_provider.dart';
 
 import '../enums.dart';
@@ -52,109 +53,99 @@ class DrawerBody extends StatelessWidget {
           ),
 
           //my lists
-          FutureBuilder<List<TaskList>>(
-            future: context.read<DatabaseProvider>().fetchTaskListCollection(),
-            builder: (context, snapshot) {
-              debugPrint('build my lists');
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                context
-                    .read<DatabaseProvider>()
-                    .initTempTaskListCollection(snapshot.data!);
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    childCount: context
-                        .watch<DatabaseProvider>()
-                        .tempTaskListCollection
-                        .where((taskList) =>
-                            taskList.groupId == DefaultGroups.Main.index &&
-                            taskList.id != DefaultLists.MyDay.index &&
-                            taskList.id != DefaultLists.Starred.index &&
-                            taskList.id != DefaultLists.Planned.index)
-                        .length,
-                    (context, index) {
-                      debugPrint('build my list element');
-                      var taskList = context
-                          .watch<DatabaseProvider>()
-                          .tempTaskListCollection
-                          .where((element) =>
-                              element.groupId == DefaultGroups.Main.index &&
-                              element.id != DefaultLists.MyDay.index &&
-                              element.id != DefaultLists.Starred.index &&
-                              element.id != DefaultLists.Planned.index)
-                          .elementAt(index);
-                      var activeListId =
-                          context.watch<DatabaseProvider>().activeListId;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: ListTile(
-                          shape: const StadiumBorder(),
-                          tileColor: activeListId == taskList.id
-                              ? colorScheme.primaryContainer
-                              : null,
-                          leading: Icon(
-                            Icons.checklist_rounded,
-                            color: activeListId == taskList.id
-                                ? colorScheme.onPrimaryContainer
-                                : colorScheme.secondary,
-                          ),
-                          title: Text(
-                            taskList.name,
-                            style: TextStyle(
-                              color: activeListId == taskList.id
-                                  ? colorScheme.onPrimaryContainer
-                                  : colorScheme.secondary,
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: context
+                  .watch<DatabaseProvider>()
+                  .tempDatabase
+                  .entries
+                  .singleWhere(
+                      (element) => element.key == Collections.TaskLists)
+                  .value
+                  .where((element) {
+                element = element as TaskList;
+                return element.groupId == DefaultGroups.Main.index &&
+                    element.id != DefaultLists.MyDay.index &&
+                    element.id != DefaultLists.Planned.index &&
+                    element.id != DefaultLists.Starred.index;
+              }).length,
+              (context, index) {
+                debugPrint('build my list element');
+                var taskList = context
+                    .watch<DatabaseProvider>()
+                    .tempDatabase
+                    .entries
+                    .singleWhere(
+                        (element) => element.key == Collections.TaskLists)
+                    .value
+                    .where((element) {
+                  element = element as TaskList;
+                  return element.groupId == DefaultGroups.Main.index &&
+                      element.id != DefaultLists.MyDay.index &&
+                      element.id != DefaultLists.Planned.index &&
+                      element.id != DefaultLists.Starred.index;
+                }).elementAt(index) as TaskList;
+                var activeListId =
+                    context.read<DatabaseProvider>().activeListId;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: ListTile(
+                    shape: const StadiumBorder(),
+                    tileColor: activeListId == taskList.id
+                        ? colorScheme.primaryContainer
+                        : null,
+                    leading: Icon(
+                      Icons.checklist_rounded,
+                      color: activeListId == taskList.id
+                          ? colorScheme.onPrimaryContainer
+                          : colorScheme.secondary,
+                    ),
+                    title: Text(
+                      taskList.name,
+                      style: TextStyle(
+                        color: activeListId == taskList.id
+                            ? colorScheme.onPrimaryContainer
+                            : colorScheme.secondary,
+                      ),
+                    ),
+                    trailing: activeListId == taskList.id
+                        ? IconButton(
+                            onPressed: null,
+                            icon: Badge(
+                              badgeContent: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Text(countTasks(context, taskList.id)),
+                              ),
+                              badgeColor:
+                                  const Color.fromARGB(40, 112, 160, 249),
+                              animationType: BadgeAnimationType.fade,
+                              animationDuration:
+                                  const Duration(milliseconds: 400),
                             ),
+                          )
+                        : IconButton(
+                            icon: Icon(
+                              Icons.remove_rounded,
+                              size: 18,
+                              color: colorScheme.onPrimaryContainer,
+                            ),
+                            onPressed: () {
+                              context
+                                  .read<DatabaseProvider>()
+                                  .removeList(taskList);
+                            },
                           ),
-                          trailing: activeListId == taskList.id
-                              ? IconButton(
-                                  onPressed: null,
-                                  icon: Badge(
-                                    badgeContent: const Padding(
-                                      padding: EdgeInsets.all(2.0),
-                                      child: Text('9'),
-                                    ),
-                                    badgeColor:
-                                        const Color.fromARGB(40, 112, 160, 249),
-                                    animationType: BadgeAnimationType.fade,
-                                    animationDuration:
-                                        const Duration(milliseconds: 400),
-                                  ),
-                                )
-                              : IconButton(
-                                  icon: Icon(
-                                    Icons.remove_rounded,
-                                    size: 18,
-                                    color: colorScheme.onPrimaryContainer,
-                                  ),
-                                  onPressed: () {
-                                    context
-                                        .read<DatabaseProvider>()
-                                        .deleteTempTaskList(taskList);
-                                    // provider.setActiveGroupId(
-                                    //     DefaultGroups.Main.index);
-                                    // provider.setActiveListId(
-                                    //     DefaultLists.MyDay.index);
-                                    // provider.setCurrentDayAppBarTitle();
-                                  },
-                                ),
-                          onTap: () {
-                            var databaseProvider =
-                                context.read<DatabaseProvider>();
-                            databaseProvider.setActiveGroupId(taskList.groupId);
-                            databaseProvider.setActiveListId(taskList.id);
-                            databaseProvider
-                                .setCustomAppBarTitle(taskList.name);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      );
+                    onTap: () {
+                      var databaseProvider = context.read<DatabaseProvider>();
+                      databaseProvider.setActiveGroupId(taskList.groupId);
+                      databaseProvider.setActiveListId(taskList.id);
+                      databaseProvider.setCustomAppBarTitle(taskList.name);
+                      Navigator.pop(context);
                     },
                   ),
                 );
-              }
-              return LoadingWidget(colorScheme);
-            },
+              },
+            ),
           ),
 
           //my groups label
@@ -168,95 +159,95 @@ class DrawerBody extends StatelessWidget {
           ),
 
           //my groups
-          FutureBuilder<List<Group>>(
-              future: context.read<DatabaseProvider>().fetchGroupCollection(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData) {
-                  context
-                      .read<DatabaseProvider>()
-                      .initTempGroupCollection(snapshot.data!);
-                  return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                    childCount: context
-                        .watch<DatabaseProvider>()
-                        .tempGroupCollection
-                        .where((group) => group.id != DefaultGroups.Main.index)
-                        .length,
-                    (context, index) {
-                      var group = context
-                          .watch<DatabaseProvider>()
-                          .tempGroupCollection
-                          .where(
-                              (group) => group.id != DefaultGroups.Main.index)
-                          .elementAt(index);
-                      var activeGroupId =
-                          context.watch<DatabaseProvider>().activeGroupId;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: ListTile(
-                          shape: const StadiumBorder(),
-                          tileColor: activeGroupId == group.id
-                              ? colorScheme.primaryContainer
-                              : null,
-                          leading: Icon(
-                            Icons.folder_outlined,
-                            color: activeGroupId == group.id
-                                ? colorScheme.onPrimaryContainer
-                                : colorScheme.secondary,
-                          ),
-                          trailing: activeGroupId == group.id
-                              ? null
-                              : IconButton(
-                                  icon: Icon(
-                                    Icons.remove_rounded,
-                                    size: 18,
-                                    color: activeGroupId == group.id
-                                        ? colorScheme.onPrimaryContainer
-                                        : colorScheme.secondary,
-                                  ),
-                                  onPressed: () {
-                                    context
-                                        .read<DatabaseProvider>()
-                                        .deleteTempGroup(group);
-                                    // provider.setActiveGroupId(
-                                    //     DefaultGroups.Main.index);
-                                    // provider.setActiveListId(
-                                    //     DefaultLists.MyDay.index);
-                                    // provider.setCurrentDayAppBarTitle();
-                                  },
-                                ),
-                          title: Text(
-                            group.name,
-                            style: TextStyle(
-                              color: activeGroupId == index + 1
-                                  ? colorScheme.onPrimaryContainer
-                                  : colorScheme.secondary,
-                            ),
-                          ),
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              backgroundColor: colorScheme.background,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(18),
-                                  topRight: Radius.circular(18),
-                                ),
-                              ),
-                              builder: (context) => ListsOfGroup(
-                                currentGroup: group,
-                                colorScheme: colorScheme,
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ));
-                }
-                return LoadingWidget(colorScheme);
-              }),
+          // FutureBuilder<List<Group>>(
+          //     future: context.read<DatabaseProvider>().fetchGroupCollection(),
+          //     builder: (context, snapshot) {
+          //       if (snapshot.connectionState == ConnectionState.done &&
+          //           snapshot.hasData) {
+          //         context
+          //             .read<DatabaseProvider>()
+          //             .initTempGroupCollection(snapshot.data!);
+          //         return SliverList(
+          //             delegate: SliverChildBuilderDelegate(
+          //           childCount: context
+          //               .watch<DatabaseProvider>()
+          //               .tempGroupCollection
+          //               .where((group) => group.id != DefaultGroups.Main.index)
+          //               .length,
+          //           (context, index) {
+          //             var group = context
+          //                 .watch<DatabaseProvider>()
+          //                 .tempGroupCollection
+          //                 .where(
+          //                     (group) => group.id != DefaultGroups.Main.index)
+          //                 .elementAt(index);
+          //             var activeGroupId =
+          //                 context.watch<DatabaseProvider>().activeGroupId;
+          //             return Padding(
+          //               padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          //               child: ListTile(
+          //                 shape: const StadiumBorder(),
+          //                 tileColor: activeGroupId == group.id
+          //                     ? colorScheme.primaryContainer
+          //                     : null,
+          //                 leading: Icon(
+          //                   Icons.folder_outlined,
+          //                   color: activeGroupId == group.id
+          //                       ? colorScheme.onPrimaryContainer
+          //                       : colorScheme.secondary,
+          //                 ),
+          //                 trailing: activeGroupId == group.id
+          //                     ? null
+          //                     : IconButton(
+          //                         icon: Icon(
+          //                           Icons.remove_rounded,
+          //                           size: 18,
+          //                           color: activeGroupId == group.id
+          //                               ? colorScheme.onPrimaryContainer
+          //                               : colorScheme.secondary,
+          //                         ),
+          //                         onPressed: () {
+          //                           context
+          //                               .read<DatabaseProvider>()
+          //                               .deleteTempGroup(group);
+          //                           // provider.setActiveGroupId(
+          //                           //     DefaultGroups.Main.index);
+          //                           // provider.setActiveListId(
+          //                           //     DefaultLists.MyDay.index);
+          //                           // provider.setCurrentDayAppBarTitle();
+          //                         },
+          //                       ),
+          //                 title: Text(
+          //                   group.name,
+          //                   style: TextStyle(
+          //                     color: activeGroupId == index + 1
+          //                         ? colorScheme.onPrimaryContainer
+          //                         : colorScheme.secondary,
+          //                   ),
+          //                 ),
+          //                 onTap: () {
+          //                   showModalBottomSheet(
+          //                     context: context,
+          //                     backgroundColor: colorScheme.background,
+          //                     shape: const RoundedRectangleBorder(
+          //                       borderRadius: BorderRadius.only(
+          //                         topLeft: Radius.circular(18),
+          //                         topRight: Radius.circular(18),
+          //                       ),
+          //                     ),
+          //                     builder: (context) => ListsOfGroup(
+          //                       currentGroup: group,
+          //                       colorScheme: colorScheme,
+          //                     ),
+          //                   );
+          //                 },
+          //               ),
+          //             );
+          //           },
+          //         ));
+          //       }
+          //       return LoadingWidget(colorScheme);
+          //     }),
 
           //info
           SliverToBoxAdapter(
@@ -346,15 +337,14 @@ class DrawerBody extends StatelessWidget {
                           TextButton(
                             child: const Text('Save'),
                             onPressed: () {
-                              var isAdded = context
+                              context
                                   .read<DatabaseProvider>()
-                                  .addTempTaskList(TaskList(
-                                      id: context
-                                          .read<DatabaseProvider>()
-                                          .tempTaskListId(),
-                                      groupId: DefaultGroups.Main.index,
-                                      name: listName));
-                              isAdded ? Navigator.pop(context) : null;
+                                  .addList(
+                                      generateId(
+                                          context, Collections.TaskLists),
+                                      DefaultGroups.Main.index,
+                                      listName)
+                                  .then((value) => Navigator.pop(context));
                             },
                           ),
                         ],
@@ -396,14 +386,14 @@ class DrawerBody extends StatelessWidget {
                               child: const Text('Cancel')),
                           TextButton(
                               onPressed: () {
-                                context.read<DatabaseProvider>().addTempGroup(
-                                        Group(
-                                            id: context
-                                                .read<DatabaseProvider>()
-                                                .tempGroupId(),
-                                            name: groupName))
-                                    ? Navigator.pop(context)
-                                    : null;
+                                // context.read<DatabaseProvider>().addTempGroup(
+                                //         Group(
+                                //             id: context
+                                //                 .read<DatabaseProvider>()
+                                //                 .tempGroupId(),
+                                //             name: groupName))
+                                //     ? Navigator.pop(context)
+                                //     : null;
                               },
                               child: const Text('Save')),
                         ],

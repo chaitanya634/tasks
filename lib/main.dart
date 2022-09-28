@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'enums.dart';
 import 'isar_database/collections.dart';
 import 'isar_database/database_provider.dart';
 import 'layouts/desktop.dart';
@@ -15,17 +17,31 @@ import 'themes/dark.dart';
 import 'themes/light.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  var widgetsFlutterBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsFlutterBinding);
   Directory? applicationSupportDirectory =
       kIsWeb ? null : await getApplicationSupportDirectory();
-  Isar isarDatabase = await Isar.open(
+  Isar localDatabase = await Isar.open(
     schemas: [SubtaskSchema, TaskSchema, TaskListSchema, GroupSchema],
     directory: applicationSupportDirectory?.path,
   );
-  runApp(ChangeNotifierProvider(
-    create: (context) => DatabaseProvider(isarDatabase),
-    child: const App(),
-  ));
+
+  // await localDatabase.writeTxn((isar) async => await isar.clear());
+  //temporary database
+  //required to avoid read-write delay
+  Map<Collections, List<Object>> tempDatabase = {
+    Collections.Groups: await localDatabase.groups.where().findAll(),
+    Collections.TaskLists: await localDatabase.taskLists.where().findAll(),
+    Collections.Tasks: await localDatabase.tasks.where().findAll(),
+    Collections.Subtasks: await localDatabase.subtasks.where().findAll(),
+  };
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => DatabaseProvider(localDatabase, tempDatabase),
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {

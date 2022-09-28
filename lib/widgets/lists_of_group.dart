@@ -64,14 +64,14 @@ class ListsOfGroup extends StatelessWidget {
                         ),
                         TextButton(
                             onPressed: () {
-                              var readDatabaseProvider =
-                                  context.read<DatabaseProvider>();
-                              readDatabaseProvider.addTempTaskList(TaskList(
-                                id: readDatabaseProvider.tempTaskListId(),
-                                groupId: currentGroup.id,
-                                name: listName,
-                              ));
-                              Navigator.pop(context);
+                              // var readDatabaseProvider =
+                              //     context.read<DatabaseProvider>();
+                              // readDatabaseProvider.addTempTaskList(TaskList(
+                              //   id: readDatabaseProvider.tempTaskListId(),
+                              //   groupId: currentGroup.id,
+                              //   name: listName,
+                              // ));
+                              // Navigator.pop(context);
                             },
                             child: const Text('Save')),
                       ],
@@ -88,83 +88,84 @@ class ListsOfGroup extends StatelessWidget {
         ),
 
         //lists
-        Expanded(
-            child: ListView.builder(
-                itemCount: context
-                    .watch<DatabaseProvider>()
-                    .tempTaskListCollection
-                    .where((element) => element.groupId == currentGroup.id)
-                    .length,
-                itemBuilder: (context, index) {
-                  var element = context
-                      .watch<DatabaseProvider>()
-                      .tempTaskListCollection
-                      .where((element) => element.groupId == currentGroup.id)
-                      .elementAt(index);
+        // Expanded(
+        //     child: ListView.builder(
+        //         itemCount: context
+        //             .watch<DatabaseProvider>()
+        //             .tempTaskListCollection
+        //             .where((element) => element.groupId == currentGroup.id)
+        //             .length,
+        //         itemBuilder: (context, index) {
+        //           var element = context
+        //               .watch<DatabaseProvider>()
+        //               .tempTaskListCollection
+        //               .where((element) => element.groupId == currentGroup.id)
+        //               .elementAt(index);
 
-                  var watchProvider = context.watch<DatabaseProvider>();
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ListTile(
-                      shape: const StadiumBorder(),
-                      tileColor:
-                          watchProvider.activeGroupId == element.groupId &&
-                                  watchProvider.activeListId == element.id
-                              ? colorScheme.secondaryContainer
-                              : null,
-                      minVerticalPadding: 18,
-                      leading: Icon(
-                        Icons.checklist_rounded,
-                        color: watchProvider.activeGroupId == element.groupId &&
-                                watchProvider.activeListId == element.id
-                            ? colorScheme.onPrimaryContainer
-                            : colorScheme.onBackground,
-                      ),
-                      title: Text(element.name,
-                          style: TextStyle(
-                            color: watchProvider.activeGroupId ==
-                                        element.groupId &&
-                                    watchProvider.activeListId == element.id
-                                ? colorScheme.onPrimaryContainer
-                                : colorScheme.onBackground,
-                          )),
-                      trailing: watchProvider.activeListId == element.id
-                          ? IconButton(
-                                  onPressed: null,
-                                  icon: Badge(
-                                    badgeContent: const Padding(
-                                      padding: EdgeInsets.all(2.0),
-                                      child: Text('9'),
-                                    ),
-                                    badgeColor:
-                                        const Color.fromARGB(40, 112, 160, 249),
-                                    animationType: BadgeAnimationType.fade,
-                                    animationDuration:
-                                        const Duration(milliseconds: 400),
-                                  ),
-                                )
-                          : IconButton(
-                              onPressed: () {
-                                context
-                                    .read<DatabaseProvider>()
-                                    .deleteTempTaskList(element);
-                              },
-                              icon: Icon(
-                                Icons.remove_rounded,
-                                size: 18,
-                                color: colorScheme.onPrimaryContainer,
-                              )),
-                      onTap: () {
-                        var provider = context.read<DatabaseProvider>();
-                        provider.setActiveGroupId(element.groupId);
-                        provider.setActiveListId(element.id);
-                        provider.setCustomAppBarTitle(element.name);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                    ),
-                  );
-                })),
+        //           var watchProvider = context.watch<DatabaseProvider>();
+        //           return Padding(
+        //             padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        //             child: ListTile(
+        //               shape: const StadiumBorder(),
+        //               tileColor:
+        //                   watchProvider.activeGroupId == element.groupId &&
+        //                           watchProvider.activeListId == element.id
+        //                       ? colorScheme.secondaryContainer
+        //                       : null,
+        //               minVerticalPadding: 18,
+        //               leading: Icon(
+        //                 Icons.checklist_rounded,
+        //                 color: watchProvider.activeGroupId == element.groupId &&
+        //                         watchProvider.activeListId == element.id
+        //                     ? colorScheme.onPrimaryContainer
+        //                     : colorScheme.onBackground,
+        //               ),
+        //               title: Text(element.name,
+        //                   style: TextStyle(
+        //                     color: watchProvider.activeGroupId ==
+        //                                 element.groupId &&
+        //                             watchProvider.activeListId == element.id
+        //                         ? colorScheme.onPrimaryContainer
+        //                         : colorScheme.onBackground,
+        //                   )),
+        //               trailing: watchProvider.activeListId == element.id
+        //                   ? IconButton(
+        //                           onPressed: null,
+        //                           icon: Badge(
+        //                             badgeContent: const Padding(
+        //                               padding: EdgeInsets.all(2.0),
+        //                               child: Text('9'),
+        //                             ),
+        //                             badgeColor:
+        //                                 const Color.fromARGB(40, 112, 160, 249),
+        //                             animationType: BadgeAnimationType.fade,
+        //                             animationDuration:
+        //                                 const Duration(milliseconds: 400),
+        //                           ),
+        //                         )
+        //                   : IconButton(
+        //                       onPressed: () {
+        //                         context
+        //                             .read<DatabaseProvider>()
+        //                             .deleteTempTaskList(element);
+        //                       },
+        //                       icon: Icon(
+        //                         Icons.remove_rounded,
+        //                         size: 18,
+        //                         color: colorScheme.onPrimaryContainer,
+        //                       )),
+        //               onTap: () {
+        //                 var provider = context.read<DatabaseProvider>();
+        //                 provider.setActiveGroupId(element.groupId);
+        //                 provider.setActiveListId(element.id);
+        //                 provider.setCustomAppBarTitle(element.name);
+        //                 Navigator.pop(context);
+        //                 Navigator.pop(context);
+        //               },
+        //             ),
+        //           );
+        //         })),
+      
       ],
     );
   }

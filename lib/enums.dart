@@ -34,6 +34,13 @@ enum RepeatTask {
   Yearly,
 }
 
+enum Collections {
+  Groups,
+  TaskLists,
+  Tasks,
+  Subtasks,
+}
+
 enum DefaultLists {
   MyDay,
   Planned,
