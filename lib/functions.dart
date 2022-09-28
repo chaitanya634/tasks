@@ -12,8 +12,7 @@ int generateId(BuildContext context, Collections collection) => context
     .read<DatabaseProvider>()
     .tempDatabase
     .entries
-    .where((element) => element.key == collection)
-    .first
+    .singleWhere((element) => element.key == collection)
     .value
     .length;
 

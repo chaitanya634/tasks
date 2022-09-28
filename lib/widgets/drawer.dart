@@ -159,95 +159,89 @@ class DrawerBody extends StatelessWidget {
           ),
 
           //my groups
-          // FutureBuilder<List<Group>>(
-          //     future: context.read<DatabaseProvider>().fetchGroupCollection(),
-          //     builder: (context, snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.done &&
-          //           snapshot.hasData) {
-          //         context
-          //             .read<DatabaseProvider>()
-          //             .initTempGroupCollection(snapshot.data!);
-          //         return SliverList(
-          //             delegate: SliverChildBuilderDelegate(
-          //           childCount: context
-          //               .watch<DatabaseProvider>()
-          //               .tempGroupCollection
-          //               .where((group) => group.id != DefaultGroups.Main.index)
-          //               .length,
-          //           (context, index) {
-          //             var group = context
-          //                 .watch<DatabaseProvider>()
-          //                 .tempGroupCollection
-          //                 .where(
-          //                     (group) => group.id != DefaultGroups.Main.index)
-          //                 .elementAt(index);
-          //             var activeGroupId =
-          //                 context.watch<DatabaseProvider>().activeGroupId;
-          //             return Padding(
-          //               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          //               child: ListTile(
-          //                 shape: const StadiumBorder(),
-          //                 tileColor: activeGroupId == group.id
-          //                     ? colorScheme.primaryContainer
-          //                     : null,
-          //                 leading: Icon(
-          //                   Icons.folder_outlined,
-          //                   color: activeGroupId == group.id
-          //                       ? colorScheme.onPrimaryContainer
-          //                       : colorScheme.secondary,
-          //                 ),
-          //                 trailing: activeGroupId == group.id
-          //                     ? null
-          //                     : IconButton(
-          //                         icon: Icon(
-          //                           Icons.remove_rounded,
-          //                           size: 18,
-          //                           color: activeGroupId == group.id
-          //                               ? colorScheme.onPrimaryContainer
-          //                               : colorScheme.secondary,
-          //                         ),
-          //                         onPressed: () {
-          //                           context
-          //                               .read<DatabaseProvider>()
-          //                               .deleteTempGroup(group);
-          //                           // provider.setActiveGroupId(
-          //                           //     DefaultGroups.Main.index);
-          //                           // provider.setActiveListId(
-          //                           //     DefaultLists.MyDay.index);
-          //                           // provider.setCurrentDayAppBarTitle();
-          //                         },
-          //                       ),
-          //                 title: Text(
-          //                   group.name,
-          //                   style: TextStyle(
-          //                     color: activeGroupId == index + 1
-          //                         ? colorScheme.onPrimaryContainer
-          //                         : colorScheme.secondary,
-          //                   ),
-          //                 ),
-          //                 onTap: () {
-          //                   showModalBottomSheet(
-          //                     context: context,
-          //                     backgroundColor: colorScheme.background,
-          //                     shape: const RoundedRectangleBorder(
-          //                       borderRadius: BorderRadius.only(
-          //                         topLeft: Radius.circular(18),
-          //                         topRight: Radius.circular(18),
-          //                       ),
-          //                     ),
-          //                     builder: (context) => ListsOfGroup(
-          //                       currentGroup: group,
-          //                       colorScheme: colorScheme,
-          //                     ),
-          //                   );
-          //                 },
-          //               ),
-          //             );
-          //           },
-          //         ));
-          //       }
-          //       return LoadingWidget(colorScheme);
-          //     }),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: context
+                  .watch<DatabaseProvider>()
+                  .tempDatabase
+                  .entries
+                  .singleWhere((element) => element.key == Collections.Groups)
+                  .value
+                  .where((element) {
+                element = element as Group;
+                return element.id != DefaultGroups.Main.index;
+              }).length,
+              (context, index) {
+                var group = context
+                    .watch<DatabaseProvider>()
+                    .tempDatabase
+                    .entries
+                    .singleWhere((element) => element.key == Collections.Groups)
+                    .value
+                    .where((element) {
+                  element = element as Group;
+                  return element.id != DefaultGroups.Main.index;
+                }).elementAt(index) as Group;
+                var activeGroupId =
+                    context.watch<DatabaseProvider>().activeGroupId;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ListTile(
+                    shape: const StadiumBorder(),
+                    tileColor: activeGroupId == group.id
+                        ? colorScheme.primaryContainer
+                        : null,
+                    leading: Icon(
+                      Icons.folder_outlined,
+                      color: activeGroupId == group.id
+                          ? colorScheme.onPrimaryContainer
+                          : colorScheme.secondary,
+                    ),
+                    trailing: activeGroupId == group.id
+                        ? null
+                        : IconButton(
+                            icon: Icon(
+                              Icons.remove_rounded,
+                              size: 18,
+                              color: activeGroupId == group.id
+                                  ? colorScheme.onPrimaryContainer
+                                  : colorScheme.secondary,
+                            ),
+                            onPressed: () {
+                              context
+                                  .read<DatabaseProvider>()
+                                  .removeGroup(group);
+                            },
+                          ),
+                    title: Text(
+                      group.name,
+                      style: TextStyle(
+                        color: activeGroupId == index + 1
+                            ? colorScheme.onPrimaryContainer
+                            : colorScheme.secondary,
+                      ),
+                    ),
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: colorScheme.background,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(18),
+                            topRight: Radius.circular(18),
+                          ),
+                        ),
+                        builder: (context) => ListsOfGroup(
+                          currentGroup: group,
+                          colorScheme: colorScheme,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
 
           //info
           SliverToBoxAdapter(
@@ -385,17 +379,17 @@ class DrawerBody extends StatelessWidget {
                               onPressed: () => Navigator.pop(context),
                               child: const Text('Cancel')),
                           TextButton(
-                              onPressed: () {
-                                // context.read<DatabaseProvider>().addTempGroup(
-                                //         Group(
-                                //             id: context
-                                //                 .read<DatabaseProvider>()
-                                //                 .tempGroupId(),
-                                //             name: groupName))
-                                //     ? Navigator.pop(context)
-                                //     : null;
-                              },
-                              child: const Text('Save')),
+                            onPressed: () {
+                              var group = Group(
+                                  id: generateId(context, Collections.Groups),
+                                  name: groupName);
+                              context
+                                  .read<DatabaseProvider>()
+                                  .addGroup(group)
+                                  .then((value) => Navigator.pop(context));
+                            },
+                            child: const Text('Save'),
+                          ),
                         ],
                       );
                     });

@@ -285,6 +285,28 @@ class DatabaseProvider with ChangeNotifier {
         .value
         .remove(taskList);
     notifyListeners();
-    await localDatabase.taskLists.delete(taskList.id);
+    await localDatabase
+        .writeTxn((isar) async => await isar.taskLists.delete(taskList.id));
   }
+
+  Future<void> removeGroup(Group group) async {
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.Groups)
+        .value
+        .remove(group);
+    notifyListeners();
+    await localDatabase
+        .writeTxn((isar) async => await isar.groups.delete(group.id));
+  }
+
+  Future<void> addGroup(Group group) async {
+    tempDatabase.entries
+        .singleWhere((element) => element.key == Collections.Groups)
+        .value
+        .add(group);
+    notifyListeners();
+    await localDatabase
+        .writeTxn((isar) async => await isar.groups.put(group));
+  }
+
 }
