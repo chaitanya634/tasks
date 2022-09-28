@@ -1,6 +1,8 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/enums.dart';
+import 'package:tasks/functions.dart';
 import 'package:tasks/isar_database/database_provider.dart';
 
 import '../isar_database/collections.dart';
@@ -64,14 +66,14 @@ class ListsOfGroup extends StatelessWidget {
                         ),
                         TextButton(
                             onPressed: () {
-                              var readDatabaseProvider =
-                                  context.read<DatabaseProvider>();
-                              readDatabaseProvider.addTempTaskList(TaskList(
-                                id: readDatabaseProvider.tempTaskListId(),
-                                groupId: currentGroup.id,
-                                name: listName,
-                              ));
-                              Navigator.pop(context);
+                              context
+                                  .read<DatabaseProvider>()
+                                  .addList(
+                                      generateId(
+                                          context, Collections.TaskLists),
+                                      currentGroup.id,
+                                      listName)
+                                  .then((value) => Navigator.pop(context));
                             },
                             child: const Text('Save')),
                       ],
@@ -87,31 +89,40 @@ class ListsOfGroup extends StatelessWidget {
           ),
         ),
 
-        //lists
+        // lists
         Expanded(
             child: ListView.builder(
                 itemCount: context
                     .watch<DatabaseProvider>()
-                    .tempTaskListCollection
-                    .where((element) => element.groupId == currentGroup.id)
-                    .length,
+                    .tempDatabase
+                    .entries
+                    .singleWhere(
+                        (element) => element.key == Collections.TaskLists)
+                    .value
+                    .where((element) {
+                  element = element as TaskList;
+                  return element.groupId == currentGroup.id;
+                }).length,
                 itemBuilder: (context, index) {
                   var element = context
                       .watch<DatabaseProvider>()
-                      .tempTaskListCollection
-                      .where((element) => element.groupId == currentGroup.id)
-                      .elementAt(index);
-
+                      .tempDatabase
+                      .entries
+                      .singleWhere(
+                          (element) => element.key == Collections.TaskLists)
+                      .value
+                      .where((element) {
+                    element = element as TaskList;
+                    return element.groupId == currentGroup.id;
+                  }).elementAt(index) as TaskList;
                   var watchProvider = context.watch<DatabaseProvider>();
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: ListTile(
                       shape: const StadiumBorder(),
-                      tileColor:
-                          watchProvider.activeGroupId == element.groupId &&
-                                  watchProvider.activeListId == element.id
-                              ? colorScheme.secondaryContainer
-                              : null,
+                      tileColor: watchProvider.activeListId == element.id
+                          ? colorScheme.secondaryContainer
+                          : null,
                       minVerticalPadding: 18,
                       leading: Icon(
                         Icons.checklist_rounded,
@@ -130,24 +141,24 @@ class ListsOfGroup extends StatelessWidget {
                           )),
                       trailing: watchProvider.activeListId == element.id
                           ? IconButton(
-                                  onPressed: null,
-                                  icon: Badge(
-                                    badgeContent: const Padding(
-                                      padding: EdgeInsets.all(2.0),
-                                      child: Text('9'),
-                                    ),
-                                    badgeColor:
-                                        const Color.fromARGB(40, 112, 160, 249),
-                                    animationType: BadgeAnimationType.fade,
-                                    animationDuration:
-                                        const Duration(milliseconds: 400),
-                                  ),
-                                )
+                              onPressed: null,
+                              icon: Badge(
+                                badgeContent: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Text(countTasks(context, element.id)),
+                                ),
+                                badgeColor:
+                                    const Color.fromARGB(40, 112, 160, 249),
+                                animationType: BadgeAnimationType.fade,
+                                animationDuration:
+                                    const Duration(milliseconds: 400),
+                              ),
+                            )
                           : IconButton(
                               onPressed: () {
                                 context
                                     .read<DatabaseProvider>()
-                                    .deleteTempTaskList(element);
+                                    .removeList(element);
                               },
                               icon: Icon(
                                 Icons.remove_rounded,

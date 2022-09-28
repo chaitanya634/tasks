@@ -16,7 +16,9 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: colorScheme.background,
-      body: CustomScrollView(
+      body: 
+      
+      CustomScrollView(
         slivers: [
           //app bar
           SliverAppBar(

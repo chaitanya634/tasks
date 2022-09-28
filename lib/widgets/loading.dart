@@ -9,14 +9,12 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return circular
-        ? SliverToBoxAdapter(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: CircularProgressIndicator(color: colorScheme.secondary),
-              ),
-            ),
-          )
+        ? Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: CircularProgressIndicator(color: colorScheme.secondary),
+          ),
+        )
         : SliverToBoxAdapter(
             child: Center(
               child: Padding(
