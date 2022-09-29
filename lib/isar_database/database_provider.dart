@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:isar/isar.dart';
@@ -305,8 +306,6 @@ class DatabaseProvider with ChangeNotifier {
         .value
         .add(group);
     notifyListeners();
-    await localDatabase
-        .writeTxn((isar) async => await isar.groups.put(group));
+    await localDatabase.writeTxn((isar) async => await isar.groups.put(group));
   }
-
 }

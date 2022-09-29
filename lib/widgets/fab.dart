@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'display_task.dart';
@@ -10,6 +11,13 @@ class Fab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return FloatingActionButton(
+        onPressed: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => DisplayTask(colorScheme))),
+        child: const Icon(IconData(0xe800, fontFamily: 'NavigationIcons')),
+      );
+    }
     return OpenContainer(
       transitionDuration: const Duration(milliseconds: 750),
       openColor: colorScheme.background,

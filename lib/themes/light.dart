@@ -3,40 +3,55 @@ import 'package:flutter/services.dart';
 
 ThemeData lightThemeData() => ThemeData(
       useMaterial3: true,
+      cardColor: const Color(0xffFFFBFF),
       appBarTheme: const AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+          ),
+          foregroundColor: Color(0xff34302C),
+          backgroundColor: Color(0xffF8EFE9)),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color(0xff83540D),
+          foregroundColor: Color(0xffFFFFFF)),
+      colorScheme: const ColorScheme.light(
+        background: Color(0xffFFFBFF),
+        onBackground: Color(0xff6D5B47),
+        outline: Color(0xffEEE0D4),
+        surface: Color(0xffF8EFE9),
+        onSurface: Color(0xff34302C),
+        primary: Color(0xff83540D),
+        primaryContainer: Color(0xffF8EFE9),
+        onPrimaryContainer: Color(0xff2A1700),
+        secondary: Color(0xff6D5B47),
+        secondaryContainer: Color(0xffF7DEC5),
+      ),
+      drawerTheme: const DrawerThemeData(
+        backgroundColor: Color(0xffFFFBFF),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(18),
+            bottomRight: Radius.circular(18),
+          ),
         ),
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        height: 48,
+        surfaceTintColor: const Color(0xffF8EFE9),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        indicatorColor: const Color(0xffF7DEC5),
+        iconTheme: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) => IconThemeData(
+              color: states.any((state) => state == MaterialState.selected)
+                  ? const Color(0xff34302C)
+                  : const Color(0xff83540D)),
+        ),
+      ),
+      navigationRailTheme: const NavigationRailThemeData(
+        backgroundColor: Color(0xffF8EFE9),
+        labelType: NavigationRailLabelType.none,
+        indicatorColor: Color(0xffF7DEC5),
+        selectedIconTheme: IconThemeData(color: Color(0xff34302C)),
+        unselectedIconTheme: IconThemeData(color: Color(0xff83540D)),
+      ),
     );
-
- // ColorScheme(
-      //   brightness: Brightness.light,
-      //   surfaceTint: const Color(0xFF83540D),
-      //   onErrorContainer: const Color(0xFF410002),
-      //   onError: const Color(0xFFFFFFFF),
-      //   errorContainer: const Color(0xFFFFDAD6),
-      //   onTertiaryContainer: const Color(0xFF151E07),
-      //   tertiaryContainer: const Color(0xFFDAE8C2),
-      //   tertiary: Color(0xFF576245),
-      //   shadow: Color(0xFF000000),
-      //   error: Color(0xFFBA1A1A),
-      //   onBackground: Color(0xFF1F1B17),
-      //   background: Color(0xFFf0f0f0),
-      //   onInverseSurface: Color(0xFFF8EFE9),
-      //   inverseSurface: Color(0xFF34302C),
-      //   onSurfaceVariant: Color(0xFF4E453C),
-      //   onSurface: Color(0xFF1F1B17),
-      //   surfaceVariant: Color(0xFFEEE0D4),
-      //   surface: Color(0xFFfafafa),
-      //   onSecondaryContainer: Color(0xFF2A1700),
-      //   onSecondary: Color(0xFFFFFFFF),
-      //   secondaryContainer: Color(0xFFF7DEC5),
-      //   secondary: Color(0xFF6D5B47),
-      //   inversePrimary: Color(0xFFF9BB6C),
-      //   onPrimary: Color(0xFFFFFFFF),
-      //   primaryContainer: const HSLColor.fromAHSL(1, 31, 1, 0.83).toColor(),
-      //   onPrimaryContainer: const HSLColor.fromAHSL(1, 31, 1, 0.18).toColor(),
-      //   primary: Color(0xFF83540D),
-      // ),

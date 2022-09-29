@@ -19,6 +19,7 @@ import 'themes/light.dart';
 void main() async {
   var widgetsFlutterBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsFlutterBinding);
+
   Directory? applicationSupportDirectory =
       kIsWeb ? null : await getApplicationSupportDirectory();
   Isar localDatabase = await Isar.open(

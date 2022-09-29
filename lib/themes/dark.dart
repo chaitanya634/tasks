@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 
 ThemeData darkThemeData() => ThemeData(
       useMaterial3: true,
-      appBarTheme: const AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle(
+      cardColor: const HSLColor.fromAHSL(1, 209, 0.28, 0.08).toColor(),
+      appBarTheme: AppBarTheme(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
         ),
+        foregroundColor: const HSLColor.fromAHSL(1, 180, 1, 0.6).toColor(),
       ),
       navigationBarTheme: NavigationBarThemeData(
         height: 48,
@@ -31,6 +33,7 @@ ThemeData darkThemeData() => ThemeData(
         unselectedIconTheme: IconThemeData(
             color: const HSLColor.fromAHSL(1, 180, 1, 0.374).toColor()),
       ),
+      
       drawerTheme: DrawerThemeData(
         backgroundColor: const HSLColor.fromAHSL(1, 209, 0.28, 0.06).toColor(),
         scrimColor: const HSLColor.fromAHSL(0.78, 0, 0, 0).toColor(),

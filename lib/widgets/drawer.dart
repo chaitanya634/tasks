@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks/functions.dart';
 import 'package:tasks/isar_database/database_provider.dart';
+import 'package:tasks/widgets/message_page.dart';
 
 import '../enums.dart';
 import '../isar_database/collections.dart';
 import 'lists_of_group.dart';
-import 'loading.dart';
 
 class DrawerBody extends StatelessWidget {
   const DrawerBody(this.colorScheme, {super.key, this.onDesktop = false});
@@ -281,6 +281,18 @@ class DrawerBody extends StatelessWidget {
                 'Privacy policy',
                 style: TextStyle(color: colorScheme.secondary),
               ),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MessagePage(
+                        title: 'Privacy Policy',
+                        message:
+                            'This application does not collect the data you have created such as tasks, '
+                            'subtasks, lists, groups, it stores your '
+                            'data on your device not on any centralized or distribured server.\n\n'
+                            'Chaitanya Jadhav\n'
+                            'Developer'),
+                  )),
             ),
           ),
 
@@ -291,11 +303,15 @@ class DrawerBody extends StatelessWidget {
                 Icons.article_outlined,
                 color: colorScheme.secondary,
               ),
-              title: Text('License',
-                  style: TextStyle(color: colorScheme.secondary)),
+              title: Text(
+                'Licenses',
+                style: TextStyle(color: colorScheme.secondary),
+              ),
               onTap: () => showLicensePage(
                 context: context,
                 applicationName: 'Tasks',
+                applicationIcon: const Icon(Icons.task_alt_rounded),
+                applicationVersion: '1.0.0',
               ),
             ),
           ),
@@ -308,6 +324,17 @@ class DrawerBody extends StatelessWidget {
                 'About',
                 style: TextStyle(color: colorScheme.secondary),
               ),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MessagePage(
+                      title: 'About',
+                      message: 'Application Name: Tasks\n'
+                          'Version: 1.0.0\n'
+                          'Developed by Chaitanya Jadhav',
+                          profile: true,
+                    ),
+                  )),
             ),
           ),
         ],

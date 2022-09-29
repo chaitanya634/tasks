@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -104,54 +105,97 @@ Widget tasksOfList(BuildContext context, ColorScheme colorScheme,
                 children: [
                   StatefulBuilder(
                     builder: (context, setState) {
-                      return OpenContainer(
-                        closedColor: onDesktop
-                            ? colorScheme.surface
-                            : colorScheme.background,
-                        openColor: colorScheme.background,
-                        transitionDuration: const Duration(milliseconds: 600),
-                        openBuilder: (context, action) =>
-                            DisplayTask(colorScheme, task: task),
-                        closedBuilder: (context, action) => ListTile(
-                          minVerticalPadding: 18,
-                          trailing: SizedBox(
-                            height: double.infinity,
-                            child: Checkbox(
-                              checkColor: colorScheme.onSecondary,
-                              fillColor: MaterialStateProperty.resolveWith(
-                                (states) {
-                                  if (states.any((element) =>
-                                      element == MaterialState.selected)) {
-                                    return colorScheme.secondary;
-                                  }
-                                  return colorScheme.onBackground;
+                      if (!kIsWeb) {
+                        return OpenContainer(
+                          closedColor: onDesktop
+                              ? colorScheme.surface
+                              : colorScheme.background,
+                          openColor: colorScheme.background,
+                          transitionDuration: const Duration(milliseconds: 600),
+                          openBuilder: (context, action) =>
+                              DisplayTask(colorScheme, task: task),
+                          closedBuilder: (context, action) => ListTile(
+                            minVerticalPadding: 18,
+                            trailing: SizedBox(
+                              height: double.infinity,
+                              child: Checkbox(
+                                checkColor: colorScheme.onSecondary,
+                                fillColor: MaterialStateProperty.resolveWith(
+                                  (states) {
+                                    if (states.any((element) =>
+                                        element == MaterialState.selected)) {
+                                      return colorScheme.secondary;
+                                    }
+                                    return colorScheme.onBackground;
+                                  },
+                                ),
+                                value: task.isChecked,
+                                onChanged: (value) {
+                                  setState(() {
+                                    task.isChecked = value!;
+                                  });
+                                  context
+                                      .read<DatabaseProvider>()
+                                      .updateTaskChecked(value!, task);
                                 },
-                              ),
-                              value: task.isChecked,
-                              onChanged: (value) {
-                                setState(() {
-                                  task.isChecked = value!;
-                                });
-                                context
-                                    .read<DatabaseProvider>()
-                                    .updateTaskChecked(value!, task);
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
                               ),
                             ),
-                          ),
-                          title: Text(
-                            task.title ?? '',
-                            style: TextStyle(
-                              color: colorScheme.secondary,
-                              fontSize: 18,
+                            title: Text(
+                              task.title ?? '',
+                              style: TextStyle(
+                                color: colorScheme.secondary,
+                                fontSize: 18,
+                              ),
                             ),
+                            subtitle: generateSubtitle(task, colorScheme),
+                            onTap: action,
                           ),
-                          subtitle: generateSubtitle(task, colorScheme),
-                          onTap: action,
-                        ),
-                      );
+                        
+                        );
+                      }
+                      return ListTile(
+                            minVerticalPadding: 18,
+                            trailing: SizedBox(
+                              height: double.infinity,
+                              child: Checkbox(
+                                checkColor: colorScheme.onSecondary,
+                                fillColor: MaterialStateProperty.resolveWith(
+                                  (states) {
+                                    if (states.any((element) =>
+                                        element == MaterialState.selected)) {
+                                      return colorScheme.secondary;
+                                    }
+                                    return colorScheme.onBackground;
+                                  },
+                                ),
+                                value: task.isChecked,
+                                onChanged: (value) {
+                                  setState(() {
+                                    task.isChecked = value!;
+                                  });
+                                  context
+                                      .read<DatabaseProvider>()
+                                      .updateTaskChecked(value!, task);
+                                },
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              task.title ?? '',
+                              style: TextStyle(
+                                color: colorScheme.secondary,
+                                fontSize: 18,
+                              ),
+                            ),
+                            subtitle: generateSubtitle(task, colorScheme),
+                            onTap: null,
+                          );
+                        
                     },
                   ),
                   const Divider(height: 1),

@@ -80,10 +80,10 @@ NavigationRail navigationRail(BuildContext context,
         ? IconButton(
             style: IconButton.styleFrom(
               backgroundColor: activeListId > 2
-                  ? const HSLColor.fromAHSL(1, 209, 0.28, 0.14).toColor()
+                  ? Theme.of(context).navigationRailTheme.indicatorColor
                   : null,
             ),
-            color: const HSLColor.fromAHSL(1, 180, 1, 0.374).toColor(),
+            color: Theme.of(context).navigationRailTheme.unselectedIconTheme!.color,
             onPressed: () => scaffoldKey.currentState?.openDrawer(),
             icon: RotatedBox(
               quarterTurns: 2,
@@ -91,7 +91,7 @@ NavigationRail navigationRail(BuildContext context,
                 const IconData(0xe804, fontFamily: 'NavigationIcons'),
                 size: 24,
                 color: activeListId > 2
-                    ? const HSLColor.fromAHSL(1, 180, 1, 0.8).toColor()
+                    ? Theme.of(context).navigationRailTheme.selectedIconTheme!.color
                     : null,
               ),
             ),
