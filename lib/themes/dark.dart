@@ -22,6 +22,15 @@ ThemeData darkThemeData() => ThemeData(
           ),
         ),
       ),
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: const HSLColor.fromAHSL(1, 240, 0.28, 0.041).toColor(),
+        labelType: NavigationRailLabelType.none,
+        indicatorColor: const HSLColor.fromAHSL(1, 209, 0.28, 0.14).toColor(),
+        selectedIconTheme: IconThemeData(
+            color: const HSLColor.fromAHSL(1, 180, 1, 0.8).toColor()),
+        unselectedIconTheme: IconThemeData(
+            color: const HSLColor.fromAHSL(1, 180, 1, 0.374).toColor()),
+      ),
       drawerTheme: DrawerThemeData(
         backgroundColor: const HSLColor.fromAHSL(1, 209, 0.28, 0.06).toColor(),
         scrimColor: const HSLColor.fromAHSL(0.78, 0, 0, 0).toColor(),
@@ -37,18 +46,19 @@ ThemeData darkThemeData() => ThemeData(
         foregroundColor: const HSLColor.fromAHSL(1, 180, 1, 0.45).toColor(),
       ),
       colorScheme: ColorScheme.dark(
-        background: const HSLColor.fromAHSL(1, 209, 0.28, 0.08).toColor(),
-        onBackground: const HSLColor.fromAHSL(1, 180, 1, 0.4).toColor(),
-        outline: const HSLColor.fromAHSL(1, 180, 1, 0.26).toColor(),
-        surface: const HSLColor.fromAHSL(1, 240, 0.28, 0.041).toColor(),
-        onSurface: const HSLColor.fromAHSL(1, 180, 1, 0.38).toColor(),
-        primary: const HSLColor.fromAHSL(1, 180, 1, 0.8).toColor(),
-        primaryContainer:
-            const HSLColor.fromAHSL(1, 209, 0.28, 0.085).toColor(),
-        onPrimaryContainer: const HSLColor.fromAHSL(1, 180, 1, 0.94).toColor(),
-        secondary: const HSLColor.fromAHSL(1, 180, 1, 0.44).toColor(),
-        secondaryContainer: const HSLColor.fromAHSL(1, 209, 0.28, 0.07).toColor()
-      ),
+          background: const HSLColor.fromAHSL(1, 209, 0.28, 0.08).toColor(),
+          onBackground: const HSLColor.fromAHSL(1, 180, 1, 0.4).toColor(),
+          outline: const HSLColor.fromAHSL(1, 180, 1, 0.26).toColor(),
+          surface: const HSLColor.fromAHSL(1, 240, 0.28, 0.041).toColor(),
+          onSurface: const HSLColor.fromAHSL(1, 180, 1, 0.38).toColor(),
+          primary: const HSLColor.fromAHSL(1, 180, 1, 0.8).toColor(),
+          primaryContainer:
+              const HSLColor.fromAHSL(1, 209, 0.28, 0.085).toColor(),
+          onPrimaryContainer:
+              const HSLColor.fromAHSL(1, 180, 1, 0.94).toColor(),
+          secondary: const HSLColor.fromAHSL(1, 180, 1, 0.44).toColor(),
+          secondaryContainer:
+              const HSLColor.fromAHSL(1, 209, 0.28, 0.07).toColor()),
     );
 
 /*
