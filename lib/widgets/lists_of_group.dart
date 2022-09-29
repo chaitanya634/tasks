@@ -19,6 +19,7 @@ class ListsOfGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Column(
       children: [
         //drag handle
@@ -171,7 +172,9 @@ class ListsOfGroup extends StatelessWidget {
                         provider.setActiveListId(element.id);
                         provider.setCustomAppBarTitle(element.name);
                         Navigator.pop(context);
-                        Navigator.pop(context);
+                        if(MediaQuery.of(context).size.width < 840) {
+                          Navigator.pop(context);
+                        }
                       },
                     ),
                   );

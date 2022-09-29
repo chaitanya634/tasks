@@ -184,6 +184,9 @@ class _DisplayTaskState extends State<DisplayTask> {
         listId: provider.activeListId,
       );
       subtasks = [];
+      if(provider.activeListId == DefaultLists.Starred.index) {
+        task.isStarred = true;
+      }
     }
   }
 
@@ -252,6 +255,7 @@ class _DisplayTaskState extends State<DisplayTask> {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       Navigator.pop(context);
                     });
+                    
                   }
                 }
               },
@@ -260,7 +264,7 @@ class _DisplayTaskState extends State<DisplayTask> {
         ),
         body: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 450),
+            constraints: const BoxConstraints(maxWidth: 600),
             child: Column(
               children: [
                 Visibility(

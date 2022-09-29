@@ -194,7 +194,9 @@ class DrawerBody extends StatelessWidget {
                   child: ListTile(
                     shape: const StadiumBorder(),
                     tileColor: activeGroupId == group.id
-                        ? colorScheme.primaryContainer
+                        ? onDesktop
+                            ? colorScheme.secondaryContainer
+                            : colorScheme.primaryContainer
                         : null,
                     leading: Icon(
                       Icons.folder_outlined,
@@ -203,14 +205,25 @@ class DrawerBody extends StatelessWidget {
                           : colorScheme.secondary,
                     ),
                     trailing: activeGroupId == group.id
-                        ? null
+                        ? IconButton(
+                            onPressed: null,
+                            icon: Badge(
+                              badgeContent: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Text(countLists(context, group.id)),
+                              ),
+                              badgeColor:
+                                  const Color.fromARGB(40, 112, 160, 249),
+                              animationType: BadgeAnimationType.fade,
+                              animationDuration:
+                                  const Duration(milliseconds: 400),
+                            ),
+                          )
                         : IconButton(
                             icon: Icon(
                               Icons.remove_rounded,
                               size: 18,
-                              color: activeGroupId == group.id
-                                  ? colorScheme.onPrimaryContainer
-                                  : colorScheme.secondary,
+                              color: colorScheme.onPrimaryContainer,
                             ),
                             onPressed: () {
                               context
@@ -228,6 +241,7 @@ class DrawerBody extends StatelessWidget {
                     ),
                     onTap: () {
                       showModalBottomSheet(
+                        constraints: const BoxConstraints(maxWidth: 500),
                         context: context,
                         backgroundColor: colorScheme.background,
                         shape: const RoundedRectangleBorder(

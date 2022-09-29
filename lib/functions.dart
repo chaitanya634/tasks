@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -145,6 +144,23 @@ String countTasks(BuildContext context, int listId) {
       .where((element) {
     element = element as Task;
     return element.listId == listId;
+  }).length;
+  if (len > 9) {
+    return '9+';
+  }
+  return len.toString();
+}
+
+String countLists(BuildContext context, int groupId) {
+    int len = context
+      .watch<DatabaseProvider>()
+      .tempDatabase
+      .entries
+      .singleWhere((element) => element.key == Collections.TaskLists)
+      .value
+      .where((element) {
+    element = element as TaskList;
+    return element.groupId == groupId;
   }).length;
   if (len > 9) {
     return '9+';
