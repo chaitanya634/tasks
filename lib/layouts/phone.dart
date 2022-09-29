@@ -5,6 +5,7 @@ import 'package:tasks/enums.dart';
 import 'package:tasks/isar_database/collections.dart';
 import 'package:tasks/isar_database/database_provider.dart';
 import 'package:tasks/widgets/display_task.dart';
+import 'package:tasks/widgets/fab.dart';
 
 import '../functions.dart';
 import '../widgets/drawer.dart';
@@ -132,26 +133,12 @@ class PhoneLayout extends StatelessWidget {
                   },
                 ),
               )
+           
             ],
           );
         },
       ),
-      floatingActionButton: OpenContainer(
-        transitionDuration: const Duration(milliseconds: 750),
-        openColor: colorScheme.background,
-        openBuilder: (context, action) => DisplayTask(colorScheme),
-        closedBuilder: (context, action) => FloatingActionButton(
-          onPressed: action,
-          child: const Icon(IconData(0xe800, fontFamily: 'NavigationIcons')),
-        ),
-        closedColor:
-            Theme.of(context).floatingActionButtonTheme.backgroundColor!,
-        closedShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(16),
-          ),
-        ),
-      ),
+      floatingActionButton: Fab(colorScheme),
       drawer: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 328),
         child: Drawer(child: DrawerBody(colorScheme)),

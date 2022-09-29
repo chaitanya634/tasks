@@ -10,9 +10,10 @@ import 'lists_of_group.dart';
 import 'loading.dart';
 
 class DrawerBody extends StatelessWidget {
-  const DrawerBody(this.colorScheme, {super.key});
+  const DrawerBody(this.colorScheme, {super.key, this.onDesktop = false});
 
   final ColorScheme colorScheme;
+  final bool onDesktop;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,9 @@ class DrawerBody extends StatelessWidget {
                   child: ListTile(
                     shape: const StadiumBorder(),
                     tileColor: activeListId == taskList.id
-                        ? colorScheme.primaryContainer
+                        ? onDesktop
+                            ? colorScheme.secondaryContainer
+                            : colorScheme.primaryContainer
                         : null,
                     leading: Icon(
                       Icons.checklist_rounded,
@@ -140,7 +143,9 @@ class DrawerBody extends StatelessWidget {
                       databaseProvider.setActiveGroupId(taskList.groupId);
                       databaseProvider.setActiveListId(taskList.id);
                       databaseProvider.setCustomAppBarTitle(taskList.name);
-                      Navigator.pop(context);
+                      if (!onDesktop) {
+                        Navigator.pop(context);
+                      }
                     },
                   ),
                 );
@@ -296,105 +301,122 @@ class DrawerBody extends StatelessWidget {
       bottomNavigationBar: Container(
         height: 48,
         decoration: ShapeDecoration(
-          color: colorScheme.surface,
+          color: onDesktop ? null : colorScheme.surface,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(18),
             ),
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            //new list
-            TextButton.icon(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      late String listName;
-                      return AlertDialog(
-                        backgroundColor: colorScheme.background,
-                        title: const Text('New List'),
-                        content: TextFormField(
-                            onChanged: (value) => listName = value,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16)),
-                                label: const Text('List Name'))),
-                        actions: [
-                          //cancel
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('Cancel'),
-                          ),
-                          TextButton(
-                            child: const Text('Save'),
-                            onPressed: () {
-                              context
-                                  .read<DatabaseProvider>()
-                                  .addList(
-                                      generateId(
-                                          context, Collections.TaskLists),
-                                      DefaultGroups.Main.index,
-                                      listName)
-                                  .then((value) => Navigator.pop(context));
-                            },
-                          ),
-                        ],
-                      );
-                    });
-              },
-              icon: Icon(
-                Icons.playlist_add_rounded,
-                color: colorScheme.onSurface,
-              ),
-              label: Text(
-                'Add list',
-                style: TextStyle(color: colorScheme.onSurface),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6.0),
+              child: Visibility(
+                visible: onDesktop,
+                child: const Divider(
+                  height: 1,
+                  endIndent: 4,
+                ),
               ),
             ),
-            IconButton(
-              icon: Icon(
-                Icons.create_new_folder_outlined,
-                color: colorScheme.onSurface,
-              ),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      late String groupName;
-                      return AlertDialog(
-                        backgroundColor: colorScheme.background,
-                        title: const Text('New Group'),
-                        content: TextField(
-                            onChanged: (value) => groupName = value,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16)),
-                                label: const Text('Group Name'))),
-                        actions: [
-                          //cancel
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancel')),
-                          TextButton(
-                            onPressed: () {
-                              var group = Group(
-                                  id: generateId(context, Collections.Groups),
-                                  name: groupName);
-                              context
-                                  .read<DatabaseProvider>()
-                                  .addGroup(group)
-                                  .then((value) => Navigator.pop(context));
-                            },
-                            child: const Text('Save'),
-                          ),
-                        ],
-                      );
-                    });
-              },
-            )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                //new list
+                TextButton.icon(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          late String listName;
+                          return AlertDialog(
+                            backgroundColor: colorScheme.background,
+                            title: const Text('New List'),
+                            content: TextFormField(
+                                onChanged: (value) => listName = value,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    label: const Text('List Name'))),
+                            actions: [
+                              //cancel
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                child: const Text('Save'),
+                                onPressed: () {
+                                  context
+                                      .read<DatabaseProvider>()
+                                      .addList(
+                                          generateId(
+                                              context, Collections.TaskLists),
+                                          DefaultGroups.Main.index,
+                                          listName)
+                                      .then((value) => Navigator.pop(context));
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  icon: Icon(
+                    Icons.playlist_add_rounded,
+                    color: colorScheme.onSurface,
+                  ),
+                  label: Text(
+                    'Add list',
+                    style: TextStyle(color: colorScheme.onSurface),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.create_new_folder_outlined,
+                    color: colorScheme.onSurface,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          late String groupName;
+                          return AlertDialog(
+                            backgroundColor: colorScheme.background,
+                            title: const Text('New Group'),
+                            content: TextField(
+                                onChanged: (value) => groupName = value,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    label: const Text('Group Name'))),
+                            actions: [
+                              //cancel
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Cancel')),
+                              TextButton(
+                                onPressed: () {
+                                  var group = Group(
+                                      id: generateId(
+                                          context, Collections.Groups),
+                                      name: groupName);
+                                  context
+                                      .read<DatabaseProvider>()
+                                      .addGroup(group)
+                                      .then((value) => Navigator.pop(context));
+                                },
+                                child: const Text('Save'),
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                )
+              ],
+            ),
           ],
         ),
       ),
