@@ -332,7 +332,7 @@ class DrawerBody extends StatelessWidget {
                       message: 'Application Name: Tasks\n'
                           'Version: 1.0.0\n'
                           'Developed by Chaitanya Jadhav',
-                          profile: true,
+                      profile: true,
                     ),
                   )),
             ),
@@ -351,14 +351,11 @@ class DrawerBody extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6.0),
-              child: Visibility(
-                visible: onDesktop,
-                child: const Divider(
-                  height: 1,
-                  endIndent: 4,
-                ),
+            Visibility(
+              visible: onDesktop,
+              child: const Divider(
+                height: 1,
+                endIndent: 4,
               ),
             ),
             Row(
